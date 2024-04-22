@@ -1,0 +1,37 @@
+using AppleStore.Models.Entities;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AppleStore
+{
+    public class Product
+    {
+        [Key]
+        public int Id { get; set; }
+        [DisplayName("Tên sản phẩm")]
+        public string? Name { get; set; }
+        [DisplayName("Hiển thị")]
+        public bool Display { get; set; }
+        [DisplayName("Mô tả")]
+        public string? Description { get; set; }
+        [DisplayName("Hình đại diện")]
+        public string Avatar { get; set; }
+        [DisplayName("Bán chạy")]
+        public bool HotSeller { get; set; }
+        [DisplayName("Hình ảnh mô tả")]
+        public virtual ICollection<ProductImage>? ProductImages { get; set; }
+        public virtual ICollection<ProductDetail>? ProductDetails { get; set; }
+
+        [ForeignKey("Discounts")]
+        [DisplayName("Giảm giá")]
+        public int DiscountId { get; set; }
+        public Discount? Discount { get; set; }
+        [ForeignKey("Categories")]
+        [DisplayName("Giảm giá")]
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
+
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+    }
+}
