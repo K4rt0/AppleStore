@@ -1,4 +1,5 @@
 using AppleStore.Models;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,10 +8,12 @@ namespace AppleStore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly INotyfService _notyf;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, INotyfService notyf)
         {
             _logger = logger;
+            _notyf = notyf;
         }
 
         public IActionResult Index()

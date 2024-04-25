@@ -13,6 +13,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 10;
