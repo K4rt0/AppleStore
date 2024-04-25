@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240422152151_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240425055209_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,9 +174,6 @@ namespace AppleStore.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -185,8 +182,6 @@ namespace AppleStore.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("OrderDetails");
                 });
@@ -238,23 +233,39 @@ namespace AppleStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Battery")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Camera")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Connectivity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplaySize")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Memory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Operating")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Processor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<string>("Resolution")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SpecitificationValueId")
-                        .HasColumnType("int");
+                    b.Property<string>("StorageCapacity")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("SpecitificationValueId");
 
                     b.ToTable("ProductDetails");
                 });
@@ -280,7 +291,7 @@ namespace AppleStore.Migrations
                     b.ToTable("ProductImages");
                 });
 
-            modelBuilder.Entity("AppleStore.Specitification", b =>
+            modelBuilder.Entity("AppleStore.ProductVariant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -288,36 +299,27 @@ namespace AppleStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ColorHex")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Storage")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specitifications");
-                });
+                    b.HasIndex("ProductId");
 
-            modelBuilder.Entity("AppleStore.SpecitificationValue", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SpecitificationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecitificationId");
-
-                    b.ToTable("SpecitificationValues");
+                    b.ToTable("ProductVariants");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -594,14 +596,10 @@ namespace AppleStore.Migrations
                         .IsRequired();
 
                     b.HasOne("AppleStore.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("AppleStore.Product", null)
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId1");
 
                     b.Navigation("Order");
 
@@ -635,15 +633,7 @@ namespace AppleStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppleStore.SpecitificationValue", "SpecitificationValue")
-                        .WithMany()
-                        .HasForeignKey("SpecitificationValueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Product");
-
-                    b.Navigation("SpecitificationValue");
                 });
 
             modelBuilder.Entity("AppleStore.ProductImage", b =>
@@ -657,15 +647,15 @@ namespace AppleStore.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("AppleStore.SpecitificationValue", b =>
+            modelBuilder.Entity("AppleStore.ProductVariant", b =>
                 {
-                    b.HasOne("AppleStore.Specitification", "Specitification")
-                        .WithMany()
-                        .HasForeignKey("SpecitificationId")
+                    b.HasOne("AppleStore.Product", "Product")
+                        .WithMany("ProductVariants")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Specitification");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -731,6 +721,8 @@ namespace AppleStore.Migrations
                     b.Navigation("ProductDetails");
 
                     b.Navigation("ProductImages");
+
+                    b.Navigation("ProductVariants");
                 });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ApplicationUser", b =>
