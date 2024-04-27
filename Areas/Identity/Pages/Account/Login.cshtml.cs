@@ -19,6 +19,8 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using AspNetCoreHero.ToastNotification.Notyf;
 using Microsoft.EntityFrameworkCore;
 using AppleStore.Data;
+using AppleStore.Models.Entities.Google;
+using Azure.Core;
 
 namespace AppleStore.Areas.Identity.Pages.Account
 {
@@ -95,7 +97,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null, string access_token = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -110,6 +112,28 @@ namespace AppleStore.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            if (!string.IsNullOrEmpty(access_token))
+            {
+                TokenGoogle data = await LoginGoogle.VerifyTokenGoogle(access_token);
+                if (data.error_description == null)
+                {
+                    var user = await _userManager.FindByEmailAsync(data.email);
+                    if (user == null)
+                    {
+                        var result = await _userManager.CreateAsync(new ApplicationUser { UserName = data.email, Email = data.email, FullName = data.name }); ;
+                        if (result.Succeeded)
+                            user = await _userManager.FindByEmailAsync(data.email);
+                    }
+
+                    if (user != null)
+                    {
+                        await _signInManager.SignInAsync(user, false);
+                        return LocalRedirect(returnUrl);
+                    }
+                }
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

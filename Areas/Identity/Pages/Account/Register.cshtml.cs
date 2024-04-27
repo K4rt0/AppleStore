@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 using AppleStore.Data;
 using AppleStore.Models.Entities;
 using AppleStore.Models.Entities.Email;
+using AppleStore.Models.Entities.Google;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Azure.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -113,10 +115,33 @@ namespace AppleStore.Areas.Identity.Pages.Account
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null, string access_token = null)
         {
+            returnUrl ??= Url.Content("~/");
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            if (!string.IsNullOrEmpty(access_token))
+            {
+                TokenGoogle data = await LoginGoogle.VerifyTokenGoogle(access_token);
+                if (data.error_description == null)
+                {
+                    var user = await _userManager.FindByEmailAsync(data.email);
+                    if (user == null)
+                    {
+                        var result = await _userManager.CreateAsync(new ApplicationUser { UserName = data.email, Email = data.email, FullName = data.name }); ;
+                        if (result.Succeeded)
+                            user = await _userManager.FindByEmailAsync(data.email);
+                    }
+
+                    if (user != null)
+                    {
+                        await _signInManager.SignInAsync(user, false);
+                        return LocalRedirect(returnUrl);
+                    }
+                }
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
