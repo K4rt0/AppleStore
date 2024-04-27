@@ -5,24 +5,25 @@
 namespace AppleStore.Migrations
 {
     /// <inheritdoc />
-    public partial class ApplicationUserAddedFullName : Migration
+    public partial class UpdateDisplayForCategory : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "FullName",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.AddColumn<bool>(
+                name: "Display",
+                table: "Categories",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FullName",
-                table: "AspNetUsers");
+                name: "Display",
+                table: "Categories");
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿@model AppleStore.Category
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM DANH MỤC</h5>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Name"></label>
+        <input type="text" class="form-control" asp-for="Name" />
+    </div>
+    <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" asp-for="Display" />
+        <label class="form-check-label" asp-for="Display"></label>
+    </div>
+    <div class="mb-3">
+        <label for="disabledSelect" class="form-label">Danh sách mã giảm giá</label>
+        <select asp-for="DiscountId" class="form-control" asp-items="ViewBag.Discounts" class="form-select">
+            <option disabled selected>Không chọn</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm</button>
+</form>
