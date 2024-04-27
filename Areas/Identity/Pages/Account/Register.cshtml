@@ -1,0 +1,123 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="col-md-8 col-lg-6 col-xxl-4">
+    <div class="card mb-0">
+        <div class="card-body">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="text-nowrap logo-img text-center d-block py-3 pb-1 w-100">
+                <img src="~/logo-text.png" width="180" alt="">
+            </a>
+            <p class="text-center">Innovate Your Life with Our Tech Solutions</p>
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input type="email" class="form-control" asp-for="Input.Email" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.FullName" class="form-label"></label>
+                    <input type="text" class="form-control" asp-for="Input.FullName" aria-describedby="textHelp">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input type="password" class="form-control" asp-for="Input.Password">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                    <input type="password" class="form-control" asp-for="Input.ConfirmPassword">
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Birthdate" class="col-md-2 col-form-label"></label>
+                    <input asp-for="Input.Birthdate" class="form-control" type="date" value="" />
+                </div>
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label asp-for="Input.Gender" class="form-label"></label>
+                        <div class="form-floating d-flex">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="Input.Gender" id="male" value="true" checked />
+                                <label class="form-check-label">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="Input.Gender" id="female" value="false" />
+                                <label class="form-check-label">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</button>
+                <div class="d-flex align-items-center justify-content-center">
+                    <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
+                    <a class="text-primary fw-bold ms-2" asp-area="Identity" asp-controller="Account" asp-action="Login">Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* <h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2>Create a new account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password">Password</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to register.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+ *@

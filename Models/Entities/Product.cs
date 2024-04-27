@@ -20,8 +20,11 @@ namespace AppleStore
         [DisplayName("Bán chạy")]
         public bool HotSeller { get; set; }
         [DisplayName("Hình ảnh mô tả")]
+
         public virtual ICollection<ProductImage>? ProductImages { get; set; }
         public virtual ICollection<ProductDetail>? ProductDetails { get; set; }
+        public virtual ICollection<ProductVariant>? ProductVariants { get; set; }
+        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
 
         [ForeignKey("Discounts")]
         [DisplayName("Giảm giá")]
@@ -32,6 +35,5 @@ namespace AppleStore
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

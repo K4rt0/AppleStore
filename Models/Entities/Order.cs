@@ -19,6 +19,6 @@ namespace AppleStore.Models.Entities
         [ForeignKey("ApplicationUsers")]
         public string? UserId { get; set; }
         public ApplicationUser? ApplicationUser { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

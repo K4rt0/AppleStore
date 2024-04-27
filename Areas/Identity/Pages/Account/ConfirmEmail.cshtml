@@ -1,0 +1,17 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+
+}
+
+<div class="col-md-8 col-lg-6 col-xxl-6">
+    <div class="card mb-0">
+        <div class="card-body text-center">
+            <h1 class="card-title text-center">Thank You, @Model.TUser.FullName!</h1>
+            <p class="card-text text-center">You have successfully registered your account.</p>
+            <p class="card-text text-center">We have sent a verification email to (@Model.TUser.Email) registered email address. Please check your inbox and follow the instructions to verify your account.</p>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="btn w-25 fs-4">Back to home  <i class="ti ti-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
