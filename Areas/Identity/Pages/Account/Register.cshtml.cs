@@ -114,8 +114,8 @@ namespace AppleStore.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             public string ConfirmPassword { get; set; }
-            public string? Role { get; set; }
-            public IEnumerable<SelectListItem> RoleList { get; set; }
+            /*public string Role { get; set; }
+            public IEnumerable<SelectListItem> RoleList { get; set; }*/
         }
 
 

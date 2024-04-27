@@ -1,5 +1,6 @@
 using AppleStore.Data;
 using AppleStore.Models.Entities;
+using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +27,9 @@ builder.Services.AddNotyf(config =>
     config.IsDismissable = true;
     config.Position = NotyfPosition.TopRight;
 });
+
+builder.Services.AddScoped<IProductRepository, EFProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
 var app = builder.Build();
 
