@@ -6,6 +6,7 @@
 - Database (Full)
 - Base Source
 - Admin Template
+- Login / Register (Template + Code-Behind)
 - Category
 ```
 ### Việt:
