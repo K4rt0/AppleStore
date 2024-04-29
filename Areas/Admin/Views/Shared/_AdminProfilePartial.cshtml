@@ -1,0 +1,55 @@
+﻿@using AppleStore.Models.Entities
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var roles = await UserManager.GetRolesAsync(user);
+    var color = string.Join(", ", roles) == "Owner" ? "#d14d4d" : "#e0c55e";
+}
+
+<div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+    <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+        <li class="nav-item dropdown">
+            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+               aria-expanded="false">
+                <img src="~/adminAssets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+            </a>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                <div class="message-body">
+                    <div class="d-flex px-3 pt-2">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                                <img src="~/adminAssets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                            </div>
+                            <div class="flex-grow-1">
+                                <span class="fw-semibold d-block">
+                                    <span style="color: @color">@string.Join(", ", roles)</span>
+                                    - @user.FullName
+                                    </span>
+                                <small class="text-muted">@user.Email</small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="dropdown-divider">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-home fs-6"></i>
+                        <p class="mb-0 fs-3">Trang chủ</p>
+                    </a>
+                    <a asp-area="Identity" asp-controller="Account" asp-action="Manage" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-settings fs-6"></i>
+                        <p class="mb-0 fs-3">Tài khoản</p>
+                    </a>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="d-flex align-items-center gap-2 dropdown-item">
+                            <i class="ti ti-power-off fs-6"></i>
+                            <p class="mb-0 fs-3">Đăng xuất</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

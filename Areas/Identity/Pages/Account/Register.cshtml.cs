@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -31,6 +32,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
@@ -41,6 +43,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
@@ -49,6 +52,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
             ApplicationDbContext context)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
@@ -112,6 +116,8 @@ namespace AppleStore.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             public string ConfirmPassword { get; set; }
+            /*public string Role { get; set; }
+            public IEnumerable<SelectListItem> RoleList { get; set; }*/
         }
 
 
@@ -146,13 +152,14 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if(Input.Email == "" || Input.Email == null)
+            if (Input.Email == "" || Input.Email == null)
                 _notyf.Error("Không được bỏ trống Email !");
-            else if(Input.Password == "" || Input.Password == null || Input.ConfirmPassword == "" || Input.ConfirmPassword == null)
+            else if (Input.Password == "" || Input.Password == null || Input.ConfirmPassword == "" || Input.ConfirmPassword == null)
                 _notyf.Error("Không được bỏ trống mật khẩu !");
-            else if(await CommonFunc.IsEmailExistsAsync(_context, Input.Email))            
+            else if (await CommonFunc.IsEmailExistsAsync(_context, Input.Email))
                 _notyf.Error("Email này đã tồn tại trong hệ thống !");
             else if (!ComparePasswords(Input.Password, Input.ConfirmPassword))
                 _notyf.Warning("Mật khẩu không trùng khớp !");
@@ -170,8 +177,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
+                    await _userManager.AddToRoleAsync(user, Role.Role_Customer);
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -186,9 +192,9 @@ namespace AppleStore.Areas.Identity.Pages.Account
                     htmlString = htmlString.Replace("{{name}}", Input.FullName);
                     htmlString = htmlString.Replace("{{link}}", callbackUrl);
 
-                    CommonFunc.SendEmail(Input.Email, "Confirm your email", htmlString);
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    CommonFunc.SendEmail(Input.Email, "SmartShopping - Active your account", htmlString);
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                    /*if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
@@ -196,7 +202,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
-                    }
+                    }*/
                 }
                 foreach (var error in result.Errors)
                 {
