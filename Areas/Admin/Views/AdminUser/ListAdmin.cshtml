@@ -1,0 +1,83 @@
+﻿@using AppleStore.Models.Entities
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<AppleStore.Models.Entities.ApplicationUser>
+    
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+@{
+    ViewData["Title"] = "List Admin User";
+    int id = 0;
+    ApplicationUser? user = new ApplicationUser();
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">DANH SÁCH ADMIN</h5>
+
+<div class="table-responsive">
+    <table class="table text-nowrap mb-0 align-middle">
+        <thead class="text-dark fs-4">
+            <tr>
+                <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">#</h6>
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Birthdate)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th class="border-bottom-0">
+                    Số điện thoại
+                </th>
+                <th class="border-bottom-0"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                user = await UserManager.FindByIdAsync(item.Id);
+                if (await UserManager.IsInRoleAsync(user, Role.Role_Admin))
+                {
+                    id++;
+                    <tr>
+                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
+                        <td class="border-bottom-0 d-flex align-items-center">
+                            <img src="~/adminAssets/images/profile/user-1.jpg" width="50px" height="50px" class="rounded-circle border border-1 border-dark-light border-opacity-50" />
+                            <div class="d-flex flex-column ms-3 form-floating d-inline-block">
+                                <h6 class="fw-semibold mb-1">@item.FullName</h6>
+                                <span style="color: #e0c55e;" class="fs-2 text-opacity-50">Admin</span>
+                            </div>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">@item.Birthdate</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">@item.Email</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">@item.PhoneNumber</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <div class="dropdown">
+                                <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <form asp-action="TakeAdmin" asp-route-id="@item.Id" method="post">
+                                        <button type="submit" class="dropdown-item"><i class="ti ti-close me-1"></i> Take Admin</button>
+                                    </form>
+                                    <form asp-action="DeleteConfirmed" asp-route-id="@item.Id">
+                                        <button type="submit" class="btn dropdown-item"><i class="ti ti-lock me-1"></i> Ban User</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

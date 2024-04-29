@@ -1,0 +1,95 @@
+﻿@using AppleStore.Models.Entities
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var roles = await UserManager.GetRolesAsync(user);
+    var isOwner = string.Join(", ", roles) == "Owner" ? true : false;
+}
+
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div>
+        <div class="brand-logo d-flex align-items-center justify-content-center">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="mt-3 text-nowrap logo-img">
+                <img src="~/logo-text.png" width="160" alt="" />
+            </a>
+            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                <i class="ti ti-close fs-6"></i>
+            </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+            <ul id="sidebarnav">
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Home</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-dashboard"></i>
+                        </span>
+                        <span class="hide-menu">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Users Panel</span>
+                </li>
+                @if(isOwner)
+                {
+                    <li class="sidebar-item">
+                        <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListAdmin" class="sidebar-link" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-list"></i>
+                            </span>
+                            <span class="hide-menu">List Admin</span>
+                        </a>
+                    </li>
+                }
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListUser" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-user"></i>
+                        </span>
+                        <span class="hide-menu">List User</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListUserBlocked" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-na"></i>
+                        </span>
+                        <span class="hide-menu">List User Blocked</span>
+                    </a>
+                </li>
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Categories</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Category List</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Create" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-plus"></i>
+                        </span>
+                        <span class="hide-menu">Create new</span>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>
