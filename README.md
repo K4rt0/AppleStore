@@ -13,6 +13,9 @@ Admin Panel:
 - Users Panel
 - Role Manager for Owner
 
+****************** [Scripting] ******************
+- Account Settings
+
 ```
 ### Việt:
 ```bash
