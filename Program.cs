@@ -4,6 +4,7 @@ using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,6 +49,19 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.Use(async (context, next) =>
+{
+    var userManager = context.RequestServices.GetService<UserManager<ApplicationUser>>();
+    var user = await userManager.GetUserAsync(context.User);
+    if (user != null && user.LockoutEnabled == false)
+    {
+        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        context.Response.Redirect("/Identity/Account/Login");
+        return;
+    }
+    await next.Invoke();
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
