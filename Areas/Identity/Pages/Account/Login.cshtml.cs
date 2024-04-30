@@ -19,6 +19,8 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using AspNetCoreHero.ToastNotification.Notyf;
 using Microsoft.EntityFrameworkCore;
 using AppleStore.Data;
+using AspNetCoreHero.ToastNotification.Enums;
+using AspNetCoreHero.ToastNotification.Notyf.Models;
 
 namespace AppleStore.Areas.Identity.Pages.Account
 {
@@ -140,25 +142,20 @@ namespace AppleStore.Areas.Identity.Pages.Account
             }
             if (ModelState.IsValid)
             {
-                
+                if(!user.LockoutEnabled)
+                {
+                    _notyf.Error("Tài khoản của bạn đã bị vô hiệu hoá !");
+                    _notyf.Warning("Vui lòng liên hệ karto.11203@gmail.com để được hỗ trợ", 5);
+                    _notyf.GetNotifications();
+                    return Page();
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                }
-
                 if (result.Succeeded)
                 {
                     _notyf.Success("Đăng nhập thành công !");
