@@ -9,7 +9,6 @@ namespace AppleStore.Models.Entities
         public string? FullName { get; set; }
         [DisplayName("Ảnh đại diện")]
         public string? Avatar { get; set; }
-        public bool Active { get; set; }
         [DisplayName("Giới tính")]
         public bool Gender { get; set; }
         [DisplayName("Ngày sinh")]
