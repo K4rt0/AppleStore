@@ -14,8 +14,9 @@ Admin Panel:
 - Role Manager for Owner
 
 ****************** [Scripting] ******************
+- Admin - Discount (Pending)
 - Shop Template
-- Account Settings (Pending)
+- Account Settings
 
 ```
 ### Việt:
