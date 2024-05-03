@@ -2,9 +2,12 @@
 using AppleStore.Models.Entities;
 using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppleStore.Areas.Admin.Controllers
 {
@@ -33,13 +36,18 @@ namespace AppleStore.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            var discount = _context.Discounts.ToList();
-            ViewBag.Discounts = new SelectList(discount, "Id", "Name");
+            var discounts = _context.Discounts.ToList();
+            var discountList = new List<SelectListItem>();
+            foreach (var discount in discounts)
+            {
+                discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
+            }
+            ViewBag.Discounts = discountList;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Category category)
+        public async Task<IActionResult> Create(Category category, int? DiscountId)
         {
             if (!ModelState.IsValid || category == null)
                 return NotFound();
@@ -47,6 +55,15 @@ namespace AppleStore.Areas.Admin.Controllers
             {
                 _notyf.Warning("Danh mục này đã tồn tại trong hệ thống !");
                 return View(category);
+            }
+            if (DiscountId != null)
+            {
+                var discount = await _context.Discounts.FindAsync(DiscountId);
+                if (discount != null)
+                {
+                    category.DiscountId = DiscountId;
+                    category.Discount = discount;
+                }
             }
             await _categoryRepository.AddAsync(category);
             return RedirectToAction("Index");
@@ -57,6 +74,13 @@ namespace AppleStore.Areas.Admin.Controllers
             var category = await _categoryRepository.GetByIdAsync(id);
             if (category == null)
                 return NotFound();
+            var discounts = _context.Discounts.ToList();
+            var discountList = new List<SelectListItem>();
+            foreach (var discount in discounts)
+            {
+                discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
+            }
+            ViewBag.Discounts = discountList;
             return View(category);
         }
         [HttpPost]
@@ -68,8 +92,11 @@ namespace AppleStore.Areas.Admin.Controllers
 
             existingCategory.Name = category.Name;
             existingCategory.Display = category.Display;
-
-            if(existingCategory.DiscountId != category.DiscountId)
+            if (category.Discount != null)
+            {
+                existingCategory.Discount = category.Discount;
+            }
+            if (existingCategory.DiscountId != category.DiscountId)
             {
                 existingCategory.DiscountId = category.DiscountId;
                 existingCategory.Discount = category.Discount;

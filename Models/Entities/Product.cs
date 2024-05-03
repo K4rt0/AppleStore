@@ -8,6 +8,7 @@ namespace AppleStore
     public class Product
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DisplayName("Tên sản phẩm")]
         public string? Name { get; set; }
@@ -19,21 +20,17 @@ namespace AppleStore
         public string Avatar { get; set; }
         [DisplayName("Bán chạy")]
         public bool HotSeller { get; set; }
-        [DisplayName("Hình ảnh mô tả")]
-
-        public virtual ICollection<ProductImage>? ProductImages { get; set; }
-        public virtual ICollection<ProductDetail>? ProductDetails { get; set; }
-        public virtual ICollection<ProductVariant>? ProductVariants { get; set; }
-        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
-
+        
         [ForeignKey("Discounts")]
-        [DisplayName("Giảm giá")]
         public int DiscountId { get; set; }
         public Discount? Discount { get; set; }
         [ForeignKey("Categories")]
         [DisplayName("Giảm giá")]
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
-
+        [DisplayName("Hình ảnh mô tả")]
+        public virtual ICollection<ProductImage>? ProductImages { get; set; }
+        public virtual ICollection<ProductVariant>? ProductVariants { get; set; }
+        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }
