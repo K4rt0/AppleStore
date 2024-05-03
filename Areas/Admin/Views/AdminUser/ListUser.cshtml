@@ -9,7 +9,8 @@
     ViewData["Title"] = "List User";
     int id = 0;
     ApplicationUser? user = new ApplicationUser();
-    var roles = await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User));
+    var userMain = await UserManager.GetUserAsync(User);
+    var roles = await UserManager.GetRolesAsync(userMain);
     var isOwner = string.Join(", ", roles) == "Owner" ? true : false;
 }
 
@@ -41,7 +42,7 @@
             @foreach (var item in Model)
             {
                 user = await UserManager.FindByIdAsync(item.Id);
-                @if (await UserManager.IsInRoleAsync(user, Role.Role_Owner) == false) {
+                @if (userMain != user && await UserManager.IsInRoleAsync(user, Role.Role_Owner) == false) {
                     id++;
                     <tr>
                         <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>

@@ -24,7 +24,7 @@ namespace AppleStore.Areas.Admin.Controllers
         [Authorize(Roles = Role.Role_Owner)]
         public IActionResult ListAdmin()
         {
-            var users = _context.ApplicationUsers.ToList(); 
+            var users = _context.ApplicationUsers.Where(p => p.LockoutEnabled == true).ToList();
             return View(users);
         }
         public IActionResult ListUser()
@@ -50,7 +50,10 @@ namespace AppleStore.Areas.Admin.Controllers
                 if (!result.Succeeded)
                     return BadRequest();
                 else
+                {
+                    await _userManager.RemoveFromRoleAsync(user, Role.Role_Customer);
                     _notyf.Information($"Bạn đã cấp quyền Administrator cho {user.FullName} !");
+                }
             }
             else if (type == "Take")
             {
@@ -58,7 +61,10 @@ namespace AppleStore.Areas.Admin.Controllers
                 if (!result.Succeeded)
                     return BadRequest();
                 else
+                {
+                    await _userManager.AddToRoleAsync(user, Role.Role_Customer);
                     _notyf.Information($"Bạn đã thu hồi quyền Administrator của {user.FullName} !");
+                }
             }
             return Redirect(Request.Headers["Referer"].ToString());
         }

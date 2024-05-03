@@ -1,0 +1,43 @@
+﻿@model AppleStore.Discount
+
+@{
+    ViewData["Title"] = "Thêm mới danh mục";
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM GIẢM GIÁ</h5>
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Name"></label>
+        <input type="text" class="form-control" asp-for="Name" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Code"></label>
+        <input type="text" class="form-control" asp-for="Code" />
+    </div>
+    <div class="mb-3 row">
+        <div class="col">
+            <label class="form-label" asp-for="Expire"></label>
+            <input class="form-control" type="datetime-local" value="2024-06-18T12:30:00" asp-for="Expire" />
+        </div>
+        <div class="col">
+            <label class="form-label" asp-for="Quantity"></label>
+            <input type="text" class="form-control" asp-for="Quantity" />
+        </div>
+        <div class="col">
+            <label class="form-label" asp-for="Percent"></label>
+            <input type="number" min="0" max="100" class="form-control" value="0" asp-for="Percent" />
+        </div>
+        <div class="col">
+            <label class="form-label" asp-for="Price"></label>
+            <input type="number" min="0" class="form-control" value="0" asp-for="Price" />
+        </div>
+    </div>
+    <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" asp-for="Active" />
+        <label class="form-check-label" asp-for="Active"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm</button>
+    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="btn btn-secondary">Trở về</a>
+</form>
