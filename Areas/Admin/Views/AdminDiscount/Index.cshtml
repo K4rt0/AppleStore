@@ -1,0 +1,139 @@
+﻿@model IEnumerable<AppleStore.Discount>
+
+@{
+    ViewData["Title"] = "Discount List";
+    int id = 0;
+}
+
+<div class="form-floating">
+    <h5 class="card-title fw-semibold mb-4 d-inline-block">DANH SÁCH GIẢM GIÁ</h5>
+    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Create" class="btn btn-light border shadow float-end"><i class="ti ti-plus"></i></a>
+</div>
+<div class="table-responsive">
+    <table class="table text-nowrap mb-0 align-middle">
+        <thead class="text-dark fs-4">
+            <tr>
+                <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">#</h6>
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Percent)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Expire)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Active)
+                </th>
+                <th class="border-bottom-0"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                id++;
+                <tr>
+                    <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
+                    <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-1">@item.Name</h6>
+                        <span class="fw-normal">Qty: @item.Quantity</span>
+                    </td>
+                    <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">@item.Code</p>
+                    </td>
+                    <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">
+                            @if(item.Percent == null || item.Percent == 0)
+                            {
+                                <span class="badge bg-danger rounded-3 fw-semibold">NULL</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary rounded-3 fw-semibold">@item.Percent%</span>
+                            }
+                        </p>
+                    </td>
+                    <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">
+                            @if (item.Price == null || item.Price == 0)
+                            {
+                                <span class="badge bg-danger rounded-3 fw-semibold">NULL</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary rounded-3 fw-semibold">@item.Price</span>
+                            }
+                        </p>
+                    </td>
+                    <td class="border-bottom-0">
+                        <p class="mb-0 fw-normal">@item.Expire</p>
+                    </td>
+                    <td class="border-bottom-0">
+                        <div class="d-flex align-items-center gap-2">
+                            @if (item.Active)
+                            {
+                                <span class="badge bg-primary rounded-3 fw-semibold">Actived</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger rounded-3 fw-semibold">Ended</span>
+                            }
+                        </div>
+                    </td>
+                    <td class="border-bottom-0">
+                        <div class="dropdown">
+                            <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
+                                <button type="button" class="btn dropdown-item deleteButton" data-discount-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteDiscountModal"><i class="ti ti-trash me-1"></i> Delete</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="deleteDiscountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Xoá danh mục</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xoá danh mục này không?
+            </div>
+            <div class="modal-footer">
+                <form asp-action="DeleteConfirmed" method="post">
+                    <input type="hidden" id="discountId" name="id" />
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.deleteButton').on('click', function () {
+                var discountId = $(this).data('discount-id');
+                $('#discountId').val(discountId);
+            });
+        });
+    </script>
+}

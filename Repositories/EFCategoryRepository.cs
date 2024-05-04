@@ -15,13 +15,18 @@ namespace AppleStore.Repositories
 
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
-            return await _context.Categories.Include(p => p.Products).ToListAsync();
-
+            return await _context.Categories
+                        .Include(p => p.Products)
+                        .Include(p => p.Discount)
+                        .ToListAsync();
         }
 
         public async Task<Category> GetByIdAsync(int id)
         {
-            return await _context.Categories.Include(p => p.Products).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Categories
+                        .Include(p => p.Products)
+                        .Include(p => p.Discount)
+                        .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Category category)

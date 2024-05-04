@@ -35,6 +35,7 @@
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
+                @* User Panel *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Users Panel</span>
@@ -66,6 +67,28 @@
                         <span class="hide-menu">List User Blocked</span>
                     </a>
                 </li>
+                @* Discounts *@
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Discount Panel</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Discount List</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Create" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-plus"></i>
+                        </span>
+                        <span class="hide-menu">Create new</span>
+                    </a>
+                </li>
+                @* Categories *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">PRODUCTS</span>

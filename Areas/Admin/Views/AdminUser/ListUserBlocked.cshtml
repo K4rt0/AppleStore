@@ -8,8 +8,9 @@
 @{
     ViewData["Title"] = "List User";
     int id = 0;
+    var userMain = await UserManager.GetUserAsync(User);
     ApplicationUser? user = new ApplicationUser();
-    var roles = await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User));
+    var roles = await UserManager.GetRolesAsync(userMain);
 }
 
 <h5 class="card-title fw-semibold mb-4 d-inline-block">DANH SÁCH NGƯỜI DÙNG</h5>
@@ -40,38 +41,41 @@
             @foreach (var item in Model)
             {
                 user = await UserManager.FindByIdAsync(item.Id);
-                id++;
-                <tr>
-                    <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
-                    <td class="border-bottom-0 d-flex align-items-center">
-                        <img src="~/adminAssets/images/profile/user-1.jpg" width="50px" height="50px" class="rounded-circle border border-1 border-dark-light border-opacity-50" />
-                        <div class="d-flex flex-column ms-3 form-floating d-inline-block">
-                            <h6 class="fw-semibold mb-1">@item.FullName</h6>
-                            @if (await UserManager.IsInRoleAsync(user, Role.Role_Admin))
-                            {
-                                <span style="color: #e0c55e;" class="fs-2 text-opacity-50">Admin</span>
-                            }
-                            else if (await UserManager.IsInRoleAsync(user, Role.Role_Customer))
-                            {
-                                <span class="fs-2 text-dark text-opacity-50">Customer</span>
-                            }
-                        </div>
-                    </td>
-                    <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">@item.Birthdate</p>
-                    </td>
-                    <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">@item.Email</p>
-                    </td>
-                    <td class="border-bottom-0">
-                        <p class="mb-0 fw-normal">@item.PhoneNumber</p>
-                    </td>
-                    <td class="border-bottom-0">
-                        <form asp-action="LockUser" asp-route-id="@item.Id" asp-route-lockout="true">
-                            <button type="submit" class="btn dropdown-item"><i class="ti ti-check me-1"></i> Unban User</button>
-                        </form>
-                    </td>
-                </tr>
+                if (userMain != user)
+                {
+                    id++;
+                    <tr>
+                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
+                        <td class="border-bottom-0 d-flex align-items-center">
+                            <img src="~/adminAssets/images/profile/user-1.jpg" width="50px" height="50px" class="rounded-circle border border-1 border-dark-light border-opacity-50" />
+                            <div class="d-flex flex-column ms-3 form-floating d-inline-block">
+                                <h6 class="fw-semibold mb-1">@item.FullName</h6>
+                                @if (await UserManager.IsInRoleAsync(user, Role.Role_Admin))
+                                {
+                                    <span style="color: #e0c55e;" class="fs-2 text-opacity-50">Admin</span>
+                                }
+                                else if (await UserManager.IsInRoleAsync(user, Role.Role_Customer))
+                                {
+                                    <span class="fs-2 text-dark text-opacity-50">Customer</span>
+                                }
+                            </div>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">@item.Birthdate</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">@item.Email</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">@item.PhoneNumber</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <form asp-action="LockUser" asp-route-id="@item.Id" asp-route-lockout="true">
+                                <button type="submit" class="btn dropdown-item"><i class="ti ti-check me-1"></i> Unban User</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
