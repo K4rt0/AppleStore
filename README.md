@@ -6,17 +6,18 @@
 - Database (Full)
 - Base Source
 - Login / Register (Template + Code-Behind)
-- Category
+- Shop Template
 
 Admin Panel:
 - Admin Template
 - Users Panel
+- Category
 - Role Manager for Owner
+- Discount
 
 ****************** [Scripting] ******************
-- Admin - Discount (Pending)
-- Shop Template
-- Account Settings
+- Product Details
+- Account Settings (Pending)
 
 ```
 ### Việt:
