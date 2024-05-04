@@ -37,8 +37,13 @@ namespace AppleStore.Areas.Admin.Controllers
         {
             var category = await _categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(category, "Id", "Name");
-            //var discount = _context.Discounts.ToList();
-            //ViewBag.Discounts = new SelectList(discount, "Id", "Name");
+            var discounts = _context.Discounts.ToList();
+            var discountList = new List<SelectListItem>();
+            foreach (var discount in discounts)
+            {
+                discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
+            }
+            ViewBag.Discounts = discountList;
             return View();
         }
 

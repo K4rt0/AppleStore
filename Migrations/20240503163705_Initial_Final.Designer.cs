@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Migrations/20240430075504_Update-Display-For-Category.Designer.cs
-    [Migration("20240430075504_Update-Display-For-Category")]
-    partial class UpdateDisplayForCategory
-========
     [Migration("20240503163705_Initial_Final")]
     partial class Initial_Final
->>>>>>>> origin/Karto:Migrations/20240503163705_Initial_Final.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

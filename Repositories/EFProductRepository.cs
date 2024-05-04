@@ -17,12 +17,20 @@ namespace AppleStore.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductVariants)
+                .Include(p => p.OrderDetails)
                 .ToListAsync();
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            return await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductVariants)
+                .Include(p => p.OrderDetails)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Product product)
