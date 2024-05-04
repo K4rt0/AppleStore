@@ -18,6 +18,12 @@
         </select>
     </div>
     <div class="mb-3">
+        <label for="disabledSelect" class="form-label">Danh sách mã giảm giá</label>
+        <select asp-for="DiscountId" class="form-control" asp-items="ViewBag.Discounts" class="form-select">
+            <option value="" selected>Không chọn</option>
+        </select>
+    </div>
+    <div class="mb-3">
         <label class="form-label" asp-for="Avatar"></label>
         <input type="file" class="form-control" asp-for="Avatar" id="imageInput" required />
     </div>
