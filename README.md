@@ -5,9 +5,19 @@
 ```bash
 - Database (Full)
 - Base Source
-- Admin Template
 - Login / Register (Template + Code-Behind)
 - Category
+
+Admin Panel:
+- Admin Template
+- Users Panel
+- Role Manager for Owner
+
+****************** [Scripting] ******************
+- Admin - Discount (Pending)
+- Shop Template
+- Account Settings
+
 ```
 ### Việt:
 ```bash
