@@ -16,7 +16,7 @@ namespace AppleStore
         [DisplayName("Mô tả")]
         public string? Description { get; set; }
         [DisplayName("Hình đại diện")]
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
         [DisplayName("Bán chạy")]
         public bool HotSeller { get; set; }
         [DisplayName("Hình ảnh mô tả")]
@@ -28,11 +28,12 @@ namespace AppleStore
 
         [ForeignKey("Discounts")]
         [DisplayName("Giảm giá")]
-        public int DiscountId { get; set; }
+        public int? DiscountId { get; set; }
         public Discount? Discount { get; set; }
         [ForeignKey("Categories")]
         [DisplayName("Giảm giá")]
         public int CategoryId { get; set; }
+        [DisplayName("Loại sản phẩm")]
         public Category? Category { get; set; }
 
     }

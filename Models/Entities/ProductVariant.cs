@@ -10,6 +10,8 @@ namespace AppleStore
         public int Id { get; set; }
         [DisplayName("SKU")]
         public string Name { get; set; }
+        [DisplayName("Số lượng")]
+        public int Quantity { get; set; }
         public string? Color { get; set; }
         public string? ColorHex { get; set; }
         [DisplayName("Dung lượng")]

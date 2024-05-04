@@ -33,11 +33,11 @@
                     <label asp-for="Input.Birthdate" class="col-md-2 col-form-label"></label>
                     <input asp-for="Input.Birthdate" class="form-control" type="date" value="" />
                 </div>
-                @* <div class="form-floating">
+                <div class="form-floating">
                     <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-control">
                         <option disabled selected>- Select Role -</option>
                     </select>
-                </div> *@
+                </div>
                 <div class="mb-3">
                     <div class="mb-3">
                         <label asp-for="Input.Gender" class="form-label"></label>
@@ -54,8 +54,6 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</button>
-                <hr class="hr hr-blurry" style="margin-top: -6px" />
-                <button id="btnGoogle" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2"></button>
                 <div class="d-flex align-items-center justify-content-center">
                     <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
                     <a class="text-primary fw-bold ms-2" asp-area="Identity" asp-controller="Account" asp-action="Login">Sign In</a>

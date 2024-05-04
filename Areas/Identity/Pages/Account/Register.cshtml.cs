@@ -116,38 +116,29 @@ namespace AppleStore.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             public string ConfirmPassword { get; set; }
-            /*public string Role { get; set; }
-            public IEnumerable<SelectListItem> RoleList { get; set; }*/
+            public string Role { get; set; }
+            public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
 
-        public async Task<IActionResult> OnGetAsync(string returnUrl = null, string access_token = null)
+        public async Task OnGetAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            if (!_roleManager.RoleExistsAsync(Role.Role_Customer).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Role.Role_Customer)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(Role.Role_Admin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(Role.Role_Owner)).GetAwaiter().GetResult();
+            }
+            Input = new()
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            if (!string.IsNullOrEmpty(access_token))
-            {
-                TokenGoogle data = await LoginGoogle.VerifyTokenGoogle(access_token);
-                if (data.error_description == null)
-                {
-                    var user = await _userManager.FindByEmailAsync(data.email);
-                    if (user == null)
-                    {
-                        var result = await _userManager.CreateAsync(new ApplicationUser { UserName = data.email, Email = data.email, FullName = data.name }); ;
-                        if (result.Succeeded)
-                            user = await _userManager.FindByEmailAsync(data.email);
-                    }
-
-                    if (user != null)
-                    {
-                        await _signInManager.SignInAsync(user, false);
-                        return LocalRedirect(returnUrl);
-                    }
-                }
-            }
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -177,7 +168,14 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Role.Role_Customer);
+                    if (!String.IsNullOrEmpty(Input.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Role.Role_Customer);
+                    }
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -194,15 +192,15 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
                     CommonFunc.SendEmail(Input.Email, "SmartShopping - Active your account", htmlString);
                     return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    /*if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }*/
+                    //if (_usermanager.options.signin.requireconfirmedaccount)
+                    //{
+                    //    return redirecttopage("registerconfirmation", new { email = input.email, returnurl = returnurl });
+                    //}
+                    //else
+                    //{
+                    //    await _signinmanager.signinasync(user, ispersistent: false);
+                    //    return localredirect(returnurl);
+                    //}
                 }
                 foreach (var error in result.Errors)
                 {
