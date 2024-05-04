@@ -1,4 +1,6 @@
-﻿<!doctype html>
+﻿@using AppleStore.Models.Entities.Google;
+
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -21,6 +23,29 @@
             </div>
         </div>
     </div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function redirectPage(token, from) {
+            var url = new URL(window.location.href);
+            url.searchParams.set('access_token', token);
+            url.searchParams.set('from', from);
+            window.location.href = url.href;
+        }
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "@LoginGoogle.IDClientGoogle",
+                callback: function (response) {
+                    console.log('Welcome from GG! Fetching your information...');
+                    redirectPage(response.credential, 'google');
+                }
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("btnGoogle"),
+                { theme: "outline", size: "large", text: "signin_with", width: "400", }
+            );
+        }
+    </script>
     <script src="~/adminAssets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/adminAssets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

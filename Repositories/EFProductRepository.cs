@@ -15,8 +15,9 @@ namespace AppleStore.Repositories
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Products.Include(p => p.Category).ToListAsync();
-
+            return await _context.Products
+                .Include(p => p.Category)
+                .ToListAsync();
         }
 
         public async Task<Product> GetByIdAsync(int id)

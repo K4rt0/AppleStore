@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 using AppleStore.Data;
 using AppleStore.Models.Entities;
 using AppleStore.Models.Entities.Email;
+using AppleStore.Models.Entities.Google;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Azure.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -114,14 +116,14 @@ namespace AppleStore.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             public string ConfirmPassword { get; set; }
-            /*public string Role { get; set; }
-            public IEnumerable<SelectListItem> RoleList { get; set; }*/
+            public string Role { get; set; }
+            public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            /*if (!_roleManager.RoleExistsAsync(Role.Role_Customer).GetAwaiter().GetResult())
+            if (!_roleManager.RoleExistsAsync(Role.Role_Customer).GetAwaiter().GetResult())
             {
                 _roleManager.CreateAsync(new IdentityRole(Role.Role_Customer)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(Role.Role_Admin)).GetAwaiter().GetResult();
@@ -134,21 +136,21 @@ namespace AppleStore.Areas.Identity.Pages.Account
                     Text = i,
                     Value = i
                 })
-            };*/
+            };
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            
+
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if(Input.Email == "" || Input.Email == null)
+            if (Input.Email == "" || Input.Email == null)
                 _notyf.Error("Không được bỏ trống Email !");
-            else if(Input.Password == "" || Input.Password == null || Input.ConfirmPassword == "" || Input.ConfirmPassword == null)
+            else if (Input.Password == "" || Input.Password == null || Input.ConfirmPassword == "" || Input.ConfirmPassword == null)
                 _notyf.Error("Không được bỏ trống mật khẩu !");
-            else if(await CommonFunc.IsEmailExistsAsync(_context, Input.Email))            
+            else if (await CommonFunc.IsEmailExistsAsync(_context, Input.Email))
                 _notyf.Error("Email này đã tồn tại trong hệ thống !");
             else if (!ComparePasswords(Input.Password, Input.ConfirmPassword))
                 _notyf.Warning("Mật khẩu không trùng khớp !");
@@ -191,15 +193,15 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
                     CommonFunc.SendEmail(Input.Email, "SmartShopping - Active your account", htmlString);
                     return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    /*if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }*/
+                    //if (_usermanager.options.signin.requireconfirmedaccount)
+                    //{
+                    //    return redirecttopage("registerconfirmation", new { email = input.email, returnurl = returnurl });
+                    //}
+                    //else
+                    //{
+                    //    await _signinmanager.signinasync(user, ispersistent: false);
+                    //    return localredirect(returnurl);
+                    //}
                 }
                 foreach (var error in result.Errors)
                 {

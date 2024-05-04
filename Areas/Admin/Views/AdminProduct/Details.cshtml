@@ -1,0 +1,100 @@
+﻿@model AppleStore.Product
+
+@{
+    ViewData["Title"] = "Product List";
+    var Product = ViewBag.Products;
+}
+
+<div class="form-floating">
+    <h5 class="card-title fw-semibold mb-4 d-inline-block">Chi tiết Sản Phẩm</h5>
+</div>
+
+<div class="row">
+    <div class="col-xl">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Thông tin Sản Phẩm</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Details">
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-default-fullname">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </label>
+                        <input type="text" class="form-control" id="basic-default-fullname" value="@Product.Name" disabled />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-default-company">
+                            @Html.DisplayNameFor(model => model.Avatar)
+                        </label>
+                        <img src="@Product.Avatar" style="max-width:200px" class="form-control" id="basic-default-company" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-default-email">
+                            @Html.DisplayNameFor(model => model.Category)
+                        </label>
+                        <input type="text" id="basic-default-email" class="form-control" value="@Product.Category.Name" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </label>
+                        <input type="text" id="basic-default-phone" class="form-control phone-mask" value="@Product.Description" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-default-message">
+                            @Html.DisplayNameFor(model => model.DiscountId)
+                        </label>
+                        <input id="basic-default-message" class="form-control" value="@Product.DiscountId" disabled />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Thông tin khác</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="ti ti-user"></i></span>
+                            <input type="text" class="form-control" id="basic-icon-default-fullname" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-icon-default-company">Company</label>
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-company2" class="input-group-text"><i class="ti ti-image"></i></span>
+                            <input type="text" id="basic-icon-default-company" class="form-control" aria-label="ACME Inc." aria-describedby="basic-icon-default-company2">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-icon-default-email">Email</label>
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="ti ti-bookmark"></i></span>
+                            <input type="text" id="basic-icon-default-email" class="form-control" aria-label="john.doe" aria-describedby="basic-icon-default-email2">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-icon-default-phone">Phone No</label>
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-phone2" class="input-group-text"><i class="ti ti-more"></i></span>
+                            <input type="text" id="basic-icon-default-phone" class="form-control phone-mask" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-icon-default-message">Message</label>
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-message2" class="input-group-text"><i class="ti ti-check"></i></span>
+                            <textarea id="basic-icon-default-message" class="form-control" aria-label="Hi, Do you have a moment to talk Joe?" aria-describedby="basic-icon-default-message2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
