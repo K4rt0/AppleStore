@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Migrations/20240430075504_Update-Display-For-Category.Designer.cs
-    [Migration("20240430075504_Update-Display-For-Category")]
-    partial class UpdateDisplayForCategory
-========
     [Migration("20240503163705_Initial_Final")]
     partial class Initial_Final
->>>>>>>> origin/Karto:Migrations/20240503163705_Initial_Final.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,851 +26,851 @@ namespace AppleStore.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("AppleStore.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DiscountId")
-                        .HasColumnType("int");
+                b.Property<int?>("DiscountId")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("Display")
-                        .HasColumnType("bit");
+                b.Property<bool>("Display")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("DiscountId");
+                b.HasIndex("DiscountId");
 
-                    b.ToTable("Categories");
-                });
+                b.ToTable("Categories");
+            });
 
             modelBuilder.Entity("AppleStore.Discount", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
+                b.Property<bool>("Active")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Code")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Expire")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("Expire")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Percent")
-                        .HasColumnType("int");
+                b.Property<int>("Percent")
+                    .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("Price")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                b.Property<int>("Quantity")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Discounts");
-                });
+                b.ToTable("Discounts");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Address")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Avatar")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("Birthdate")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("Birthdate")
+                    .HasColumnType("date");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("FullName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Gender")
-                        .HasColumnType("bit");
+                b.Property<bool>("Gender")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex")
+                    .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
-                });
+                b.ToTable("AspNetUsers", (string)null);
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.DeliveryAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Address")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("ApplicationUserId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("City")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Country")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("FullName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                b.Property<int>("PhoneNumber")
+                    .HasColumnType("int");
 
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
+                b.Property<int>("PostalCode")
+                    .HasColumnType("int");
 
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("State")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("DeliveryAddresses");
-                });
+                b.ToTable("DeliveryAddresses");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("ApplicationUserId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("Confirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("Confirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("int");
+                b.Property<int>("DiscountId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Note")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
+                b.Property<bool>("Paid")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("PaymentMethod")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PaymentMethod")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("TotalPrice")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("UserId")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("DiscountId");
+                b.HasIndex("DiscountId");
 
-                    b.ToTable("Orders");
-                });
+                b.ToTable("Orders");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.OrderDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                b.Property<int>("OrderId")
+                    .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("Price")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                b.Property<int>("ProductId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                b.Property<int>("Quantity")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
+                b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
-                });
+                b.ToTable("OrderDetails");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductAttribute", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("ProductAttributes");
-                });
+                b.ToTable("ProductAttributes");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductAttributeValue", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductAttributeId")
-                        .HasColumnType("int");
+                b.Property<int>("ProductAttributeId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Value")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ProductAttributeId");
+                b.HasIndex("ProductAttributeId");
 
-                    b.ToTable("ProductAttributeValues");
-                });
+                b.ToTable("ProductAttributeValues");
+            });
 
             modelBuilder.Entity("AppleStore.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Avatar")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                b.Property<int>("CategoryId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("int");
+                b.Property<int>("DiscountId")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("Display")
-                        .HasColumnType("bit");
+                b.Property<bool>("Display")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("HotSeller")
-                        .HasColumnType("bit");
+                b.Property<bool>("HotSeller")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                b.HasIndex("CategoryId");
 
-                    b.HasIndex("DiscountId");
+                b.HasIndex("DiscountId");
 
-                    b.ToTable("Products");
-                });
+                b.ToTable("Products");
+            });
 
             modelBuilder.Entity("AppleStore.ProductImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ImageUrl")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                b.Property<int>("ProductId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
-                });
+                b.ToTable("ProductImages");
+            });
 
             modelBuilder.Entity("AppleStore.ProductVariant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BatteryId")
-                        .HasColumnType("int");
+                b.Property<int>("BatteryId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("CameraId")
-                        .HasColumnType("int");
+                b.Property<int>("CameraId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("ColorId")
-                        .HasColumnType("int");
+                b.Property<int>("ColorId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("ConnectivityId")
-                        .HasColumnType("int");
+                b.Property<int>("ConnectivityId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("DisplaySizeId")
-                        .HasColumnType("int");
+                b.Property<int>("DisplaySizeId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("MemoryId")
-                        .HasColumnType("int");
+                b.Property<int>("MemoryId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("OperatingId")
-                        .HasColumnType("int");
+                b.Property<int>("OperatingId")
+                    .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("Price")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProcessorId")
-                        .HasColumnType("int");
+                b.Property<int>("ProcessorId")
+                    .HasColumnType("int");
 
-                    b.Property<int?>("ProductAttributeValueId")
-                        .HasColumnType("int");
+                b.Property<int?>("ProductAttributeValueId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                b.Property<int>("ProductId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                b.Property<int>("Quantity")
+                    .HasColumnType("int");
 
-                    b.Property<int>("ResolutionId")
-                        .HasColumnType("int");
+                b.Property<int>("ResolutionId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("StorageCapacityId")
-                        .HasColumnType("int");
+                b.Property<int>("StorageCapacityId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("BatteryId");
+                b.HasIndex("BatteryId");
 
-                    b.HasIndex("CameraId");
+                b.HasIndex("CameraId");
 
-                    b.HasIndex("ColorId");
+                b.HasIndex("ColorId");
 
-                    b.HasIndex("ConnectivityId");
+                b.HasIndex("ConnectivityId");
 
-                    b.HasIndex("DisplaySizeId");
+                b.HasIndex("DisplaySizeId");
 
-                    b.HasIndex("MemoryId");
+                b.HasIndex("MemoryId");
 
-                    b.HasIndex("OperatingId");
+                b.HasIndex("OperatingId");
 
-                    b.HasIndex("ProcessorId");
+                b.HasIndex("ProcessorId");
 
-                    b.HasIndex("ProductAttributeValueId");
+                b.HasIndex("ProductAttributeValueId");
 
-                    b.HasIndex("ProductId");
+                b.HasIndex("ProductId");
 
-                    b.HasIndex("ResolutionId");
+                b.HasIndex("ResolutionId");
 
-                    b.HasIndex("StorageCapacityId");
+                b.HasIndex("StorageCapacityId");
 
-                    b.ToTable("ProductVariants");
-                });
+                b.ToTable("ProductVariants");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex")
+                    .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
-                });
+                b.ToTable("AspNetRoles", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("RoleId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
+                b.ToTable("AspNetUserClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("ProviderKey")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
+                b.ToTable("AspNetUserLogins", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("UserId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("RoleId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "RoleId");
+                b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
+                b.ToTable("AspNetUserRoles", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("UserId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Value")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
+                b.ToTable("AspNetUserTokens", (string)null);
+            });
 
             modelBuilder.Entity("AppleStore.Category", b =>
-                {
-                    b.HasOne("AppleStore.Discount", "Discount")
-                        .WithMany("Categories")
-                        .HasForeignKey("DiscountId");
+            {
+                b.HasOne("AppleStore.Discount", "Discount")
+                    .WithMany("Categories")
+                    .HasForeignKey("DiscountId");
 
-                    b.Navigation("Discount");
-                });
+                b.Navigation("Discount");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.DeliveryAddress", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
-                        .WithMany("DeliveryAddresses")
-                        .HasForeignKey("ApplicationUserId");
-                });
+            {
+                b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    .WithMany("DeliveryAddresses")
+                    .HasForeignKey("ApplicationUserId");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Order", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+            {
+                b.HasOne("AppleStore.Models.Entities.ApplicationUser", "ApplicationUser")
+                    .WithMany()
+                    .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("AppleStore.Discount", "Discount")
-                        .WithMany("Orders")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("AppleStore.Discount", "Discount")
+                    .WithMany("Orders")
+                    .HasForeignKey("DiscountId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                b.Navigation("ApplicationUser");
 
-                    b.Navigation("Discount");
-                });
+                b.Navigation("Discount");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.OrderDetail", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AppleStore.Models.Entities.Order", "Order")
+                    .WithMany("OrderDetails")
+                    .HasForeignKey("OrderId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Product", "Product")
+                    .WithMany("OrderDetails")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Order");
+                b.Navigation("Order");
 
-                    b.Navigation("Product");
-                });
+                b.Navigation("Product");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductAttributeValue", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ProductAttribute", "ProductAttribute")
-                        .WithMany("ProductAttributeValues")
-                        .HasForeignKey("ProductAttributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AppleStore.Models.Entities.ProductAttribute", "ProductAttribute")
+                    .WithMany("ProductAttributeValues")
+                    .HasForeignKey("ProductAttributeId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("ProductAttribute");
-                });
+                b.Navigation("ProductAttribute");
+            });
 
             modelBuilder.Entity("AppleStore.Product", b =>
-                {
-                    b.HasOne("AppleStore.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AppleStore.Category", "Category")
+                    .WithMany("Products")
+                    .HasForeignKey("CategoryId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Discount", "Discount")
-                        .WithMany("Products")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("AppleStore.Discount", "Discount")
+                    .WithMany("Products")
+                    .HasForeignKey("DiscountId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Category");
+                b.Navigation("Category");
 
-                    b.Navigation("Discount");
-                });
+                b.Navigation("Discount");
+            });
 
             modelBuilder.Entity("AppleStore.ProductImage", b =>
-                {
-                    b.HasOne("AppleStore.Product", "Product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("AppleStore.Product", "Product")
+                    .WithMany("ProductImages")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Product");
-                });
+                b.Navigation("Product");
+            });
 
             modelBuilder.Entity("AppleStore.ProductVariant", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Battery")
-                        .WithMany()
-                        .HasForeignKey("BatteryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+            {
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Battery")
+                    .WithMany()
+                    .HasForeignKey("BatteryId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Camera")
-                        .WithMany()
-                        .HasForeignKey("CameraId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Camera")
+                    .WithMany()
+                    .HasForeignKey("CameraId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Color")
-                        .WithMany()
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Color")
+                    .WithMany()
+                    .HasForeignKey("ColorId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Connectivity")
-                        .WithMany()
-                        .HasForeignKey("ConnectivityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Connectivity")
+                    .WithMany()
+                    .HasForeignKey("ConnectivityId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "DisplaySize")
-                        .WithMany()
-                        .HasForeignKey("DisplaySizeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "DisplaySize")
+                    .WithMany()
+                    .HasForeignKey("DisplaySizeId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Memory")
-                        .WithMany()
-                        .HasForeignKey("MemoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Memory")
+                    .WithMany()
+                    .HasForeignKey("MemoryId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Operating")
-                        .WithMany()
-                        .HasForeignKey("OperatingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Operating")
+                    .WithMany()
+                    .HasForeignKey("OperatingId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Processor")
-                        .WithMany()
-                        .HasForeignKey("ProcessorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Processor")
+                    .WithMany()
+                    .HasForeignKey("ProcessorId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", null)
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("ProductAttributeValueId");
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", null)
+                    .WithMany("ProductVariants")
+                    .HasForeignKey("ProductAttributeValueId");
 
-                    b.HasOne("AppleStore.Product", "Product")
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("AppleStore.Product", "Product")
+                    .WithMany("ProductVariants")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Resolution")
-                        .WithMany()
-                        .HasForeignKey("ResolutionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Resolution")
+                    .WithMany()
+                    .HasForeignKey("ResolutionId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "StorageCapacity")
-                        .WithMany()
-                        .HasForeignKey("StorageCapacityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "StorageCapacity")
+                    .WithMany()
+                    .HasForeignKey("StorageCapacityId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Battery");
+                b.Navigation("Battery");
 
-                    b.Navigation("Camera");
+                b.Navigation("Camera");
 
-                    b.Navigation("Color");
+                b.Navigation("Color");
 
-                    b.Navigation("Connectivity");
+                b.Navigation("Connectivity");
 
-                    b.Navigation("DisplaySize");
+                b.Navigation("DisplaySize");
 
-                    b.Navigation("Memory");
+                b.Navigation("Memory");
 
-                    b.Navigation("Operating");
+                b.Navigation("Operating");
 
-                    b.Navigation("Processor");
+                b.Navigation("Processor");
 
-                    b.Navigation("Product");
+                b.Navigation("Product");
 
-                    b.Navigation("Resolution");
+                b.Navigation("Resolution");
 
-                    b.Navigation("StorageCapacity");
-                });
+                b.Navigation("StorageCapacity");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("AppleStore.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
+            {
+                b.Navigation("Products");
+            });
 
             modelBuilder.Entity("AppleStore.Discount", b =>
-                {
-                    b.Navigation("Categories");
+            {
+                b.Navigation("Categories");
 
-                    b.Navigation("Orders");
+                b.Navigation("Orders");
 
-                    b.Navigation("Products");
-                });
+                b.Navigation("Products");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("DeliveryAddresses");
-                });
+            {
+                b.Navigation("DeliveryAddresses");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
-                });
+            {
+                b.Navigation("OrderDetails");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductAttribute", b =>
-                {
-                    b.Navigation("ProductAttributeValues");
-                });
+            {
+                b.Navigation("ProductAttributeValues");
+            });
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductAttributeValue", b =>
-                {
-                    b.Navigation("ProductVariants");
-                });
+            {
+                b.Navigation("ProductVariants");
+            });
 
             modelBuilder.Entity("AppleStore.Product", b =>
-                {
-                    b.Navigation("OrderDetails");
+            {
+                b.Navigation("OrderDetails");
 
-                    b.Navigation("ProductImages");
+                b.Navigation("ProductImages");
 
-                    b.Navigation("ProductVariants");
-                });
+                b.Navigation("ProductVariants");
+            });
 #pragma warning restore 612, 618
         }
     }
