@@ -11,6 +11,7 @@ namespace AppleStore
                 [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
                 public int Id { get; set; }
                 public decimal Price { get; set; }
+                [DisplayName("Số lượng")]                
                 public int Quantity { get; set; }
                 public int ColorId { get; set; }
                 [DisplayName("Màu sắc")]
