@@ -1,25 +1,19 @@
 ﻿@{
-    /*if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
-    {
-        Layout = parentLayout.ToString();
-    }
-    else
-    {
-        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
-    }*/
-    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Manage your account</h1>
 
 <div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
+    <div class="mb-8 row" style="margin: 30px 100px 100px">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-4 mb-4 ">
+                <h3 class="mb-0 fw-bold" style="margin-left: 330px;">Quản lý thông tin tài khoản</h3>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-12 col-12">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+        <div class="col-xl-9 col-lg-8 col-md-12 col-12">
             @RenderBody()
         </div>
     </div>

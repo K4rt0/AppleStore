@@ -3,10 +3,12 @@
 #nullable disable
 
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AppleStore.Models.Entities;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,13 +19,16 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly INotyfService _notyf;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            INotyfService notyf)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _notyf = notyf;
         }
 
         /// <summary>
@@ -59,18 +64,42 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Full Name")]
+            public string Fullname { get; set; }
+
+            [DisplayName("Ngày sinh")]
+            public DateOnly Birthdate { get; set; }
+
+            [DisplayName("Địa chỉ")]
+            public string? Address { get; set; }
+
+            [DisplayName("Giới tính")]
+            public bool Gender { get; set; }
+            [DisplayName("Ảnh đại diện")]
+            public string? Avatar { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var fullName = user.FullName;
+            var Birthdate = user.Birthdate;
+            var Address = user.Address;
+            var gender = user.Gender;
+            var Avatar = user.Avatar;
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Fullname = fullName,
+                Birthdate = Birthdate,
+                Address = Address,
+                Gender = gender,
+                Avatar = Avatar,
             };
         }
 
@@ -86,7 +115,13 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task SaveImageToDatabaseAsync(string imagePath, ApplicationUser user)
+        {
+            user.Avatar = imagePath;
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -100,20 +135,68 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            else
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+                if (Input.PhoneNumber != phoneNumber)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                    if (!setPhoneResult.Succeeded)
+                    {
+                        StatusMessage = "Unexpected error when trying to set phone number.";
+                        return RedirectToPage();
+                    }
                 }
+
+                if (Input.Fullname != user.FullName || Input.Birthdate != user.Birthdate ||
+                    Input.Address != user.Address || Input.Gender != user.Gender)
+                {
+                    user.FullName = Input.Fullname;
+                    user.Birthdate = Input.Birthdate;
+                    user.Address = Input.Address;
+                    user.Gender = Input.Gender;
+                    await _userManager.UpdateAsync(user);
+                }
+
+                //// Kiểm tra xem người dùng đã tải lên ảnh mới chưa
+                //if (Input.Avatar != user.Avatar)
+                //{
+                //    if (Request.Form.Files.Count > 0)
+                //    {
+                //        var file = Request.Form.Files[0];
+                //        if (file != null && file.Length > 0)
+                //        {
+                //            // Lưu ảnh vào thư mục hoặc lưu trữ ảnh
+                //            var imagePath = SaveImageToFileSystem(file);
+
+                //            // Lưu đường dẫn ảnh vào cơ sở dữ liệu
+                //            await SaveImageToDatabaseAsync(imagePath, user);
+                //        }
+                //    }
+                //}
+
+                if(!string.IsNullOrEmpty(Input.Avatar))
+                {
+                    user.Avatar = Input.Avatar;
+                    await _userManager.UpdateAsync(user);
+                }
+
+                await _signInManager.RefreshSignInAsync(user);
+                StatusMessage = "Thông tin của bạn đã được cập nhật.";
+                return RedirectToPage();
+            }
+        }
+        private string SaveImageToFileSystem(IFormFile file)
+        {
+            // Đường dẫn tạm thời để lưu ảnh
+            var imagePath = Path.Combine("wwwroot", "images", "team", file.FileName);
+
+            using (var stream = new FileStream(imagePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
             }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+            return imagePath;
         }
     }
 }

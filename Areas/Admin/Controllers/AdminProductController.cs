@@ -5,6 +5,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
 
 namespace AppleStore.Areas.Admin.Controllers
 {
@@ -48,7 +49,7 @@ namespace AppleStore.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Product product, IFormFile avatar)
+        public async Task<IActionResult> Create(Product product, IFormFile avatar, List<IFormFile> productImages)
         {
             if (ModelState.IsValid)
             {
@@ -56,6 +57,19 @@ namespace AppleStore.Areas.Admin.Controllers
                 {
                     product.Avatar = await SaveImage(avatar);
 
+                }
+                if (productImages != null)
+                {
+                    product.ProductImages = new List<ProductImage>();
+                    foreach (var img in productImages)
+                    {
+                        ProductImage productImage = new ProductImage()
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = await SaveImage(img)
+                        };
+                        product.ProductImages.Add(productImage);
+                    }
                 }
 
                 await _productRepository.AddAsync(product);
@@ -123,14 +137,34 @@ namespace AppleStore.Areas.Admin.Controllers
 
         private async Task<string> SaveImage(IFormFile image)
         {
-            var savePath = Path.Combine("wwwroot/adminAssets/images/products", image.FileName);
+            var savePath = Path.Combine("wwwroot/images/products", image.FileName);
 
             using (var fileStream = new FileStream(savePath, FileMode.Create))
             {
                 await image.CopyToAsync(fileStream);
-                return "/adminAssets/images/products/" + image.FileName;
+                return "/images/products/" + image.FileName;
             }
         }
 
+        private async Task<List<string>> SaveListImage(List<IFormFile> images)
+        {
+            var savedPaths = new List<string>();
+            var basePath = "wwwroot/images/products"; // Adjust this path according to your project structure
+
+            foreach (var formFile in images)
+            {
+                var fileName = Path.GetFileName(formFile.FileName);
+                var savePath = Path.Combine(basePath, fileName);
+
+                using (var fileStream = new FileStream(savePath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(fileStream);
+                }
+
+                savedPaths.Add("/images/products/" + fileName);
+            }
+
+            return savedPaths;
+        }
     }
 }
