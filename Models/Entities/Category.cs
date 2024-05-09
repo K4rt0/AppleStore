@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AppleStore
+namespace AppleStore.Models.Entities
 {
     public class Category
     {

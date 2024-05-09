@@ -1,4 +1,5 @@
 ﻿using AppleStore.Models;
+using AppleStore.Models.Entities;
 
 namespace AppleStore.Repositories
 {

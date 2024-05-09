@@ -1,0 +1,27 @@
+﻿@model AppleStore.Models.Entities.ProductAttributeValue
+
+@{
+    ViewData["Title"] = "EditValue";
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM GIÁ TRỊ THUỘC TÍNH - <span class="text-uppercase">@Model.ProductAttribute.Name</span></h5>
+<form asp-action="EditValue" asp-route-id="@ViewBag.AttributeId">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Name"></label>
+        <input type="text" class="form-control" asp-for="Name" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Value"></label>
+        @if (ViewBag.Color)
+        {
+            <input type="color" asp-for="Value" class="p-1 h-10 d-block w-25 border-gray-200 rounded-md">
+        }
+        else
+        {
+            <input type="text" class="form-control" asp-for="Value" />
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Sửa</button>
+    <a asp-action="Details" asp-route-id="@Model.ProductAttribute.Id" class="btn btn-secondary">Trở về</a>
+</form>

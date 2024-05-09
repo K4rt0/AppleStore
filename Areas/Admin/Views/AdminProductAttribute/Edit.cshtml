@@ -1,0 +1,24 @@
+﻿@model AppleStore.Models.Entities.ProductAttribute
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">SỬA THUỘC TÍNH</h5>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Name"></label>
+        <input type="text" class="form-control" asp-for="Name" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="NameSuggest"></label>
+        <input type="text" class="form-control" asp-for="NameSuggest" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Description"></label>
+        <textarea class="form-control" placeholder="Mô tả" asp-for="Description" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Sửa</button>
+    <a asp-action="Index" class="btn btn-secondary">Trở về</a>
+</form>

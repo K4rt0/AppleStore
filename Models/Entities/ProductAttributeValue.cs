@@ -7,7 +7,6 @@ namespace AppleStore.Models.Entities
     public class ProductAttributeValue
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DisplayName("Tên giá trị thuộc tính")]
         public string? Name { get; set; }
@@ -16,7 +15,6 @@ namespace AppleStore.Models.Entities
         [ForeignKey("ProductAttribute")]
         public int ProductAttributeId { get; set; }
         public ProductAttribute? ProductAttribute { get; set; }
-        public virtual ICollection<ProductVariant>? ProductVariants { get; set; }
-
+        public virtual ICollection<VariantsAttributes>? VariantsAttributes { get; set; }
     }
 }

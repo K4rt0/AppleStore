@@ -1,8 +1,11 @@
-﻿@model IEnumerable<AppleStore.Product>
+﻿@model IEnumerable<AppleStore.Models.Entities.Product>
 
 @{
     ViewData["Title"] = "Product List";
     int id = 0;
+
+    ViewData["DeleteModalAction"] = "DeleteConfirmed";
+    ViewData["DeleteModalText"] = "Bạn có chắc muốn xoá sản phẩm này hay không?";
 }
 
 <div class="form-floating">
@@ -22,13 +25,13 @@
                 <th class="border-bottom-0">
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
-                <th class="border-bottom-0">
+                <th class="border-bottom-0 text-center">
                     @Html.DisplayNameFor(model => model.Category)
                 </th>
-                <th class="border-bottom-0">
+                <th class="border-bottom-0 text-center">
                     Số lượng
                 </th>
-                <th class="border-bottom-0">
+                <th class="border-bottom-0 text-center">
                     @Html.DisplayNameFor(model => model.Display)
                 </th>
                 <th class="border-bottom-0"></th>
@@ -39,31 +42,24 @@
             {
                 id++;
                 <tr>
-                    <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
-                    <td class="border-bottom-0">
-                        <img src="@item.Avatar" style="max-width:100px" alt="" />
+                    <td class="border-bottom-0 align-content-center"><h6 class="fw-semibold mb-0">@id</h6></td>
+                    <td class="border-bottom-0 align-content-center">
+                        <img src="~/images/products/@item.Avatar" style="max-width: 100px;" class="object-fit-cover" alt="" />
                     </td>
-                    <td class="border-bottom-0">
+                    <td class="border-bottom-0 align-content-center">
                         <p class="mb-0 fw-normal">@item.Name</p>
                     </td>
-                    <td class="border-bottom-0">
+                    <td class="border-bottom-0 align-content-center text-center">
                         <p class="mb-0 fw-normal">@item.Category?.Name</p>
                     </td>
-                    <td class="border-bottom-0">
+                    <td class="border-bottom-0 align-content-center text-center">
                         @{
-                            int qty = 0;
-                            @if (item.ProductVariants != null)
-                            {
-                                @foreach (var variant in item.ProductVariants)
-                                {
-                                    <p class="mb-0 fw-normal">@variant.Quantity</p>
-                                }
-                            }
+                            int qty = item.ProductVariants?.Sum(variant => variant.Quantity) ?? 0;
                         }
                         @qty
                     </td>
-                    <td class="border-bottom-0">
-                        <div>
+                    <td class="border-bottom-0 align-content-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
                             @if (item.Display)
                             {
                                 <span class="badge bg-primary rounded-3 fw-semibold">Showed</span>
@@ -74,14 +70,15 @@
                             }
                         </div>
                     </td>
-                    <td class="border-bottom-0">
+                    <td class="border-bottom-0 align-content-center">
                         <div class="dropdown">
                             <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                 <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
                                 <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id"><i class="ti ti-eye me-1"></i> Details</a>
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
+                                <button type="submit" class="btn dropdown-item deleteButton" data-item-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteItemModal"><i class="ti ti-trash me-1"></i> Delete</button>
                             </div>
                         </div>
                     </td>
@@ -90,11 +87,3 @@
         </tbody>
     </table>
 </div>
-
-<style>
-     th, td {
-         display: table-cell;
-        vertical-align: middle;
-        text-align: center;
-    }
-</style>
