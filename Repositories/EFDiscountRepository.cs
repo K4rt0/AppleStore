@@ -1,4 +1,5 @@
 ﻿using AppleStore.Data;
+using AppleStore.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppleStore.Repositories

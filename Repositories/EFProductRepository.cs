@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AppleStore.Data;
 using AppleStore.Models;
+using AppleStore.Models.Entities;
 
 namespace AppleStore.Repositories
 {
@@ -19,6 +20,8 @@ namespace AppleStore.Repositories
                 .Include(p => p.Category)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductVariants)
+                .ThenInclude(p => p.VariantsAttributes)
+                .ThenInclude(p => p.ProductAttributeValue)
                 .Include(p => p.OrderDetails)
                 .ToListAsync();
         }
@@ -29,6 +32,8 @@ namespace AppleStore.Repositories
                 .Include(p => p.Category)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductVariants)
+                .ThenInclude(p => p.VariantsAttributes)
+                .ThenInclude(p => p.ProductAttributeValue)
                 .Include(p => p.OrderDetails)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }

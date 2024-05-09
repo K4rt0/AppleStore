@@ -1,7 +1,7 @@
-﻿@model AppleStore.Discount
+﻿@model AppleStore.Models.Entities.Discount
 
 @{
-    ViewData["Title"] = "Thêm mới danh mục";
+    ViewData["Title"] = "Thêm mới mã giảm giá";
 }
 
 <h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM GIẢM GIÁ</h5>
@@ -39,5 +39,5 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Thêm</button>
-    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="btn btn-secondary">Trở về</a>
+    <a asp-action="Index" class="btn btn-secondary">Trở về</a>
 </form>

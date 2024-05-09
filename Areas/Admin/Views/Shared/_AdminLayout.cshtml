@@ -7,6 +7,7 @@
     <title>Smart Shopping - @ViewData["Title"]</title>
     <link rel="shortcut icon" type="image/png" href="~/logo.png" />
     <link rel="stylesheet" href="~/adminAssets/css/styles.min.css" />
+    <link rel="stylesheet" href="~/adminAssets/css/select2.min.css" />
 </head>
 
 <body>
@@ -55,8 +56,38 @@
     <script src="~/adminAssets/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="~/adminAssets/libs/simplebar/dist/simplebar.js"></script>
     <script src="~/adminAssets/js/dashboard.js"></script>
+    <script src="~/adminAssets/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.deleteButton').on('click', function () {
+                var itemId = $(this).data('item-id');
+                $('#itemId').val(itemId);
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
+
+    <div class="modal fade" id="deleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Xoá danh mục</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @ViewData["DeleteModalText"]
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="@ViewData["DeleteModalAction"]" method="post">
+                        <input type="hidden" id="itemId" name="id" />
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

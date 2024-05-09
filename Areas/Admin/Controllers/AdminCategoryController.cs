@@ -29,9 +29,7 @@ namespace AppleStore.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var category = await _categoryRepository.GetAllAsync();
-            if (category != null)
-                return View(category);
-            return View();
+            return View(category);
         }
 
         public IActionResult Create()
@@ -40,7 +38,8 @@ namespace AppleStore.Areas.Admin.Controllers
             var discountList = new List<SelectListItem>();
             foreach (var discount in discounts)
             {
-                discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
+                if(discount.Active == true)
+                    discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
             }
             ViewBag.Discounts = discountList;
             return View();
@@ -78,7 +77,8 @@ namespace AppleStore.Areas.Admin.Controllers
             var discountList = new List<SelectListItem>();
             foreach (var discount in discounts)
             {
-                discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
+                if (discount.Active == true)
+                    discountList.Add(new SelectListItem { Value = discount.Id.ToString(), Text = $"{discount.Code} - {discount.Name}" });
             }
             ViewBag.Discounts = discountList;
             return View(category);

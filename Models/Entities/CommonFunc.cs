@@ -93,7 +93,7 @@ namespace AppleStore.Models.Entities
                     return newname;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
