@@ -1,7 +1,10 @@
+using AppleStore.Migrations;
 using AppleStore.Models;
+using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AppleStore.Controllers
 {
@@ -9,17 +12,22 @@ namespace AppleStore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly INotyfService _notyf;
+        private readonly IProductRepository _productRepository;
 
-        public HomeController(ILogger<HomeController> logger, INotyfService notyf)
+
+        public HomeController(ILogger<HomeController> logger, INotyfService notyf, IProductRepository productRepository)
         {
             _logger = logger;
             _notyf = notyf;
+            _productRepository = productRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = (await _productRepository.GetAllAsync()).Where(p=>p.HotSeller==true).Take(8);
+            return View(products);
         }
+
 
         public IActionResult Privacy()
         {

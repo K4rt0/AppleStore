@@ -71,7 +71,6 @@ namespace AppleStore.Areas.Admin.Controllers
             var existingAttribute = await _productAttributeRepository.GetByIdAsync(id);
 
             existingAttribute.Name = productAttribute.Name;
-            existingAttribute.NameSuggest = productAttribute.NameSuggest;
             existingAttribute.Description = productAttribute.Description;
             await _productAttributeRepository.UpdateAsync(existingAttribute);
             return RedirectToAction("Index");
