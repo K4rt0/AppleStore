@@ -286,6 +286,9 @@ namespace AppleStore.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameSuggest")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("ProductAttributes");
@@ -313,6 +316,29 @@ namespace AppleStore.Migrations
                     b.HasIndex("ProductAttributeId");
 
                     b.ToTable("ProductAttributeValues");
+                });
+
+            modelBuilder.Entity("AppleStore.Models.Entities.VariantsAttributes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductAttributeValueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductVariantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductAttributeValueId");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.ToTable("VariantsAttributes");
                 });
 
             modelBuilder.Entity("AppleStore.Product", b =>
@@ -382,35 +408,8 @@ namespace AppleStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BatteryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CameraId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConnectivityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DisplaySizeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OperatingId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProcessorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductAttributeValueId")
-                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -418,37 +417,9 @@ namespace AppleStore.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ResolutionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StorageCapacityId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("BatteryId");
-
-                    b.HasIndex("CameraId");
-
-                    b.HasIndex("ColorId");
-
-                    b.HasIndex("ConnectivityId");
-
-                    b.HasIndex("DisplaySizeId");
-
-                    b.HasIndex("MemoryId");
-
-                    b.HasIndex("OperatingId");
-
-                    b.HasIndex("ProcessorId");
-
-                    b.HasIndex("ProductAttributeValueId");
-
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ResolutionId");
-
-                    b.HasIndex("StorageCapacityId");
 
                     b.ToTable("ProductVariants");
                 });
@@ -649,6 +620,25 @@ namespace AppleStore.Migrations
                     b.Navigation("ProductAttribute");
                 });
 
+            modelBuilder.Entity("AppleStore.Models.Entities.VariantsAttributes", b =>
+                {
+                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "ProductAttributeValue")
+                        .WithMany("VariantsAttributes")
+                        .HasForeignKey("ProductAttributeValueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppleStore.ProductVariant", "ProductVariant")
+                        .WithMany("VariantsAttributes")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductAttributeValue");
+
+                    b.Navigation("ProductVariant");
+                });
+
             modelBuilder.Entity("AppleStore.Product", b =>
                 {
                     b.HasOne("AppleStore.Category", "Category")
@@ -679,97 +669,13 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.ProductVariant", b =>
                 {
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Battery")
-                        .WithMany()
-                        .HasForeignKey("BatteryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Camera")
-                        .WithMany()
-                        .HasForeignKey("CameraId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Color")
-                        .WithMany()
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Connectivity")
-                        .WithMany()
-                        .HasForeignKey("ConnectivityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "DisplaySize")
-                        .WithMany()
-                        .HasForeignKey("DisplaySizeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Memory")
-                        .WithMany()
-                        .HasForeignKey("MemoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Operating")
-                        .WithMany()
-                        .HasForeignKey("OperatingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Processor")
-                        .WithMany()
-                        .HasForeignKey("ProcessorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", null)
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("ProductAttributeValueId");
-
                     b.HasOne("AppleStore.Product", "Product")
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "Resolution")
-                        .WithMany()
-                        .HasForeignKey("ResolutionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppleStore.Models.Entities.ProductAttributeValue", "StorageCapacity")
-                        .WithMany()
-                        .HasForeignKey("StorageCapacityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Battery");
-
-                    b.Navigation("Camera");
-
-                    b.Navigation("Color");
-
-                    b.Navigation("Connectivity");
-
-                    b.Navigation("DisplaySize");
-
-                    b.Navigation("Memory");
-
-                    b.Navigation("Operating");
-
-                    b.Navigation("Processor");
-
                     b.Navigation("Product");
-
-                    b.Navigation("Resolution");
-
-                    b.Navigation("StorageCapacity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -854,7 +760,7 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductAttributeValue", b =>
                 {
-                    b.Navigation("ProductVariants");
+                    b.Navigation("VariantsAttributes");
                 });
 
             modelBuilder.Entity("AppleStore.Product", b =>
@@ -864,6 +770,11 @@ namespace AppleStore.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductVariants");
+                });
+
+            modelBuilder.Entity("AppleStore.ProductVariant", b =>
+                {
+                    b.Navigation("VariantsAttributes");
                 });
 #pragma warning restore 612, 618
         }

@@ -88,10 +88,10 @@
                         <span class="hide-menu">Create new</span>
                     </a>
                 </li>
-                @* Categories *@
+                @* Products *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">PRODUCTS</span>
+                    <span class="hide-menu">Products</span>
                 </li>
                 <li class="sidebar-item">
                     <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Index" class="sidebar-link" aria-expanded="false">
@@ -102,13 +102,14 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Create" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminProductAttribute" asp-action="Index" class="sidebar-link" aria-expanded="false">
                         <span>
-                            <i class="ti ti-plus"></i>
+                            <i class="ti ti-list"></i>
                         </span>
-                        <span class="hide-menu">Create new</span>
+                        <span class="hide-menu">Attribute List</span>
                     </a>
                 </li>
+                @* Categories *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Categories</span>

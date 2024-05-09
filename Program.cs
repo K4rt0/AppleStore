@@ -36,6 +36,9 @@ builder.Services.AddNotyf(config =>
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<IDiscountRepository, EFDiscountRepository>();
+builder.Services.AddScoped<IProductVariantRepository, EFProductVariantRepository>();
+builder.Services.AddScoped<IProductAttributeRepository, EFProductAttributeRepository>();
+builder.Services.AddScoped<IProductAttributeValueRepository, EFProductAttributeValueRepository>();
 
 var app = builder.Build();
 

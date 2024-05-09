@@ -7,7 +7,6 @@ namespace AppleStore.Models.Entities
     public class ProductAttribute
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DisplayName("Tên thuộc tính")]
         public string? Name { get; set; }
