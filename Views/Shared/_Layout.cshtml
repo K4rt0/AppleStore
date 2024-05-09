@@ -275,7 +275,7 @@
                                             data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
                                             aria-expanded="false" aria-label="Toggle navigation">Shop</a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="product-grids.html">Shop Grid</a></li>
+                                            <li class="nav-item"><a asp-controller="Products" asp-action="Index">Shop Grid</a></li>
                                             <li class="nav-item"><a href="product-list.html">Shop List</a></li>
                                             <li class="nav-item"><a href="product-details.html">shop Single</a></li>
                                             <li class="nav-item"><a href="cart.html">Cart</a></li>
@@ -543,6 +543,12 @@
         }
         .btn:hover {
             color: #0167F3;
+        }
+        .btn-primary {
+            color: #fff !important;
+            background-color: #0167F3;
+            padding: 0.7rem;
+            border-radius: 0.7rem;
         }
     </style>
 </body>

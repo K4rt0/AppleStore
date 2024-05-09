@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -118,6 +119,9 @@ namespace AppleStore.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
             public string Role { get; set; }
             public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            [DisplayName("Ảnh đại diện")]
+            public string? Avatar { get; set; }
         }
 
 
@@ -161,6 +165,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
                 user.Gender = Input.Gender;
                 user.FullName = Input.FullName;
                 user.Birthdate = Input.Birthdate;
+                user.Avatar = "~/adminAssets/images/profile/user-1.jpg";
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
