@@ -1,8 +1,11 @@
-﻿@model IEnumerable<AppleStore.Category>
+﻿@model IEnumerable<AppleStore.Models.Entities.Category>
 
 @{
     ViewData["Title"] = "Category List";
     int id = 0;
+
+    ViewData["DeleteModalAction"] = "DeleteConfirmed";
+    ViewData["DeleteModalText"] = "Bạn có chắc muốn xoá danh mục này hay không?";
 }
 
 <div class="form-floating">
@@ -78,7 +81,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
-                                <button type="submit" class="btn dropdown-item deleteButton" data-category-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="ti ti-trash me-1"></i> Delete</button>
+                                <button type="submit" class="btn dropdown-item deleteButton" data-item-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteItemModal"><i class="ti ti-trash me-1"></i> Delete</button>
                             </div>
                         </div>
                     </td>
@@ -87,37 +90,3 @@
         </tbody>
     </table>
 </div>
-
-<div class="modal fade" id="deleteCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Xoá danh mục</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xoá danh mục này không?
-            </div>
-            <div class="modal-footer">
-                <form asp-action="DeleteConfirmed" method="post">
-                    <input type="hidden" id="categoryId" name="id" />
-                    <button type="submit" class="btn btn-danger">Xóa</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            $('.deleteButton').on('click', function () {
-                var categoryId = $(this).data('category-id');
-                $('#categoryId').val(categoryId);
-            });
-        });
-    </script>
-}
-
-                

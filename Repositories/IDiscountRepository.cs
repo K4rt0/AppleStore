@@ -1,4 +1,6 @@
-﻿namespace AppleStore.Repositories
+﻿using AppleStore.Models.Entities;
+
+namespace AppleStore.Repositories
 {
     public interface IDiscountRepository
     {

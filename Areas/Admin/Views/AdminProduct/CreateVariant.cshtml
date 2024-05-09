@@ -1,0 +1,71 @@
+﻿@model AppleStore.Models.Entities.ProductVariant
+@{
+    var productAttributes = (IEnumerable<ProductAttribute>?)ViewData["productAttributes"];
+    ViewData["Title"] = "CreateVariant";
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM CHI TIẾT SẢN PHẨM</h5>
+<form asp-action="CreateVariant" method="post" enctype="multipart/form-data">
+    @* <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label asp-for="Color" class="form-label"></label>
+                <select id="colorSelect" asp-for="ColorId" class="form-control" asp-items="ViewBag.Colors" class="form-select">
+                    <option value="" selected>Không chọn</option>
+                </select>
+                <span class="fw-normal">
+                    Màu hiển thị: <div id="colorDisplay" class="rounded-circle" style="width: 30px; height: 30px;"></div>
+                </span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DisplaySize" class="form-label"></label>
+                <select asp-for="DisplaySizeId" class="form-control" asp-items="ViewBag.DisplaySizes" class="form-select">
+                    <option value="" selected>Không chọn</option>
+                </select>
+            </div>
+            <!-- Thêm thẻ select cho các thuộc tính khác tại đây -->
+        </div>
+    </div> *@
+    <div class="mb-3">
+        <label class="form-label" asp-for="Price"></label>
+        <input type="text" class="form-control" asp-for="Price" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Quantity"></label>
+        <input type="text" class="form-control" asp-for="Quantity" />
+    </div>
+    <div class="row">
+        @foreach (var item in productAttributes)
+        {
+            var value = new SelectList(item.ProductAttributeValues, "Id", "Name");
+            <div class="col-12 col-md-4">
+                <div class="mb-3">
+                    <label class="form-label">@item.Name</label>
+                    <select asp-for="VariantsAttributes" class="form-control form-select" asp-items="value" multiple="false">
+                        <option value="0" selected>Không chọn</option>
+                    </select>
+                </div>
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm</button>
+    <a asp-action="Index" class="btn btn-secondary">Trở về</a>
+</div>
+</form>
+
+@section Scripts {
+    <script>
+        window.onload = function () {
+            var selectElements = document.querySelectorAll("select[multiple]");
+            selectElements.forEach(function (selectElement) {
+                selectElement.removeAttribute("multiple");
+            });
+        };
+        $(document).ready(function () {
+            $('#colorSelect').change(function () {
+                var selectedColor = $(this).children("option:selected").text();
+                $('#colorDisplay').css('background-color', selectedColor);
+            });
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿@model AppleStore.Category
+﻿@model AppleStore.Models.Entities.Category
 
 @{
     ViewData["Title"] = "Thêm mới danh mục";
@@ -22,4 +22,5 @@
         </select>
     </div>
     <button type="submit" class="btn btn-primary">Thêm</button>
+    <a asp-action="Index" class="btn btn-secondary">Trở về</a>
 </form>
