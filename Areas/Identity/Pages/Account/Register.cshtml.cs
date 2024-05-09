@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -118,6 +119,9 @@ namespace AppleStore.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
             public string Role { get; set; }
             public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            [DisplayName("Ảnh đại diện")]
+            public string? Avatar { get; set; }
         }
 
 
@@ -161,6 +165,7 @@ namespace AppleStore.Areas.Identity.Pages.Account
                 user.Gender = Input.Gender;
                 user.FullName = Input.FullName;
                 user.Birthdate = Input.Birthdate;
+                user.Avatar = "~/adminAssets/images/profile/user-1.jpg";
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -168,15 +173,15 @@ namespace AppleStore.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    /*if (!String.IsNullOrEmpty(Input.Role))
+                    if (!String.IsNullOrEmpty(Input.Role))
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
                     }
                     else
                     {
                         await _userManager.AddToRoleAsync(user, Role.Role_Customer);
-                    }*/
-                    await _userManager.AddToRoleAsync(user, Role.Role_Customer);
+                    }
+                    //await _userManager.AddToRoleAsync(user, Role.Role_Customer);
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
