@@ -10,8 +10,6 @@ namespace AppleStore.Models.Entities
         public int Id { get; set; }
         [DisplayName("Tên thuộc tính")]
         public string? Name { get; set; }
-        [DisplayName("Tên gợi ý")]
-        public string? NameSuggest { get; set; }
         [DisplayName("Mô tả")]
         public string? Description { get; set; }
         public virtual ICollection<ProductAttributeValue>? ProductAttributeValues { get; set; }
