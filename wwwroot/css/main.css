@@ -32,18 +32,17 @@ Index Of css
 /*======================================
     Normalize CSS
 ========================================*/
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Manrope", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-  color: #888;
-  overflow-x: hidden;
-  font-size: 14px;
+    font-family: "Plus Jakarta Sans",sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #888;
+    overflow-x: hidden;
+    font-size: 14px;
 }
 
 p {
@@ -1759,7 +1758,9 @@ ol {
 .header .navbar-cart .cart-items {
   position: relative;
 }
-
+.message-body {
+    max-height: 360px
+}
 .header .navbar-cart .cart-items:hover .main-btn {
   color: #fff;
   background-color: #0167F3;
@@ -1967,7 +1968,33 @@ ol {
   display: block;
   padding-bottom: 10px;
 }
+.fw-lighter {
+    font-weight: 300 !important
+}
 
+.fw-light {
+    font-weight: 300 !important
+}
+
+.fw-normal {
+    font-weight: 400 !important
+}
+
+.fw-medium {
+    font-weight: 500 !important
+}
+
+.fw-semibold {
+    font-weight: 600 !important
+}
+
+.fw-bold {
+    font-weight: 500 !important
+}
+
+.fw-bolder {
+    font-weight: 700 !important
+}
 .header .navbar-cart .cart-items .shopping-item .bottom .total span {
   text-transform: capitalize;
   color: #222;
