@@ -76,9 +76,9 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
 
             [DisplayName("Giới tính")]
             public bool Gender { get; set; }
-            [DisplayName("Ảnh đại diện")]
-            public string? Avatar { get; set; }
         }
+        [DisplayName("Ảnh đại diện")]
+        public string? Avatar { get; set; }
 
         private async Task LoadAsync(ApplicationUser user)
         {
@@ -88,8 +88,8 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
             var Birthdate = user.Birthdate;
             var Address = user.Address;
             var gender = user.Gender;
-            var Avatar = user.Avatar;
 
+            Avatar = user.Avatar;
             Username = userName;
 
             Input = new InputModel
@@ -98,8 +98,7 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
                 Fullname = fullName,
                 Birthdate = Birthdate,
                 Address = Address,
-                Gender = gender,
-                Avatar = Avatar,
+                Gender = gender
             };
         }
 
@@ -121,7 +120,7 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync(int id, IFormFile avatar)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -147,41 +146,10 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
                         return RedirectToPage();
                     }
                 }
-
-                if (Input.Fullname != user.FullName || Input.Birthdate != user.Birthdate ||
-                    Input.Address != user.Address || Input.Gender != user.Gender)
-                {
-                    user.FullName = Input.Fullname;
-                    user.Birthdate = Input.Birthdate;
-                    user.Address = Input.Address;
-                    user.Gender = Input.Gender;
-                    await _userManager.UpdateAsync(user);
-                }
-
-                //// Kiểm tra xem người dùng đã tải lên ảnh mới chưa
-                //if (Input.Avatar != user.Avatar)
-                //{
-                //    if (Request.Form.Files.Count > 0)
-                //    {
-                //        var file = Request.Form.Files[0];
-                //        if (file != null && file.Length > 0)
-                //        {
-                //            // Lưu ảnh vào thư mục hoặc lưu trữ ảnh
-                //            var imagePath = SaveImageToFileSystem(file);
-
-                //            // Lưu đường dẫn ảnh vào cơ sở dữ liệu
-                //            await SaveImageToDatabaseAsync(imagePath, user);
-                //        }
-                //    }
-                //}
-
-                if(!string.IsNullOrEmpty(Input.Avatar))
-                {
-                    user.Avatar = Input.Avatar;
-                    await _userManager.UpdateAsync(user);
-                }
-
+                user.Avatar = await CommonFunc.UploadFile(avatar, "profiles", CommonFunc.SEOUrl(user.Email) + Path.GetExtension(avatar.FileName));
+                
                 await _signInManager.RefreshSignInAsync(user);
+                await _userManager.UpdateAsync(user);
                 StatusMessage = "Thông tin của bạn đã được cập nhật.";
                 return RedirectToPage();
             }

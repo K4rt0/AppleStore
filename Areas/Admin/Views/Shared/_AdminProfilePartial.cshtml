@@ -8,6 +8,7 @@
     var user = await UserManager.GetUserAsync(User);
     var roles = await UserManager.GetRolesAsync(user);
     var color = string.Join(", ", roles) == "Owner" ? "#d14d4d" : "#e0c55e";
+    var image = $"/images/profiles/{(string.IsNullOrEmpty(user.Avatar) ? "user-default.jpg" : user.Avatar)}";
 }
 
 <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -15,14 +16,14 @@
         <li class="nav-item dropdown">
             <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                aria-expanded="false">
-                <img src="~/adminAssets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                <img src="@image" alt="" width="40" height="40" class="rounded-circle object-fit-cover">
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                 <div class="message-body">
                     <div class="d-flex px-3 pt-2">
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
-                                <img src="~/adminAssets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                                <img src="@image" alt="" width="40" height="40" class="rounded-circle object-fit-cover">
                             </div>
                             <div class="flex-grow-1">
                                 <span class="fw-semibold d-block">

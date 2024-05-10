@@ -15,7 +15,6 @@ namespace AppleStore.Models.Entities
         public int Percent { get; set; }
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
-
         public ICollection<Category>? Categories { get; set; }
         public ICollection<Product>? Products { get; set; }
         public ICollection<Order>? Orders { get; set; }

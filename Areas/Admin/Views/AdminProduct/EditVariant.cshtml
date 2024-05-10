@@ -5,7 +5,7 @@
 }
 
 <h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM CHI TIẾT SẢN PHẨM</h5>
-<form asp-action="CreateVariant" asp-route-variantId="@ViewBag.VariantId" method="post" enctype="multipart/form-data">
+<form asp-action="EditVariant" asp-route-variantId="@ViewBag.VariantId" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label class="form-label" asp-for="Price"></label>
         <input type="text" class="form-control" asp-for="Price" />
@@ -21,16 +21,17 @@
             <div class="col-12 col-md-4">
                 <div class="mb-3">
                     <label class="form-label">@item.Name</label>
-                    <select asp-for="VariantsAttributes" class="form-control form-select" asp-items="value" multiple="false">
-                        <option value="0" selected>Không chọn</option>
+                    <select asp-for="@Model.VariantsAttributes.FirstOrDefault(p => p.ProductAttributeValue.ProductAttributeId == item.Id).ProductAttributeValueId" class="form-control form-select" asp-items="value">
+                        <option value="0">Không chọn</option>
                     </select>
+                    <input type="hidden" asp-for="@Model.VariantsAttributes.FirstOrDefault(p => p.ProductAttributeValue.ProductAttributeId == item.Id).ProductVariantId" />
                 </div>
             </div>
         }
     </div>
     <button type="submit" class="btn btn-primary">Thêm</button>
-    <a asp-action="Details" asp-route-id="@ViewBag.VariantId" class="btn btn-secondary">Trở về</a>
-</div>
+    <a asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-secondary">Trở về</a>
+    </div>
 </form>
 
 @section Scripts {

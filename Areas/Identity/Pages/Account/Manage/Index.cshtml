@@ -23,14 +23,12 @@
                     <div class="col-md-8 col-12">
                         <div class="personal-image">
                             <label class="label">
-                                <input type="file" id="avatarUpload" onchange="updateAvatar(event)" />
-                                <input asp-for="Input.Avatar" type="hidden" id="avatarPath" />
+                                <input asp-for="Avatar" type="file" id="imageInput" accept=".jpg,.jpeg,.png" />
                                 <figure class="personal-figure">
-                                    @* <img src="https://avatars1.githubusercontent.com/u/11435231?s=460&v=4" class="personal-avatar" alt="avatar"> *@
                                     @{
-                                        var image = Model.Input.Avatar ?? "/adminAssets/images/profile/user-1.jpg";
+                                        var image = $"/images/profiles/{(string.IsNullOrEmpty(Model.Avatar) ? "user-default.jpg" : Model.Avatar)}";
                                     }
-                                    <img src="@image" id="avatarPreview" class="personal-avatar" alt="avatar">
+                                    <img src="@image" id="previewImage" class="personal-avatar" alt="avatar">
                                     <figcaption class="personal-figcaption">
                                         <img src="https://raw.githubusercontent.com/ThiagoLuizNunes/angular-boilerplate/master/src/assets/imgs/camera-white.png">
                                     </figcaption>
@@ -97,8 +95,7 @@
                 <div class="row align-items-center">
                     <div class="offset-md-4 col-md-8 mt-4">
                         <button type="submit" class="btn btn-primary">
-                            Save
-                            Changes
+                            Save Changes
                         </button>
                     </div>
                 </div>
@@ -108,4 +105,17 @@
 </div>
 
 
-<script src="~/js/upload-image.js" />
+@section Scripts {
+    <script>
+        document.querySelector('#imageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.querySelector('#previewImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}
