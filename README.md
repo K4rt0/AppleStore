@@ -7,6 +7,7 @@
 - Base Source
 - Login / Register (Template + Code-Behind)
 - Shop Template
+- Fix Header Main Site
 
 Admin Panel:
 - Admin Template
@@ -14,10 +15,10 @@ Admin Panel:
 - Category
 - Role Manager for Owner
 - Discount
+- Product
 
 ****************** [Scripting] ******************
-- Product Details
-- Account Settings (Pending)
+- News On Top
 
 ```
 ### Việt:
