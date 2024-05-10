@@ -24,7 +24,7 @@ Admin Panel:
 ```bash
 - Login with google
 - CRU Product (List, Creat new)
-- Account settings + template (update avatar profile)
+- Account settings + form template (update avatar profile)
 
 ****************** [Scripting] ******************
 - Add product to Cart (Pending)
