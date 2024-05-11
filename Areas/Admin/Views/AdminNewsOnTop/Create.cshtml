@@ -1,0 +1,59 @@
+﻿@model AppleStore.Models.Entities.NewsOnTop
+
+@{
+    ViewData["Title"] = "Thêm tin nổi bật";
+}
+
+<h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM TIN NỔI BẬT</h5>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-sm-3 col-xs-3 col-md-3">
+            <div class="card">
+                <div class="card-header bg-body-secondary">
+                    <h6 class="mb-0">
+                        <label class="form-label" asp-for="Image"></label>
+                    </h6>
+                </div>
+                <div class="card-body p-2">
+                    <div class="ratio ratio-1x1 bg-body-secondary">
+                        <img class="object-fit-cover" id="previewImage" />
+                    </div>
+                    <input type="file" class="form-control mt-3" asp-for="Image" id="imageInput" required />
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Header"></label>
+                <input type="text" class="form-control" asp-for="Header" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="SubHeader"></label>
+                <input type="text" class="form-control" asp-for="SubHeader" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Price"></label>
+                <input type="text" class="form-control" asp-for="Price" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Content"></label>
+                <textarea rows="4" class="form-control" asp-for="Content" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Thêm</button>
+            <a asp-action="Index" class="btn btn-secondary">Trở về</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.querySelector('#imageInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.querySelector('#previewImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

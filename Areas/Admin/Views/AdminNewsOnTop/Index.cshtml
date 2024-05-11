@@ -1,0 +1,59 @@
+﻿@model IEnumerable<AppleStore.Models.Entities.NewsOnTop>
+
+@{
+    ViewData["Title"] = "News On Top List";
+    int id = 0;
+
+    ViewData["DeleteModalAction"] = "DeleteConfirmed";
+    ViewData["DeleteModalText"] = "Bạn có chắc muốn xoá tin tức nổi bật này hay không?";
+}
+
+<div class="form-floating">
+    <h5 class="card-title fw-semibold mb-4 d-inline-block">DANH SÁCH SẢN PHẨM</h5>
+    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Create" class="btn btn-light border shadow float-end"><i class="ti ti-plus"></i></a>
+</div>
+<div class="table-responsive text-nowrap">
+    <table class="table table-hover">
+        <thead class="text-dark fs-4">
+            <tr>
+                <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">#</h6>
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Header)
+                </th>
+                <th class="border-bottom-0">
+                    @Html.DisplayNameFor(model => model.Content)
+                </th>
+                <th class="border-bottom-0"></th>
+            </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+            @foreach(var item in Model)
+            {
+                id++;
+                <tr>
+                    <td class="border-bottom-0 align-content-center"><h6 class="fw-semibold mb-0">@id</h6></td>
+                    <td class="border-bottom-0 align-content-center">
+                        <p class="mb-0 fw-normal">@item.Header</p>
+                    </td>
+                    <td class="border-bottom-0 align-content-center">
+                        <p class="mb-0 fw-normal text-truncate" style="max-width: 500px;">@item.Content</p>
+                    </td>
+                    
+                    <td class="border-bottom-0 align-content-center">
+                        <div class="dropdown">
+                            <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
+                                <button type="submit" class="btn dropdown-item deleteButton" data-item-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteItemModal"><i class="ti ti-trash me-1"></i> Delete</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

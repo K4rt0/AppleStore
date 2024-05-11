@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
-    var image = $"/images/profiles/{(string.IsNullOrEmpty(user.Avatar) ? "user-default.jpg" : user.Avatar)}";
+    var image = user != null ? ($"/images/profiles/{(string.IsNullOrEmpty(user.Avatar) ? "user-default.jpg" : user.Avatar)}") : "/images/profiles/user-default.jpg";
 }
 @if (SignInManager.IsSignedIn(User))
 {
