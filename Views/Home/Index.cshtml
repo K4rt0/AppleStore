@@ -121,7 +121,11 @@
                             <h4 class="title">
                                 <a href="@Url.Action("ProductGrids", "Products", new { id = product.Id })">@product.Name</a>
                             </h4>
+                            <div class="price">
+                                <span>product.ProductVariants.Min(v => v.Price)</span>
+                            </div>
                         </div>
+
                     </div>
                     <!-- End Single Product -->
                 </div>
