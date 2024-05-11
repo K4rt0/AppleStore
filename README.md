@@ -16,9 +16,10 @@ Admin Panel:
 - Role Manager for Owner
 - Discount
 - Product
+- News On Top
 
 ****************** [Scripting] ******************
-- News On Top
+- Product Details Page
 
 ```
 ### Việt:
