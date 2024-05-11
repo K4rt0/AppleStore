@@ -22,6 +22,7 @@ namespace AppleStore.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<NewsOnTop> NewsOnTops { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
