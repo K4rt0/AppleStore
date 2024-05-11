@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="~/css/tiny-slider.css" />
     <link rel="stylesheet" href="~/css/glightbox.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -32,7 +34,7 @@
         your experience and security.
       </p>
     <![endif]-->
-    <!-- Preloader -->
+@*     <!-- Preloader -->
     <div class="preloader">
         <div class="preloader-inner">
             <div class="preloader-icon">
@@ -41,7 +43,7 @@
             </div>
         </div>
     </div>
-    <!-- /End Preloader -->
+    <!-- /End Preloader --> *@
     <!-- Start Header Area -->
     <header class="header navbar-area">
         <!-- Start Topbar -->
@@ -124,24 +126,20 @@
                         <div class="main-menu-search">
                             <!-- navbar search start -->
                             <div class="navbar-search search-style-5">
+                                <form asp-action="Index" method="get">
                                 <div class="search-select">
                                     <div class="select-position">
-                                        <select id="select1">
-                                            <option selected>All</option>
-                                            <option value="1">option 01</option>
-                                            <option value="2">option 02</option>
-                                            <option value="3">option 03</option>
-                                            <option value="4">option 04</option>
-                                            <option value="5">option 05</option>
+                                        <select name="CategoryId" class="form-control" asp-items="@ViewBag.CategoryID">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="search-input">
-                                    <input type="text" placeholder="Search">
+                                    <input type="text" name="name" placeholder="Search">
                                 </div>
                                 <div class="search-btn">
-                                    <button><i class="lni lni-search-alt"></i></button>
+                                    <button type="submit"><i class="lni lni-search-alt"></i></button>
                                 </div>
+                                </form>
                             </div>
                             <!-- navbar search Ends -->
                         </div>
@@ -388,8 +386,8 @@
                         <!-- Start Single Widget -->
                         <div class="single-widget search">
                             <h3>Search Product</h3>
-                            <form action="#">
-                                <input type="text" placeholder="Search Here...">
+                            <form asp-action="Index" method="get">
+                                <input type="text" placeholder="Search Here..." name="name">
                                 <button type="submit"><i class="lni lni-search-alt"></i></button>
                             </form>
                         </div>
@@ -410,49 +408,20 @@
                         </div>
                         <!-- End Single Widget -->
                         <!-- Start Single Widget -->
-                        <div class="single-widget range">
-                            <h3>Price Range</h3>
-                            <div class="input-number price-min">
-                                <input id="price-min" type="number" name="Priceto" placeholder="1">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
+                        <form asp-action="Index" method="get">
+                            <div class="single-widget range">
+                                <h3>Price Range</h3>
+                                <input type="range" class="form-range" name="PriceFrom" step="10" min="10" max="1000" onchange="rangePrimary.value=value" value="10">
+                                <div class="range-inner">
+                                    <label>$</label>
+                                    <input type="text" id="rangePrimary" placeholder="10">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="font-size:small;padding:7px;">Search</button>
                             </div>
-                            <span> - </span>
-                            <div class="input-number price-max">
-                                <input id="price-max" type="number" name="Pricefrom" placeholder="9999">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
-                        </div>
-                        <!-- End Single Widget -->
-                        <!-- Start Single Widget -->
-                        <div class="single-widget condition">
-                            <h3>Filter by Price</h3>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
-                                <label class="form-check-label" for="flexCheckDefault1">
-                                    $50 - $100L (208)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
-                                <label class="form-check-label" for="flexCheckDefault2">
-                                    $100L - $500 (311)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
-                                <label class="form-check-label" for="flexCheckDefault3">
-                                    $500 - $1,000 (485)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4">
-                                <label class="form-check-label" for="flexCheckDefault4">
-                                    $1,000 - $5,000 (213)
-                                </label>
-                            </div>
-                        </div>
+                        </form>
+
+
+
                         <!-- End Single Widget -->
                     </div>
                     <!-- End Product Sidebar -->
@@ -466,10 +435,10 @@
                                         <form method="get" asp-action="Index">
                                             <label for="sorting">Sort by:</label>
                                             <select class="form-control" id="sorting" name="sortOrder" onchange="this.form.submit()">
-                                                <option value="price_asc">Low - High Price</option>
-                                                <option value="price_desc">High - Low Price</option>
                                                 <option value="name_asc">A - Z Order</option>
                                                 <option value="name_desc">Z - A Order</option>
+                                                <option value="price_asc">Low - High Price</option>
+                                                <option value="price_desc">High - Low Price</option>
                                             </select>
                                         </form>
                                         <h3 class="total-show-product">Showing: <span>1 - 12 items</span></h3>
@@ -497,17 +466,20 @@
                             <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
                                  aria-labelledby="nav-grid-tab">
                                 <div class="row">
+                                    @{
+                                        int index = 0; // Khởi tạo chỉ số cho danh sách giá nhỏ nhất
+                                    }
+
                                     @foreach (var product in Model)
                                     {
                                         <div class="col-lg-3 col-md-6 col-12">
-                                            <!-- Start Single Product -->
                                             <div class="single-product">
                                                 <div class="product-image">
                                                     <img src="@Url.Content($"~/images/products/{product.Avatar}")" alt="@product.Name">
                                                     <div class="button">
-                                                        <a href="@Url.Action("Details", "Products", new { id = product.Id })" class="btn">
-                                                            <i class="lni lni-cart"></i> Add to Cart
-                                                        </a>
+                                                    <a href="@Url.Action("Details", "Products", new { id = product.Id })" class="btn">
+                                                        <i class="lni lni-cart"></i> Add to Cart
+                                                    </a>
                                                     </div>
                                                 </div>
                                                 <div class="product-info">
@@ -524,13 +496,14 @@
                                                         <li><span>5.0 Review(s)</span></li>
                                                     </ul>
                                                     <div class="price">
-                                                        <span>product.ProductVariants.Min(v => v.Price)</span>
+                                                        <span>@ViewBag.MinPrices[index].ToString("C")</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- End Single Product -->
                                         </div>
+                                        index++;
                                     }
+                                     
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
@@ -554,93 +527,22 @@
                             </div>
                             <div class="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
                                 <div class="row">
+
+                                    @{
+                                        index = 0; // Khởi tạo chỉ số cho danh sách giá nhỏ nhất
+                                    }
+
+                                    @foreach (var product in Model)
+                                    {
                                     <div class="col-lg-12 col-md-12 col-12">
                                         <!-- Start Single Product -->
                                         <div class="single-product">
                                             <div class="row align-items-center">
                                                 <div class="col-lg-4 col-md-4 col-12">
                                                     <div class="product-image">
-                                                        <img src="~/images/products/product-1.jpg" alt="#">
+                                                        <img src="@Url.Content($"~/images/products/{product.Avatar}")" alt="@product.Name">
                                                         <div class="button">
-                                                            <a href="product-details.html" class="btn">
-                                                                <i class="lni lni-cart"></i> Add to
-                                                                Cart
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-8 col-md-8 col-12">
-                                                    <div class="product-info">
-                                                        <span class="category">Watches</span>
-                                                        <h4 class="title">
-                                                            <a href="product-grids.html">Xiaomi Mi Band 5</a>
-                                                        </h4>
-                                                        <ul class="review">
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star"></i></li>
-                                                            <li><span>4.0 Review(s)</span></li>
-                                                        </ul>
-                                                        <div class="price">
-                                                            <span>$199.00</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End Single Product -->
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-12">
-                                        <!-- Start Single Product -->
-                                        <div class="single-product">
-                                            <div class="row align-items-center">
-                                                <div class="col-lg-4 col-md-4 col-12">
-                                                    <div class="product-image">
-                                                        <img src="~/images/products/product-2.jpg" alt="#">
-                                                        <span class="sale-tag">-25%</span>
-                                                        <div class="button">
-                                                            <a href="product-details.html" class="btn">
-                                                                <i class="lni lni-cart"></i> Add to
-                                                                Cart
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-8 col-md-8 col-12">
-                                                    <div class="product-info">
-                                                        <span class="category">Speaker</span>
-                                                        <h4 class="title">
-                                                            <a href="product-grids.html">Big Power Sound Speaker</a>
-                                                        </h4>
-                                                        <ul class="review">
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><span>5.0 Review(s)</span></li>
-                                                        </ul>
-                                                        <div class="price">
-                                                            <span>$275.00</span>
-                                                            <span class="discount-price">$300.00</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End Single Product -->
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-12">
-                                        <!-- Start Single Product -->
-                                        <div class="single-product">
-                                            <div class="row align-items-center">
-                                                <div class="col-lg-4 col-md-4 col-12">
-                                                    <div class="product-image">
-                                                        <img src="~/images/products/product-3.jpg" alt="#">
-                                                        <div class="button">
-                                                            <a href="product-details.html" class="btn">
+                                                            <a href="@Url.Action("Details", "Products", new { id = product.Id })" class="btn">
                                                                 <i class="lni lni-cart"></i> Add to Cart
                                                             </a>
                                                         </div>
@@ -648,9 +550,9 @@
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-12">
                                                     <div class="product-info">
-                                                        <span class="category">Camera</span>
+                                                        <span class="category">@product.Category.Name</span>
                                                         <h4 class="title">
-                                                            <a href="product-grids.html">WiFi Security Camera</a>
+                                                            <a href="@Url.Action("ProductGrids", "Products", new { id = product.Id })">@product.Name</a>
                                                         </h4>
                                                         <ul class="review">
                                                             <li><i class="lni lni-star-filled"></i></li>
@@ -661,7 +563,7 @@
                                                             <li><span>5.0 Review(s)</span></li>
                                                         </ul>
                                                         <div class="price">
-                                                            <span>$399.00</span>
+                                                            <span>@ViewBag.MinPrices[index].ToString("C")</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -669,85 +571,7 @@
                                         </div>
                                         <!-- End Single Product -->
                                     </div>
-                                    <div class="col-lg-12 col-md-12 col-12">
-                                        <!-- Start Single Product -->
-                                        <div class="single-product">
-                                            <div class="row align-items-center">
-                                                <div class="col-lg-4 col-md-4 col-12">
-                                                    <div class="product-image">
-                                                        <img src="~/images/products/product-4.jpg" alt="#">
-                                                        <span class="new-tag">New</span>
-                                                        <div class="button">
-                                                            <a href="product-details.html" class="btn">
-                                                                <i class="lni lni-cart"></i> Add to
-                                                                Cart
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-8 col-md-8 col-12">
-                                                    <div class="product-info">
-                                                        <span class="category">Phones</span>
-                                                        <h4 class="title">
-                                                            <a href="product-grids.html">iphone 6x plus</a>
-                                                        </h4>
-                                                        <ul class="review">
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><span>5.0 Review(s)</span></li>
-                                                        </ul>
-                                                        <div class="price">
-                                                            <span>$400.00</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End Single Product -->
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-12">
-                                        <!-- Start Single Product -->
-                                        <div class="single-product">
-                                            <div class="row align-items-center">
-                                                <div class="col-lg-4 col-md-4 col-12">
-                                                    <div class="product-image">
-                                                        <img src="~/images/products/product-7.jpg" alt="#">
-                                                        <span class="sale-tag">-50%</span>
-                                                        <div class="button">
-                                                            <a href="product-details.html" class="btn">
-                                                                <i class="lni lni-cart"></i> Add to
-                                                                Cart
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-8 col-md-8 col-12">
-                                                    <div class="product-info">
-                                                        <span class="category">Headphones</span>
-                                                        <h4 class="title">
-                                                            <a href="product-grids.html">PX7 Wireless Headphones</a>
-                                                        </h4>
-                                                        <ul class="review">
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star-filled"></i></li>
-                                                            <li><i class="lni lni-star"></i></li>
-                                                            <li><span>4.0 Review(s)</span></li>
-                                                        </ul>
-                                                        <div class="price">
-                                                            <span>$100.00</span>
-                                                            <span class="discount-price">$200.00</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End Single Product -->
-                                    </div>
+                                    }
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
@@ -934,6 +758,8 @@
     <script src="~/js/tiny-slider.js"></script>
     <script src="~/js/glightbox.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+    
 </body>
 
 
