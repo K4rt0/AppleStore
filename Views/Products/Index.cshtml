@@ -21,12 +21,13 @@
     <link rel="stylesheet" href="~/css/tiny-slider.css" />
     <link rel="stylesheet" href="~/css/glightbox.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
-    <link href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css" rel="stylesheet">
 
 
 </head>
 
 <body>
+            <form method="get" asp-action="Index">
+
     <!--[if lte IE 9]>
       <p class="browserupgrade">
         You are using an <strong>outdated</strong> browser. Please
@@ -126,7 +127,6 @@
                         <div class="main-menu-search">
                             <!-- navbar search start -->
                             <div class="navbar-search search-style-5">
-                                <form asp-action="Index" method="get">
                                 <div class="search-select">
                                     <div class="select-position">
                                         <select name="CategoryId" class="form-control" asp-items="@ViewBag.CategoryID">
@@ -139,7 +139,6 @@
                                 <div class="search-btn">
                                     <button type="submit"><i class="lni lni-search-alt"></i></button>
                                 </div>
-                                </form>
                             </div>
                             <!-- navbar search Ends -->
                         </div>
@@ -224,9 +223,11 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- End Header Middle -->
         <!-- Start Header Bottom -->
+
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 col-md-6 col-12">
@@ -384,31 +385,28 @@
                     <!-- Start Product Sidebar -->
                     <div class="product-sidebar">
                         <!-- Start Single Widget -->
-                        <div class="single-widget search">
-                            <h3>Search Product</h3>
-                            <form asp-action="Index" method="get">
-                                <input type="text" placeholder="Search Here..." name="name">
-                                <button type="submit"><i class="lni lni-search-alt"></i></button>
-                            </form>
-                        </div>
-                        <!-- End Single Widget -->
-                        <!-- Start Single Widget -->
-                        <div class="single-widget">
-                            <h3>All Categories</h3>
-                            <ul class="list">
-                                @foreach (var category in ViewBag.CategoryCounts)
-                                {
-                                    <li>
-                                        <a asp-action="Index" asp-route-CategoryId="@category.CategoryId">
-                                            @category.CategoryName (@category.Count)
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                        <!-- End Single Widget -->
-                        <!-- Start Single Widget -->
-                        <form asp-action="Index" method="get">
+                            <div class="single-widget search">
+                                <h3>Search Product</h3>
+                                   <input type="text" placeholder="Search Here..." name="name">
+                                    <button type="submit"><i class="lni lni-search-alt"></i></button>
+                            </div>
+                            <!-- End Single Widget -->
+                            <!-- Start Single Widget -->
+                            <div class="single-widget">
+                                <h3>All Categories</h3>
+                                <ul class="list">
+                                    @foreach (var category in ViewBag.CategoryCounts)
+                                    {
+                                        <li>
+                                            <a asp-action="Index" asp-route-CategoryId="@category.CategoryId">
+                                                @category.CategoryName (@category.Count)
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <!-- End Single Widget -->
+                            <!-- Start Single Widget -->
                             <div class="single-widget range">
                                 <h3>Price Range</h3>
                                 <input type="range" class="form-range" name="PriceFrom" step="10" min="10" max="1000" onchange="rangePrimary.value=value" value="10">
@@ -418,7 +416,6 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary" style="font-size:small;padding:7px;">Search</button>
                             </div>
-                        </form>
 
 
 
@@ -432,15 +429,14 @@
                             <div class="row align-items-center">
                                 <div class="col-lg-7 col-md-8 col-12">
                                     <div class="product-sorting">
-                                        <form method="get" asp-action="Index">
                                             <label for="sorting">Sort by:</label>
                                             <select class="form-control" id="sorting" name="sortOrder" onchange="this.form.submit()">
-                                                <option value="name_asc">A - Z Order</option>
-                                                <option value="name_desc">Z - A Order</option>
+                                                <option selected disabled>Default</option>
+                                                <option value="name_asc">A - Z</option>
+                                                <option value="name_desc">Z - A</option>
                                                 <option value="price_asc">Low - High Price</option>
                                                 <option value="price_desc">High - Low Price</option>
                                             </select>
-                                        </form>
                                         <h3 class="total-show-product">Showing: <span>1 - 12 items</span></h3>
                                     </div>
                                 </div>
@@ -552,7 +548,7 @@
                                                     <div class="product-info">
                                                         <span class="category">@product.Category.Name</span>
                                                         <h4 class="title">
-                                                            <a href="@Url.Action("ProductGrids", "Products", new { id = product.Id })">@product.Name</a>
+                                                            <a href="@Url.Action("Details", "Products", new { id = product.Id })">@product.Name</a>
                                                         </h4>
                                                         <ul class="review">
                                                             <li><i class="lni lni-star-filled"></i></li>
@@ -597,7 +593,9 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
     </section>
     <!-- End Product Grids -->
     <!-- Start Footer Area -->
@@ -622,7 +620,7 @@
                                 </h4>
                                 <div class="newsletter-form-head">
                                     <form action="#" method="get" target="_blank" class="newsletter-form">
-                                        <input name="EMAIL" placeholder="Email address here..." type="email">
+                                        <input placeholder="Email address here..." type="email">
                                         <div class="button">
                                             <button class="btn">Subscribe<span class="dir-part"></span></button>
                                         </div>
@@ -752,14 +750,13 @@
     <a href="#" class="scroll-top">
         <i class="lni lni-chevron-up"></i>
     </a>
+    </form>
 
     <!-- ========================= JS here ========================= -->
     <script src="~/js/bootstrap.min.js"></script>
     <script src="~/js/tiny-slider.js"></script>
     <script src="~/js/glightbox.min.js"></script>
     <script src="~/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
-    
 </body>
 
 
