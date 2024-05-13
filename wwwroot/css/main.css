@@ -1275,6 +1275,28 @@ ol {
   color: #fff;
   border-color: transparent;
 }
+.pagination-list .page-item.active .page-link,
+.pagination-list .page-item:hover .page-link {
+    background: #fff;
+    color: #081828;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 6px 18px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+.pagination-list .page-item .page-link {
+    background: #fff;
+    color: #081828;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 6px 18px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
 
 .pagination .pagination-list li a i {
   font-size: 14px;

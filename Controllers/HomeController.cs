@@ -24,7 +24,17 @@ namespace AppleStore.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var products = (await _productRepository.GetAllAsync()).Where(p=>p.HotSeller==true).Take(8);
+            var products = (await _productRepository.GetAllAsync()).Take(8);
+            List<decimal> minPrices = new List<decimal>();
+            foreach (var product in products)
+            {
+                var minPrice = product.ProductVariants
+                                          .Select(p => p.Price)
+                                          .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
+                                          .Min();
+                minPrices.Add(minPrice);
+            }
+            ViewBag.MinPrices = minPrices;
             return View(products);
         }
 

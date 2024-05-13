@@ -4,6 +4,7 @@ using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using X.PagedList;
 
 namespace AppleStore.Controllers
 {
@@ -21,90 +22,129 @@ namespace AppleStore.Controllers
             _context = dbContext;
             _notyf = notyfService;
         }
-        public async Task<IActionResult> Index(string? name, decimal? Pricefrom, int? CategoryId, string? sortOrder)
-        {
-            var products = await _productRepository.GetAllAsync();
-            var categories = await _categoryRepository.GetAllAsync();
-            var listCategories = categories.ToList();
-            listCategories.Insert(0, new Category { Id = 0, Name = "All" });
-            ViewBag.CategoryID = new SelectList(listCategories, "Id", "Name", CategoryId);
-            if (!string.IsNullOrEmpty(name))
+            public async Task<IActionResult> Index(string? name, decimal? Pricefrom, int? CategoryId, string? sortOrder, int? CategoryIdShow, int? page)
             {
-                if ( Pricefrom != null)
-                {
-                    if (CategoryId > 0)
-                    {
-                        products = products.Where(x => x.CategoryId == CategoryId && x.Name.Contains(name) && x.ProductVariants.Any(v=> v.Price >= Pricefrom));
-                    }
-                    else
-                    {
-                        products = products.Where(x => x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-                    }
+                var products = await _productRepository.GetAllAsync();
+                var categories = await _categoryRepository.GetAllAsync();
+                var listCategories = categories.ToList();
+                listCategories.Insert(0, new Category { Id = 0, Name = "All" });
+                ViewBag.CategoryID = new SelectList(listCategories, "Id", "Name", CategoryId);
 
-                }
-                else
+                //LỌC
+                if (!string.IsNullOrEmpty(name))
                 {
-                    products = products.Where(x => x.Name.Contains(name));
-
-                }
-            }
-            else
-            {
-                if (Pricefrom != null)
-                {
-                    if (CategoryId > 0)
+                    if ( Pricefrom != null)
                     {
-                        products = products.Where(x => x.CategoryId == CategoryId && x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                        if (CategoryId > 0)
+                        {
+                            products = products.Where(x => x.CategoryId == CategoryId && x.Name.Contains(name) && x.ProductVariants.Any(v=> v.Price >= Pricefrom));
+                        }
+                        else
+                        {
+                            products = products.Where(x => x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                        }
 
                     }
                     else
                     {
-                        products = products.Where(x => x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                        products = products.Where(x => x.Name.Contains(name));
+
                     }
                 }
                 else
                 {
-                    if (CategoryId > 0)
+                    if (Pricefrom != null)
                     {
-                        products = products.Where(x => x.CategoryId == CategoryId);
+                        if (CategoryId > 0)
+                        {
+                            products = products.Where(x => x.CategoryId == CategoryId && x.ProductVariants.Any(v => v.Price >= Pricefrom));
+
+                        }
+                        else
+                        {
+                            products = products.Where(x => x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                        }
                     }
+                    else
+                    {
+                        if (CategoryId > 0)
+                        {
+                            products = products.Where(x => x.CategoryId == CategoryId);
+                        }
+                    }
+
                 }
 
-            }
-            var categoryCounts = products
-                    .GroupBy(p => p.Category)
-                    .Select(g => new { CategoryId = g.Key.Id, CategoryName = g.Key.Name, Count = g.Count() })
-                    .ToList();
-            ViewBag.CategoryCounts = categoryCounts;
-            switch (sortOrder)
-            {
-                case "name_asc":
-                    products = products.OrderBy(p => p.Name);
-                    break;
-                case "name_desc":
-                    products = products.OrderByDescending(p => p.Name);
-                    break;
-                case "price_asc":
-                    products = products.OrderBy(p => p.ProductVariants.Min(v => v.Price));
-                    break;
-                case "price_desc":
-                    products = products.OrderByDescending(p => p.ProductVariants.Min(v => v.Price));
-                    break;
-                default:
-                    products = products.OrderBy(p => p.Name);
-                    break;
-            }
-            List<decimal> minPrices = new List<decimal>();
-            foreach (var product in products)
-            {
-                var minPrice = product.ProductVariants
-                                          .Select(p => p.Price)
-                                          .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
-                                          .Min();
-                minPrices.Add(minPrice);
-            }
-            ViewBag.MinPrices = minPrices;
-            return View(products);
-        }   
+                //ĐẾM SỐ LOẠI
+                var categoryCounts = (from c in _categoryRepository.GetAllAsync().Result
+                                      join p in products on c.Id equals p.CategoryId into productGroup
+                                      from pg in productGroup.DefaultIfEmpty()
+                                      group pg by new { c.Id, c.Name } into g
+                                      select new
+                                      {
+                                          CategoryId = g.Key.Id,
+                                          CategoryName = g.Key.Name,
+                                          Count = g.Count(t => t != null && t.CategoryId == g.Key.Id)
+                                      }).ToList();
+
+
+                categoryCounts.Insert(0, new { CategoryId = 0, CategoryName = "All Categories", Count = products.Count() });
+                ViewBag.CategoryCounts = categoryCounts;
+                if (CategoryIdShow == null)
+                {
+                    CategoryIdShow = 0;
+                }
+
+                // SẮP XẾP
+                switch (sortOrder)
+                {
+                    case "name_asc":
+                        products = products.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        products = products.OrderByDescending(p => p.Name);
+                        break;
+                    case "price_asc":
+                        products = products.OrderBy(p => p.ProductVariants.Min(v => v.Price));
+                        break;
+                    case "price_desc":
+                        products = products.OrderByDescending(p => p.ProductVariants.Min(v => v.Price));
+                        break;
+                    default:
+                        products = products.OrderBy(p => p.Name);
+                        break;
+                }
+
+
+                List<decimal> minPrices = new List<decimal>();
+                foreach (var product in products)
+                {
+                    var minPrice = product.ProductVariants
+                                              .Select(p => p.Price)
+                                              .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
+                                              .Min();
+                    minPrices.Add(minPrice);
+                }
+                ViewBag.MinPrices = minPrices;
+                if (CategoryIdShow.HasValue && CategoryIdShow.Value > 0)
+                {
+                    products = products.Where(p => p.CategoryId == CategoryIdShow.Value);
+                }
+            ViewBag.TotalProducts = products.Count();
+
+            //PHÂN TRANG
+            var pageNumber = page ?? 1; // Nếu không có số trang được cung cấp, mặc định là trang 1
+                var pageSize = 4; // Số lượng sản phẩm trên mỗi trang
+                products = await products.ToPagedListAsync(pageNumber, pageSize);
+                ViewBag.CategoryIdShow = CategoryIdShow;
+                ViewBag.CurrentName = name;
+                ViewBag.CurrentPriceFrom = Pricefrom;
+                ViewBag.CurrentCategoryId = CategoryId;
+                ViewBag.CurrentSortOrder = sortOrder;
+                ViewBag.Page = pageNumber;
+                ViewBag.PageSize = pageSize;
+
+                return View(products);
+            }   
     }
 }

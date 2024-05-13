@@ -103,6 +103,9 @@
             </div>
         </div>
         <div class="row">
+            @{
+                int index = 0; // Khởi tạo chỉ số cho danh sách giá nhỏ nhất
+            }
             @foreach (var product in Model)
             {
                 <div class="col-lg-3 col-md-6 col-12">
@@ -122,13 +125,14 @@
                                 <a href="@Url.Action("ProductGrids", "Products", new { id = product.Id })">@product.Name</a>
                             </h4>
                             <div class="price">
-                                <span>product.ProductVariants.Min(v => v.Price)</span>
+                                <span>@ViewBag.MinPrices[index].ToString("C")</span>
                             </div>
                         </div>
 
                     </div>
                     <!-- End Single Product -->
                 </div>
+                index++;
             }
         </div>
     </div>
