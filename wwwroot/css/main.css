@@ -8166,7 +8166,34 @@ blockquote span {
 }
 
 @media (max-width: 767px) {
-  .footer .footer-bottom .socila li span {
-    display: none;
-  }
+    .footer .footer-bottom .socila li span {
+        display: none;
+    }
+}
+
+.color-option .color-item input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.20em solid currentColor;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+}
+
+.color-option .color-item input[type="radio"]::before {
+    content: "";
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 200ms transform ease-in-out;
+    box-shadow: inset 1em 1em currentColor;
+}
+
+.color-option .color-item input[type="radio"]:checked::before {
+    transform: scale(1);
 }
