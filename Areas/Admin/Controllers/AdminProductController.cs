@@ -184,13 +184,19 @@ namespace AppleStore.Areas.Admin.Controllers
             var productAttributes = await _productAttributeRepository.GetAllAsync();
             ViewBag.VariantId = id;
             ViewData["productAttributes"] = productAttributes;
-            /*ViewBag.Colors = new SelectList(_context.ProductAttributeValues.Where(pav => pav.ProductAttributeId == _context.ProductAttributes.FirstOrDefault(pa => pa.NameSuggest == "Color").Id), "Id", "Value");
-            ViewBag.DisplaySizes = new SelectList(_context.ProductAttributeValues.Where(pav => pav.ProductAttributeId == _context.ProductAttributes.FirstOrDefault(pa => pa.NameSuggest == "DisplaySize").Id), "Id", "Name");*/
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateVariant(ProductVariant productVariant, List<int> VariantsAttributes)
+        public async Task<IActionResult> CreateVariant(int variantId, ProductVariant productVariant, List<int> VariantsAttributes)
         {
+            ViewBag.VariantId = variantId;
+            if (productVariant.Price <= 0 || productVariant.Quantity <= 0)
+            {
+                var productAttributes = await _productAttributeRepository.GetAllAsync();
+                ViewData["productAttributes"] = productAttributes;
+                _notyf.Warning("Giá tiền hoặc số lượng không được bỏ trống !");
+                return View(productVariant);
+            }
             if (!ModelState.IsValid || productVariant == null)
                 return NotFound();
 
@@ -215,6 +221,57 @@ namespace AppleStore.Areas.Admin.Controllers
             await _productVariantRepository.AddAsync(productVariant);
             ViewBag.VariantName = product.Name;
             return RedirectToAction("Details", new { id = id });
+        }
+        public async Task<IActionResult> EditVariant(int id)
+        {
+            var productVariant = await _productVariantRepository.GetByIdAsync(id);
+            if (productVariant == null)
+                return NotFound();
+            ViewBag.VariantId = id;
+
+            var productAttributes = await _productAttributeRepository.GetAllAsync();
+            ViewData["productAttributes"] = productAttributes;
+            return View(productVariant);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditVariant(int variantId, ProductVariant productVariant, List<int> ProductAttributeValueId)
+        {
+            ViewBag.VariantId = variantId;
+
+            if (productVariant.Price <= 0 || productVariant.Quantity <= 0)
+            {
+                ViewData["productAttributes"] = await _productAttributeRepository.GetAllAsync();
+                _notyf.Warning("Giá tiền hoặc số lượng không được bỏ trống !");
+                return View(productVariant);
+            }
+
+            if (!ModelState.IsValid || productVariant == null || variantId != productVariant.Id)
+                return NotFound();
+
+            var existingVariant = await _productVariantRepository.GetByIdAsync(variantId);
+
+            existingVariant.VariantsAttributes.Clear();
+
+            existingVariant.Price = productVariant.Price;
+            existingVariant.Quantity = productVariant.Quantity;
+
+            existingVariant.VariantsAttributes = ProductAttributeValueId
+                .Where(item => item != 0)
+                .Select(item => new VariantsAttributes
+                {
+                    ProductVariantId = variantId,
+                    ProductAttributeValueId = item
+                }).ToList();
+
+            await _productVariantRepository.UpdateAsync(existingVariant);
+
+            return RedirectToAction("Details", new { id = existingVariant.ProductId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteVariantConfirmed(int id)
+        {
+            await _productVariantRepository.DeleteAsync(id);
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

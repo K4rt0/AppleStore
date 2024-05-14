@@ -2,24 +2,65 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var image = user != null ? ($"/images/profiles/{(string.IsNullOrEmpty(user.Avatar) ? "user-default.jpg" : user.Avatar)}") : "/images/profiles/user-default.jpg";
+}
 @if (SignInManager.IsSignedIn(User))
 {
-    <ul class="user-login">
-        <a class="user" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="lni lni-user"></i> Hello @User.Identity?.Name!</a>
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit">Logout</button>
-        </form>
-    </ul>
+    <div class="navbar justify-content-end" id="navbarNav">
+        <ul class="flex-row ms-auto align-items-center justify-content-end">
+            <li class="dropdown">
+                <a class="nav-link nav-icon-hover p-0" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <img src="@image" class="rounded-circle object-fit-cover" style="min-width: 40px; max-width: 40px; min-height: 40px; max-height: 40px;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
+                    <div class="message-body">
+                        <div class="d-flex px-3 pt-2">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <img src="@image" style="min-width: 40px; max-width: 40px; min-height: 40px; max-height: 40px;" class="rounded-circle object-fit-cover">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="fw-semibold d-block">
+                                        @user.FullName
+                                    </span>
+                                    <small class="text-muted">@user.Email</small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="dropdown-divider">
+                        @if(user != null)
+                        {
+                            if (await UserManager.IsInRoleAsync(user, Role.Role_Admin) || await UserManager.IsInRoleAsync(user, Role.Role_Owner))
+                            {
+                                <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="d-flex align-items-center gap-2 dropdown-item text-muted">
+                                    <i class="lni lni-control-panel"></i>
+                                    <p class="mb-0 fs-7">Admin Panel</p>
+                                </a>
+                            }
+                        }
+                        <a asp-area="Identity" asp-controller="Account" asp-action="Manage" class="d-flex align-items-center gap-2 dropdown-item text-muted">
+                            <i class="lni lni-cog"></i>
+                            <p class="mb-0 fs-7">Cài đặt tài khoản</p>
+                        </a>
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="text-muted d-flex align-items-center gap-2 dropdown-item">
+                                <i class="lni lni-power-switch"></i>
+                                <p class="mb-0 fs-7">Đăng xuất</p>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 }
 else
 {
-    <ul class="user-login">
-        <li>
-            <a asp-area="Identity" asp-page="/Account/Login">Sign In</a>
-        </li>
-        <li>
-            <a asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-    </ul>
+    <div class="d-flex flex-column justify-content-start text-start">
+        <a asp-area="Identity" asp-page="/Account/Login" class="text-dark">Đăng nhập</a>
+        <a asp-area="Identity" asp-page="/Account/Register" class="text-dark">Đăng ký</a>
+    </div>
 }

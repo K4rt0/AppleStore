@@ -22,11 +22,12 @@ namespace AppleStore.Repositories
                 .Include(p => p.ProductVariants)
                 .ThenInclude(p => p.VariantsAttributes)
                 .ThenInclude(p => p.ProductAttributeValue)
+                .ThenInclude(p => p.ProductAttribute)
                 .Include(p => p.OrderDetails)
                 .ToListAsync();
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Products
                 .Include(p => p.Category)
@@ -34,6 +35,7 @@ namespace AppleStore.Repositories
                 .Include(p => p.ProductVariants)
                 .ThenInclude(p => p.VariantsAttributes)
                 .ThenInclude(p => p.ProductAttributeValue)
+                .ThenInclude(p => p.ProductAttribute)
                 .Include(p => p.OrderDetails)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }

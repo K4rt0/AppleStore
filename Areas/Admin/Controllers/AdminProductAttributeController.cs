@@ -53,6 +53,11 @@ namespace AppleStore.Areas.Admin.Controllers
                 _notyf.Warning("Thuộc tính này đã tồn tại trong hệ thống !");
                 return View(productAttribute);
             }
+            if(productAttribute.Name == null)
+            {
+                _notyf.Warning("Không được bỏ trống tên thuộc tính !");
+                return View(productAttribute);
+            }
             await _productAttributeRepository.AddAsync(productAttribute);
             return RedirectToAction("Index");
         }
@@ -69,7 +74,11 @@ namespace AppleStore.Areas.Admin.Controllers
             if (id != productAttribute.Id)
                 return NotFound();
             var existingAttribute = await _productAttributeRepository.GetByIdAsync(id);
-
+            if (productAttribute.Name == null)
+            {
+                _notyf.Warning("Không được bỏ trống tên thuộc tính !");
+                return View(productAttribute);
+            }
             existingAttribute.Name = productAttribute.Name;
             existingAttribute.Description = productAttribute.Description;
             await _productAttributeRepository.UpdateAsync(existingAttribute);
@@ -99,7 +108,6 @@ namespace AppleStore.Areas.Admin.Controllers
 
             ViewBag.AttributeId = id;
             ViewBag.Color = item.ProductAttribute.Name == "Màu sắc";
-
             return View(item);
         }
         [HttpPost]
@@ -107,6 +115,17 @@ namespace AppleStore.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid || productAttributeValue == null)
                 return NotFound();
+            if (productAttributeValue.Name == null || productAttributeValue.Value == null)
+            {
+                _notyf.Warning("Không được bỏ trống nội dung của thuộc tính !");
+                productAttributeValue = new ProductAttributeValue()
+                {
+                    ProductAttribute = await _productAttributeRepository.GetByIdAsync(id)
+                };
+                ViewBag.AttributeId = id;
+                ViewBag.Color = productAttributeValue.ProductAttribute.Name == "Màu sắc";
+                return View(productAttributeValue);
+            }
             if (AttributeValueExists(productAttributeValue.Name, id))
             {
                 ViewBag.AttributeId = id;

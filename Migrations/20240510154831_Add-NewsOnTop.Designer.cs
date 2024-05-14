@@ -4,6 +4,7 @@ using AppleStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240510154831_Add-NewsOnTop")]
+    partial class AddNewsOnTop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,24 +103,6 @@ namespace AppleStore.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("AppleStore.Models.Entities.CartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProductVariantId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Category", b =>
@@ -600,17 +585,6 @@ namespace AppleStore.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AppleStore.Models.Entities.CartItem", b =>
-                {
-                    b.HasOne("AppleStore.Models.Entities.ProductVariant", "ProductVariant")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductVariant");
-                });
-
             modelBuilder.Entity("AppleStore.Models.Entities.Category", b =>
                 {
                     b.HasOne("AppleStore.Models.Entities.Discount", "Discount")
@@ -828,8 +802,6 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductVariant", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("VariantsAttributes");
                 });
 #pragma warning restore 612, 618

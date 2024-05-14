@@ -18,17 +18,28 @@ namespace AppleStore.Repositories
         public async Task<IEnumerable<ProductVariant>> GetAllAsync()
         {
             return await _context.ProductVariants
-                .Include(p => p.Product)
                 .Include(p => p.VariantsAttributes)
+                .Include(p => p.Product)
+                .ThenInclude(p => p.ProductVariants)
                 .ToListAsync();
         }
 
-        public async Task<ProductVariant> GetByIdAsync(int id)
+        public async Task<ProductVariant?> GetByIdAsync(int id)
         {
             return await _context.ProductVariants
                 .Include(p => p.VariantsAttributes)
                 .Include(p => p.Product)
+                .ThenInclude(p => p.ProductVariants)
                 .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<List<ProductVariant>> GetByProductIdAsync(int id)
+        {
+            return await _context.ProductVariants
+                .Include(p => p.VariantsAttributes)
+                .Include(p => p.Product)
+                .ThenInclude(p => p.ProductVariants)
+                .Where(p => p.ProductId == id).ToListAsync();
         }
 
         public async Task AddAsync(ProductVariant productVariant)

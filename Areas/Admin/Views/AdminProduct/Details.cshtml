@@ -7,11 +7,11 @@
     int id = 0;
     ViewData["Title"] = ViewBag.VariantName;
 
-    ViewData["DeleteModalAction"] = "DeleteValueConfirmed";
+    ViewData["DeleteModalAction"] = "DeleteVariantConfirmed";
     ViewData["DeleteModalText"] = "Bạn có chắc muốn xoá giá trị thuộc tính này hay không?";
 }
 <div class="form-floating">
-    <h5 class="card-title fw-semibold mb-4 d-inline-block">DANH SÁCH GIÁ TRỊ THUỘC TÍNH - <span class="text-uppercase">@ViewBag.VariantName</span></h5>
+    <h5 class="card-title fw-semibold mb-4 d-inline-block">DANH SÁCH CHI TIẾT SẢN PHẨM - <span class="text-uppercase">@ViewBag.VariantName</span></h5>
     <a asp-action="Index" class="btn btn-light-warning border shadow float-end ms-2"><i class="ti ti-back-left"></i></a>
     <a asp-action="CreateVariant" asp-route-id="@ViewBag.VariantId" class="btn btn-light border shadow float-end"><i class="ti ti-plus"></i></a>
 </div>
@@ -36,7 +36,6 @@
                             <h6 class="fw-semibold mb-0">@item.Name</h6>
                         </th>
                     }
-
                 <th class="border-bottom-0"></th>
             </tr>
         </thead>
@@ -47,7 +46,7 @@
                 {
                     id++;
                     <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
+                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@item.Id</h6></td>
                         <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@item.Price</h6></td>
                         <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@item.Quantity</h6></td>
                         @foreach (var attribute in productAttributes)
@@ -71,7 +70,7 @@
                                     <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-action="EditValue" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
+                                    <a class="dropdown-item" asp-action="EditVariant" asp-route-id="@item.Id"><i class="ti ti-pencil me-1"></i> Edit</a>
                                     <button type="submit" class="btn dropdown-item deleteButton" data-item-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteItemModal"><i class="ti ti-trash me-1"></i> Delete</button>
                                 </div>
                             </div>
