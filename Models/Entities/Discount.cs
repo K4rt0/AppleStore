@@ -1,4 +1,5 @@
-using AppleStore.Models.Entities;
+﻿using AppleStore.Models.Entities;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppleStore.Models.Entities

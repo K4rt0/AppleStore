@@ -1,6 +1,9 @@
+using AppleStore.Data;
 using AppleStore.Models;
+using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace AppleStore.Controllers
@@ -9,16 +12,24 @@ namespace AppleStore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly INotyfService _notyf;
+        private readonly IProductRepository _productRepository;
+        private readonly ICartItemRepository _cartItemRepository;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, INotyfService notyf)
+        public HomeController(ILogger<HomeController> logger, INotyfService notyf, IProductRepository productRepository, ICartItemRepository cartItemRepository, ApplicationDbContext context)
         {
             _logger = logger;
             _notyf = notyf;
+            _productRepository = productRepository;
+            _cartItemRepository = cartItemRepository;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
-            return View();
+            var productList = await _productRepository.GetAllAsync();
+            ViewBag.ProductList = productList;
+            return View(productList);
         }
 
         public IActionResult Privacy()
