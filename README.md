@@ -22,7 +22,14 @@ Admin Panel:
 ```
 ### Việt:
 ```bash
+- Login with google
+- CRU Product (List, Creat new)
+- Account settings + template (update avatar profile)
+
+****************** [Scripting] ******************
+- Add product to Cart (Pending)
 ```
 ### Duyên:
 ```bash
+- Shop Grid view (Pending)
 ```
