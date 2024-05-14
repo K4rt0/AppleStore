@@ -1,10 +1,12 @@
 using AppleStore.Data;
+using AppleStore.Migrations;
 using AppleStore.Models;
 using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AppleStore.Controllers
 {
@@ -35,10 +37,20 @@ namespace AppleStore.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var productList = await _productRepository.GetAllAsync();
-            ViewBag.ProductList = productList;
-            return View(productList);
+            var products = (await _productRepository.GetAllAsync()).Take(8);
+            List<decimal> minPrices = new List<decimal>();
+            foreach (var product in products)
+            {
+                var minPrice = product.ProductVariants
+                                          .Select(p => p.Price)
+                                          .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
+                                          .Min();
+                minPrices.Add(minPrice);
+            }
+            ViewBag.MinPrices = minPrices;
+            return View(products);
         }
+
 
         public IActionResult Privacy()
         {
