@@ -61,7 +61,7 @@
 </head>
 
 <body>
-            <form method="get" asp-action="Index">
+            <form method="get" asp-action="Index" id="formProduct">
 
     <!--[if lte IE 9]>
       <p class="browserupgrade">
@@ -164,12 +164,12 @@
                             <div class="navbar-search search-style-5">
                                 <div class="search-select">
                                     <div class="select-position">
-                                        <select name="CategoryId" class="form-control" asp-items="@ViewBag.CategoryID">
+                                        <select name="CategoryId" class="form-control" asp-items="@ViewBag.CategoryID" value ="@ViewBag.CurrentCategoryId">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="search-input">
-                                    <input type="text" name="name" placeholder="Search">
+                                    <input type="text" placeholder="Search" value="@ViewBag.CurrentName" id="searchName1">
                                 </div>
                                 <div class="search-btn">
                                     <button type="submit"><i class="lni lni-search-alt"></i></button>
@@ -422,8 +422,11 @@
                         <!-- Start Single Widget -->
                             <div class="single-widget search">
                                 <h3>Search Product</h3>
-                                   <input type="text" placeholder="Search Here..." name="name">
+                                <form action="#">
+                                    <input type="text" placeholder="Search Here..." value="@ViewBag.CurrentName" id="searchName2">
+                                    <input type="hidden" name="name" id="name" />
                                     <button type="submit"><i class="lni lni-search-alt"></i></button>
+                                </form>
                             </div>
                             <!-- End Single Widget -->
                             <!-- Start Single Widget -->
@@ -451,12 +454,11 @@
                             <!-- Start Single Widget -->
                             <div class="single-widget range">
                                 <h3>Price Range</h3>
-                                <input type="range" class="form-range" name="PriceFrom" step="10" min="10" max="1000" onchange="rangePrimary.value=value" value="10">
+                                <input type="range" class="form-range" name="Pricefrom" step="10" min="0" max="1000" value="@ViewBag.CurrentPriceFrom" onchange="this.form.submit()" >
                                 <div class="range-inner">
                                     <label>$</label>
-                                    <input type="text" id="rangePrimary" placeholder="10">
+                                    <input type="text" placeholder="0" id="rangePrimary" value="@ViewBag.CurrentPriceFrom">
                                 </div>
-                                <button type="submit" class="btn btn-primary" style="font-size:small;padding:7px;">Search</button>
                             </div>
 
 
@@ -472,16 +474,15 @@
                                 <div class="col-lg-7 col-md-8 col-12">
                                     <div class="product-sorting">
                                             <label for="sorting">Sort by:</label>
-                                            <select class="form-control" id="sorting" name="sortOrder" onchange="this.form.submit()">
-                                                <option selected disabled>Default</option>
-                                                <option value="name_asc">A - Z</option>
-                                                <option value="name_desc">Z - A</option>
-                                                <option value="price_asc">Low - High Price</option>
-                                                <option value="price_desc">High - Low Price</option>
-                                            </select>
+                                        <select class="form-control" id="sorting" name="sortOrder" onchange="this.form.submit()">
+                                                <!option value="name_asc" @(ViewBag.CurrentSortOrder == "name_asc" ? "selected" : "")>A - Z</!option>
+                                                <!option value="name_desc" @(ViewBag.CurrentSortOrder == "name_desc" ? "selected" : "")>Z - A</!option>
+                                                <!option value="price_asc" @(ViewBag.CurrentSortOrder == "price_asc" ? "selected" : "")>Low - High Price</!option>
+                                                <!option value="price_desc" @(ViewBag.CurrentSortOrder == "price_desc" ? "selected" : "")>High - Low Price</!option>
+                                        </select>
                                             <h3 class="total-show-product">Showing: <span>@startItem - @endItem items</span></h3>
                                         </div>
-                                </div>
+                                </div>  
                                 <div class="col-lg-5 col-md-4 col-12">
                                     <nav>
                                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -788,6 +789,15 @@
     <script src="~/js/tiny-slider.js"></script>
     <script src="~/js/glightbox.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script>
+        document.getElementById('formProduct').addEventListener('submit', function () {
+            // Lấy giá trị từ searchName1, nếu không có thì lấy từ searchName2
+            var searchValue = document.getElementById('searchName1').value || document.getElementById('searchName2').value;
+            // Gán giá trị cho trường 'name'
+            document.getElementById('name').value = searchValue;
+        });
+
+    </script>
 </body>
 
 

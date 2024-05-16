@@ -22,58 +22,41 @@ namespace AppleStore.Controllers
             _context = dbContext;
             _notyf = notyfService;
         }
-            public async Task<IActionResult> Index(string? name, decimal? Pricefrom, int? CategoryId, string? sortOrder, int? CategoryIdShow, int? page)
+        public async Task<IActionResult> Index(string? name, decimal? Pricefrom, int? CategoryId, string? sortOrder, int? CategoryIdShow, int? page)
+        {
+            var products = await _productRepository.GetAllAsync();
+            var categories = await _categoryRepository.GetAllAsync();
+            var listCategories = categories.ToList();
+            listCategories.Insert(0, new Category { Id = 0, Name = "All" });
+            ViewBag.CategoryID = new SelectList(listCategories, "Id", "Name", CategoryId);
+
+            Pricefrom = Pricefrom ?? 0;
+            //LỌC
+            if (!string.IsNullOrEmpty(name))
             {
-                var products = await _productRepository.GetAllAsync();
-                var categories = await _categoryRepository.GetAllAsync();
-                var listCategories = categories.ToList();
-                listCategories.Insert(0, new Category { Id = 0, Name = "All" });
-                ViewBag.CategoryID = new SelectList(listCategories, "Id", "Name", CategoryId);
-
-                //LỌC
-                if (!string.IsNullOrEmpty(name))
+                if (CategoryId > 0)
                 {
-                    if ( Pricefrom != null)
-                    {
-                        if (CategoryId > 0)
-                        {
-                            products = products.Where(x => x.CategoryId == CategoryId && x.Name.Contains(name) && x.ProductVariants.Any(v=> v.Price >= Pricefrom));
-                        }
-                        else
-                        {
-                            products = products.Where(x => x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-                        }
-
-                    }
-                    else
-                    {
-                        products = products.Where(x => x.Name.Contains(name));
-
-                    }
+                    products = products.Where(x => x.CategoryId == CategoryId && x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
                 }
                 else
                 {
-                    if (Pricefrom != null)
-                    {
-                        if (CategoryId > 0)
-                        {
-                            products = products.Where(x => x.CategoryId == CategoryId && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-
-                        }
-                        else
-                        {
-                            products = products.Where(x => x.ProductVariants.Any(v => v.Price >= Pricefrom));
-                        }
-                    }
-                    else
-                    {
-                        if (CategoryId > 0)
-                        {
-                            products = products.Where(x => x.CategoryId == CategoryId);
-                        }
-                    }
+                    products = products.Where(x => x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                }
+            }
+            else
+            {
+                if (CategoryId > 0)
+                {
+                    products = products.Where(x => x.CategoryId == CategoryId && x.ProductVariants.Any(v => v.Price >= Pricefrom));
 
                 }
+                else
+                {
+                    products = products.Where(x => x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                }
+            }
+
+        
 
                 //ĐẾM SỐ LOẠI
                 var categoryCounts = (from c in _categoryRepository.GetAllAsync().Result
@@ -111,7 +94,6 @@ namespace AppleStore.Controllers
                         products = products.OrderByDescending(p => p.ProductVariants.Min(v => v.Price));
                         break;
                     default:
-                        products = products.OrderBy(p => p.Name);
                         break;
                 }
 
@@ -120,6 +102,7 @@ namespace AppleStore.Controllers
                 foreach (var product in products)
                 {
                     var minPrice = product.ProductVariants
+                                              .Where(variant => variant.Price >= Pricefrom)
                                               .Select(p => p.Price)
                                               .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
                                               .Min();
@@ -134,7 +117,7 @@ namespace AppleStore.Controllers
 
             //PHÂN TRANG
             var pageNumber = page ?? 1; // Nếu không có số trang được cung cấp, mặc định là trang 1
-                var pageSize = 4; // Số lượng sản phẩm trên mỗi trang
+                var pageSize = 12; // Số lượng sản phẩm trên mỗi trang
                 products = await products.ToPagedListAsync(pageNumber, pageSize);
                 ViewBag.CategoryIdShow = CategoryIdShow;
                 ViewBag.CurrentName = name;
