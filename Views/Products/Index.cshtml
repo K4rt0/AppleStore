@@ -107,40 +107,38 @@
 
                     <!-- End Single Widget -->
                 </div>
-                <!-- End Product Sidebar -->
-            </div>
-            <div class="col-lg-9 col-12">
-                <div class="product-grids-head">
-                    <div class="product-grid-topbar">
-                        <div class="row align-items-center">
-                            <div class="col-lg-7 col-md-8 col-12">
-                                <div class="product-sorting">
-                                        <label for="sorting">Sort by:</label>
+                <div class="col-lg-9 col-12">
+                    <div class="product-grids-head">
+                        <div class="product-grid-topbar">
+                            <div class="row align-items-center">
+                                <div class="col-lg-7 col-md-8 col-12">
+                                    <div class="product-sorting">
+                                            <label for="sorting">Sort by:</label>
                                         <select class="form-control" id="sorting" name="sortOrder" onchange="this.form.submit()">
-                                            <option selected disabled>Default</option>
-                                            <option value="name_asc">A - Z</option>
-                                            <option value="name_desc">Z - A</option>
-                                            <option value="price_asc">Low - High Price</option>
-                                            <option value="price_desc">High - Low Price</option>
+                                                <!option value="name_asc" @(ViewBag.CurrentSortOrder == "name_asc" ? "selected" : "")>A - Z</!option>
+                                                <!option value="name_desc" @(ViewBag.CurrentSortOrder == "name_desc" ? "selected" : "")>Z - A</!option>
+                                                <!option value="price_asc" @(ViewBag.CurrentSortOrder == "price_asc" ? "selected" : "")>Low - High Price</!option>
+                                                <!option value="price_desc" @(ViewBag.CurrentSortOrder == "price_desc" ? "selected" : "")>High - Low Price</!option>
                                         </select>
-                                        <h3 class="total-show-product">Showing: <span>@startItem - @endItem items</span></h3>
-                                    </div>
-                            </div>
-                            <div class="col-lg-5 col-md-4 col-12">
-                                <nav>
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button class="nav-link active" id="nav-grid-tab" data-bs-toggle="tab"
-                                                data-bs-target="#nav-grid" type="button" role="tab"
-                                                aria-controls="nav-grid" aria-selected="true">
-                                            <i class="lni lni-grid-alt"></i>
-                                        </button>
-                                        <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab"
-                                                data-bs-target="#nav-list" type="button" role="tab"
-                                                aria-controls="nav-list" aria-selected="false">
-                                            <i class="lni lni-list"></i>
-                                        </button>
-                                    </div>
-                                </nav>
+                                            <h3 class="total-show-product">Showing: <span>@startItem - @endItem items</span></h3>
+                                        </div>
+                                </div>  
+                                <div class="col-lg-5 col-md-4 col-12">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <button class="nav-link active" id="nav-grid-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#nav-grid" type="button" role="tab"
+                                                    aria-controls="nav-grid" aria-selected="true">
+                                                <i class="lni lni-grid-alt"></i>
+                                            </button>
+                                            <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#nav-list" type="button" role="tab"
+                                                    aria-controls="nav-list" aria-selected="false">
+                                                <i class="lni lni-list"></i>
+                                            </button>
+                                        </div>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
                     </div>
