@@ -18,11 +18,14 @@ namespace AppleStore.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly ApplicationDbContext _context;
         private readonly INotyfService _notyf;
-        private readonly IProductRepository _productRepository;
         private readonly ICartItemRepository _cartItemRepository;
-        private readonly ApplicationDbContext _context;
 
-        public HomeController(IProductRepository productRepository, IProductAttributeRepository productAttributeRepository, ICategoryRepository categoryRepository, IProductVariantRepository productVariantRepository, ApplicationDbContext context, INotyfService notyf)
+        public HomeController(IProductRepository productRepository, 
+            IProductAttributeRepository productAttributeRepository, 
+            ICategoryRepository categoryRepository, 
+            IProductVariantRepository productVariantRepository, 
+            ApplicationDbContext context, INotyfService notyf,
+            ICartItemRepository cartItemRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;

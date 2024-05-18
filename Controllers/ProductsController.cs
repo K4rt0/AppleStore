@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using X.PagedList;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace AppleStore.Controllers
 {
@@ -28,13 +30,6 @@ namespace AppleStore.Controllers
             _productAttributeValueRepository = productAttributeValueRepository;
             _context = context;
             _notyf = notyf;
-        }
-        public IActionResult Index()
-        {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
-            _context = dbContext;
-            _notyf = notyfService;
         }
         /*public async Task<IActionResult> Details(int id, int? colorId)
         {
@@ -293,7 +288,7 @@ namespace AppleStore.Controllers
 
             //PHÂN TRANG
             var pageNumber = page ?? 1; // Nếu không có số trang được cung cấp, mặc định là trang 1
-            var pageSize = 4; // Số lượng sản phẩm trên mỗi trang
+            var pageSize = 12; // Số lượng sản phẩm trên mỗi trang
             products = await products.ToPagedListAsync(pageNumber, pageSize);
             ViewBag.CategoryIdShow = CategoryIdShow;
             ViewBag.CurrentName = name;

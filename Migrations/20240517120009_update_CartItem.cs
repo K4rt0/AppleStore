@@ -5,26 +5,30 @@
 namespace AppleStore.Migrations
 {
     /// <inheritdoc />
-    public partial class ShoppingCartEntity : Migration
+    public partial class update_CartItem : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "NameSuggest",
-                table: "ProductAttributes");
-
             migrationBuilder.CreateTable(
                 name: "CartItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductVariantId = table.Column<int>(type: "int", nullable: false)
+                    CartProductQuantity = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductVariantId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CartItems_ProductVariants_ProductVariantId",
                         column: x => x.ProductVariantId,
@@ -32,6 +36,11 @@ namespace AppleStore.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ApplicationUserId",
+                table: "CartItems",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_ProductVariantId",
@@ -44,12 +53,6 @@ namespace AppleStore.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CartItems");
-
-            migrationBuilder.AddColumn<string>(
-                name: "NameSuggest",
-                table: "ProductAttributes",
-                type: "nvarchar(max)",
-                nullable: true);
         }
     }
 }

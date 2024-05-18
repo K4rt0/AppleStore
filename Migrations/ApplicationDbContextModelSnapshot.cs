@@ -110,10 +110,21 @@ namespace AppleStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CartProductQuantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ProductVariantId");
 
@@ -602,6 +613,10 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.CartItem", b =>
                 {
+                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                        .WithMany("CartItems")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("AppleStore.Models.Entities.ProductVariant", "ProductVariant")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductVariantId")
@@ -785,6 +800,8 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("CartItems");
+
                     b.Navigation("DeliveryAddresses");
                 });
 

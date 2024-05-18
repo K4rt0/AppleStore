@@ -5,7 +5,7 @@
         public List<CartItem> Items { get; set; } = new List<CartItem>();
         public void AddItem(CartItem item)
         {
-            var existingItem = Items.FirstOrDefault(i => i.ProductVariant.ProductId == item.ProductVariant.ProductId);
+            var existingItem = Items.FirstOrDefault(i => i.ProductVariant?.ProductId == item.ProductVariant?.ProductId);
 
             if (existingItem != null)
             {

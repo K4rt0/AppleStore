@@ -11,7 +11,7 @@
                     <!-- Start Hero Slider -->
                     <div class="hero-slider">
                         <!-- Start Single Slider -->
-                        @if (newsOnTops.Count != 0)
+                        @if (newsOnTops != null)
                         {
                             @foreach (var item in newsOnTops)
                             {
@@ -72,20 +72,23 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-6 col-12 md-custom-padding">
                         <!-- Start Small Banner -->
-                        <div class="hero-small-banner" style="background-image: url('./images/news/poster.png');">
-                            <img class="position-absolute" style="bottom: 0; right: 0; margin-bottom: -15px;" src="~/images/products/@product.Avatar" width="50%" />
-                            <div class="content">
-                                <div class="col-lg-10 col-md-7 col-sm-10 col-xs-5">
-                                    <h2>
-                                        <span>New line required</span>
-                                        @product.Name
-                                    </h2>
-                                    <h3>@ViewBag.Price</h3>
-                                </div>
-                                <div class="col">
+                        @if(product != null)
+                        {
+                            <div class="hero-small-banner" style="background-image: url('./images/news/poster.png');">
+                                <img class="position-absolute" style="bottom: 0; right: 0; margin-bottom: -15px;" src="~/images/products/@product.Avatar" width="50%" />
+                                <div class="content">
+                                    <div class="col-lg-10 col-md-7 col-sm-10 col-xs-5">
+                                        <h2>
+                                            <span>New line required</span>
+                                            @product.Name
+                                        </h2>
+                                        <h3>@ViewBag.Price</h3>
+                                    </div>
+                                    <div class="col">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                         <!-- End Small Banner -->
                     </div>
                     <div class="col-lg-12 col-md-6 col-12">

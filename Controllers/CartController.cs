@@ -1,30 +1,44 @@
-﻿using AppleStore.Extensions;
+﻿using AppleStore.Data;
+using AppleStore.Extensions;
 using AppleStore.Models;
 using AppleStore.Models.Entities;
 using AppleStore.Repositories;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AppleStore.Controllers
 {
-    [Route("/Cart/AddtoCart")]
+    [Route("/Cart/")]
     [ApiController]
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IProductRepository _productRepository;
         private readonly IProductVariantRepository _productVariantRepository;
         private readonly IDiscountRepository _discountRepository;
+        private readonly ICartItemRepository _cartItemRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
         public INotyfService _notyf { get; }
         //private ReturnApi returnApi;
         public CartController(IProductRepository productRepository, INotyfService notyf,
-            IProductVariantRepository productVariantRepository, IDiscountRepository discountRepository)
+            IProductVariantRepository productVariantRepository, IDiscountRepository discountRepository,
+            ICartItemRepository cartItemRepository,
+            UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _productRepository = productRepository;
             _productVariantRepository = productVariantRepository;
             _discountRepository = discountRepository;
+            _cartItemRepository = cartItemRepository;
+            _userManager = userManager;
             _notyf = notyf;
+            _context = context;
             //returnApi = new();
         }
 
@@ -47,52 +61,105 @@ namespace AppleStore.Controllers
         //    return new ObjectResult(returnApi);
         //}
 
-        [Authorize]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
-            return View(cart);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cartItems = await _cartItemRepository.GetAllByUserIdAsync(userId);
+
+            return View(new ShoppingCart { Items = cartItems.ToList() });
         }
 
-        [Authorize]
-        [HttpPost("{productId}")]
-        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        [HttpPost("AddToCart/{productVariantId}")]
+        public async Task<IActionResult> AddToCart(int productVariantId, [FromBody] int quantity)
         {
-            var product = await GetProductFromDatabase(productId);
-            product.Category.Products = null;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var cartItem = new CartItem
+            var productVariant = await _productVariantRepository.GetByIdAsync(productVariantId);
+            if (productVariant == null)
             {
-                ProductId = productId,
-                Product = new Product
-                {
-                    Name = product.Name,
-                    Category = product.Category,
-                    Avatar = product.Avatar,
-                },
-                ProductVariant = new ProductVariant
-                {
-                    Id = 0,
-                    Quantity = quantity,
-                    Price = product.ProductVariants.FirstOrDefault()?.Price ?? 0,
-                },
-                Category = new Category
-                {
-                    Discount = product.Category.Discount,
-                }
-            };
-            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
-            cart.AddItem(cartItem);
+                _notyf.Warning("Sản phẩm không tồn tại!");
+                return Json(new { success = false });
+            }
 
-            HttpContext.Session.SetObjectAsJson("Cart", cart);
+            var existingCartItem = await _cartItemRepository.GetByIdAndUserIdAsync(productVariantId, userId);
+
+            if (existingCartItem != null)
+            {
+                if (existingCartItem.CartProductQuantity > 0)
+                {
+                    existingCartItem.CartProductQuantity += quantity;
+                    await _cartItemRepository.UpdateAsync(existingCartItem);
+                }
+            }
+            else
+            {
+                var cartItem = new CartItem
+                {
+                    UserId = userId,
+                    ProductVariantId = productVariantId,
+                    ProductVariant = productVariant,
+                    CartProductQuantity = quantity,
+                };
+                await _cartItemRepository.AddAsync(cartItem);
+            }
+
+            _notyf.Success("Sản phẩm đã được thêm vào giỏ hàng.");
             return Json(new { success = true });
         }
 
-        private async Task<Product> GetProductFromDatabase(int productId)
+        [HttpPost("UpdateCartItem/{productVariantId}")]
+        public async Task<IActionResult> UpdateCartItem(int productVariantId, [FromForm] string? quantity)
         {
-            var product = await _productRepository.GetByIdAsync(productId);
-            return product;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var cartItem = await _cartItemRepository.GetByIdAndUserIdAsync(productVariantId, userId);
+
+            if (cartItem == null)
+            {
+                _notyf.Warning("Sản phẩm không tồn tại trong giỏ hàng!");
+                return Json(new { success = false });
+            }
+
+            if (int.TryParse(quantity, out int _quantity) && _quantity < 1)
+            {
+                _notyf.Warning("Số lượng sản phẩm phải lớn hơn 0");
+                return Json(new { success = false });
+            }
+
+            cartItem.CartProductQuantity = _quantity;
+            await _cartItemRepository.UpdateAsync(cartItem);
+
+            decimal itemTotalPrice = _quantity * cartItem.ProductVariant!.Price;
+            var cartItems = await _cartItemRepository.GetAllByUserIdAsync(userId);
+            var cartTotalPrice = cartItems.Sum(s => s.CartProductQuantity * s.ProductVariant!.Price);
+
+            _notyf.Success("Cập nhật giỏ hàng thành công.");
+            return Json(new
+            {
+                success = true,
+                itemTotalPrice = itemTotalPrice.ToString("#,##0 đ"),
+                cartTotalPrice = cartTotalPrice.ToString("#,##0 đ")
+            });
+        }
+
+        [HttpPost("RemoveCartItem/{productVariantId}")]
+        public async Task<IActionResult> RemoveCartItem(int productVariantId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var cartItem = await _cartItemRepository.GetByIdAndUserIdAsync(productVariantId, userId);
+
+            if (cartItem == null)
+            {
+                _notyf.Warning("Sản phẩm không tồn tại trong giỏ hàng!");
+                return Json(new { success = false });
+            }
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+            _notyf.Success("Đã xóa sản phẩm khỏi giỏ hàng.");
+
+            return Json(new { success = true });
         }
     }
 }

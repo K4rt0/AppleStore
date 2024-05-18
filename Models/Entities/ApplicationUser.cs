@@ -16,5 +16,6 @@ namespace AppleStore.Models.Entities
         [DisplayName("Địa chỉ")]
         public string? Address { get; set; }
         public virtual ICollection<DeliveryAddress>? DeliveryAddresses { get; set; }
+        public ICollection<CartItem>?CartItems { get; set; }
     }
 }

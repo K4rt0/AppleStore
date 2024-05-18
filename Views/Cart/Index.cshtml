@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Giỏ hàng";
+    int total = 0;
 }
 
 <!-- Start Breadcrumbs -->
@@ -63,38 +64,33 @@
                     <div class="cart-single-list">
                         <div class="row align-items-center">
                             <div class="col-lg-1 col-md-1 col-12">
-                                <a href="product-details.html"><img src="~/images/products/@item.Product?.Avatar" alt="#"></a>
+                                <a href="product-details.html"><img src="~/images/products/@item.ProductVariant?.Product?.Avatar" alt="#"></a>
                             </div>
                             <div class="col-lg-4 col-md-3 col-12">
                                 <h5 class="product-name">
                                     <a href="product-details.html">
-                                        @item.Product?.Name
+                                        @item.ProductVariant?.Product?.Name
                                     </a>
                                 </h5>
                                 <p class="product-des">
-                                    <span><em>Type:</em> @item.Category?.Name</span>
-                                    <span><em>Color:</em> Black</span>
+                                    <span><em>Loại:</em> @item.ProductVariant?.Product?.Category?.Name</span>
+                                    <span><em>Màu:</em> @item.ProductVariant </span>
+                                    <span><em>Dung lượng:</em></span>
                                 </p>
                             </div>
                             <div class="col-lg-2 col-md-2 col-12">
                                 <div class="count-input">
-                                    <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </select>
+                                    <input type="number" class="quantity-input" data-productVariantId="@item.ProductVariant?.Id" name="name" value="@item.CartProductQuantity" min="1" max="@item.ProductVariant?.Quantity" />
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-2 col-12">
-                                <p>$910.00</p>
+                                <p id="item-total-@item.ProductVariant?.Id">@($"{item.ProductVariant?.Price * item.CartProductQuantity:#,##0} đ")</p>
                             </div>
                             <div class="col-lg-2 col-md-2 col-12">
-                                <p>$29.00</p>
+                                <p>@($"{item.ProductVariant?.Product?.Discount?.Price:#,##0} đ")</p>
                             </div>
                             <div class="col-lg-1 col-md-2 col-12">
-                                <a class="remove-item" href="javascript:void(0)"><i class="lni lni-close"></i></a>
+                                <a style="cursor: pointer;" class="remove-item removeFromCartBtn" data-productVariantId="@item.ProductVariant?.Id"><i class="lni lni-close"></i></a>
                             </div>
                         </div>
                     </div>
@@ -121,14 +117,14 @@
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="right">
                                     <ul>
-                                        <li>Cart Subtotal<span>$2560.00</span></li>
+                                        <li id="cart-total-price">Cart Subtotal<span>@($"{Model.Items.Sum(s => s.CartProductQuantity * s.ProductVariant?.Price):#,##0} đ")</span></li>
                                         <li>Shipping<span>Free</span></li>
                                         <li>You Save<span>$29.00</span></li>
                                         <li class="last">You Pay<span>$2531.00</span></li>
                                     </ul>
                                     <div class="button">
                                         <a href="checkout.html" class="btn">Checkout</a>
-                                        <a href="product-grids.html" class="btn btn-alt">Continue shopping</a>
+                                        <a asp-controller="Products" asp-action="Index" class="btn btn-alt">Continue shopping</a>
                                     </div>
                                 </div>
                             </div>
@@ -142,3 +138,9 @@
 </div>
 <!--/ End Shopping Cart -->
     
+<style>
+    input[type='number'] {
+        width: 70px;
+        text-align: center;
+    }
+</style>

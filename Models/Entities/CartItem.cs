@@ -8,18 +8,9 @@ namespace AppleStore.Models.Entities
     {
         [Key]
         public int Id { get; set; }
-
-        [DisplayName("Tổng giá")]
-        public decimal TotalPrice => ProductVariant.Quantity * ProductVariant.Price;
-
-        [ForeignKey("Products")]
-        public int ProductId { get; set; }
-        public Product? Product { get; set; }
-
-        [ForeignKey("Categories")]
-        public int CategoryId { get; set; }
-        public Category? Category { get; set; }
-
+        public int CartProductQuantity { get; set; }
+        [ForeignKey("AspNetUsers")]
+        public string? UserId { get; set; }
         [ForeignKey("ProductVariants")]
         public int ProductVariantId { get; set; }
         public ProductVariant? ProductVariant { get; set; }
