@@ -109,7 +109,7 @@ namespace AppleStore.Controllers
         }
 
         [HttpPost("UpdateCartItem/{productVariantId}")]
-        public async Task<IActionResult> UpdateCartItem(int productVariantId, [FromForm] string? quantity)
+        public async Task<IActionResult> UpdateCartItem(int productVariantId,  string? quantity)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
