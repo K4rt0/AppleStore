@@ -14,5 +14,6 @@ namespace AppleStore.Models.Entities
         public int ProductId { get; set; }
         public Product? Product { get; set; }
         public virtual ICollection<VariantsAttributes>? VariantsAttributes { get; set; }
+        public virtual ICollection<CartItem>? CartItems { get; set; }
     }
 }

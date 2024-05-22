@@ -1,0 +1,411 @@
+@using AppleStore.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    ApplicationDbContext _context = (ApplicationDbContext)ViewData["DbContext"];
+    var _user = await UserManager.GetUserAsync(User);
+    var user = await _context.ApplicationUsers
+    .Include(p => p.DeliveryAddresses)
+    .Include(p => p.CartItems)
+    .ThenInclude(p => p.ProductVariant)
+    .ThenInclude(p => p.VariantsAttributes)
+    .ThenInclude(p => p.ProductAttributeValue)
+    .ThenInclude(p => p.ProductAttribute)
+    .Include(p => p.CartItems)
+    .ThenInclude(p => p.ProductVariant)
+    .ThenInclude(p => p.Product)
+    .FirstOrDefaultAsync(u => u.Id == _user.Id);
+
+    decimal? totalPrice = user.CartItems.Sum(s => s.CartProductQuantity * s.ProductVariant?.Price);
+    decimal? totalDiscount = 0;
+}
+
+<!-- Start Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="breadcrumbs-content">
+                    <h1 class="page-title">Cart</h1>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <ul class="breadcrumb-nav">
+                    <li><a href="index-2.html"><i class="lni lni-home"></i> Home</a></li>
+                    <li><a href="index-2.html">Shop</a></li>
+                    <li>Cart</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumbs -->
+<!-- Shopping Cart -->
+<div class="shopping-cart section">
+    <div class="container cart-body">
+        @if (user.CartItems.Count == 0)
+        {
+            <h1>Giỏ hàng trống!</h1>
+        }
+        else
+        {
+            <div class="row">
+                @* <div class="form-control mx-2">
+            <h3>Địa chỉ giao hàng</h3>
+            </div> *@
+                <div class="card mx-2 p-0 flex-shrink-1">
+                    <div class="card-header">
+                        <h6 class="py-1"><i class="lni lni-map-marker"></i> Địa chỉ giao hàng</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="w-auto border-bottom-0"></th>
+                                        <th class="w-auto border-bottom-0"></th>
+                                        <th class="w-auto border-bottom-0"></th>
+                                        <th class="w-auto border-bottom-0"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border-bottom-0"><b id="header_address_fullname"></b></td>
+                                        <td class="border-bottom-0">
+                                            <p id="header_address_phonenumber"></p>
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <p id="header_address_address"></p>
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <a style="font-size: 13px;" href="#"
+                                                class="deliveryAddressListModal link-offset-2 link-offset-5-hover"
+                                                data-item-id="1" data-bs-toggle="modal"
+                                                data-bs-target="#deliveryAddressModal">Thay đổi</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9 col-md-12 col-12 p-2">
+                    <div class="table-responsive p-3"
+                        style="background-color: #fff; font-size: 14px !important; border: 1px solid #eee; border-radius: 4px;">
+                        <table class="table text-nowrap mb-0 align-middle">
+                            <thead class="text-dark" style="border-bottom: 1px solid #eee;">
+                                <tr>
+                                    <th class="border-bottom-0" style="width: 150px;"></th>
+                                    <th class="border-bottom-0">Tên sản phẩm</th>
+                                    <th class="border-bottom-0 text-center">Số lượng</th>
+                                    <th class="border-bottom-0 text-center">Đơn giá</th>
+                                    <th class="border-bottom-0 text-center">Giảm giá</th>
+                                    <th class="border-bottom-0 text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div class="d-flex align-items-center">
+                                    @foreach (var item in user.CartItems)
+                                    {
+                                        <tr class="itemOfList" style="border-bottom: 1px solid #eee;">
+                                            <td class="border-bottom-0">
+                                                <a href="product-details.html">
+                                                    <img style="min-width: 150px; max-width: 150px;"
+                                                        src="~/images/products/@item.ProductVariant?.Product?.Avatar" alt="#">
+                                                </a>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h5 class="product-name">
+                                                    <a href="product-details.html">@item.ProductVariant?.Product?.Name</a>
+                                                </h5>
+                                                <p class="product-des d-flex flex-column">
+                                                    <span><em>Loại:</em> @item.ProductVariant?.Product?.Category?.Name</span>
+                                                    <span><em>Màu:</em>
+                                                        @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
+                                                                 p.ProductAttributeValue.ProductAttribute.Name == "Màu sắc" &&
+                                                                 p.ProductVariantId
+                                                                 == item.ProductVariantId).ProductAttributeValue.Name </span>
+                                                    <span><em>Dung lượng:</em>
+                                                        @item.ProductVariant.VariantsAttributes.FirstOrDefault(p
+                                                                 => p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ"
+                                                                 &&
+                                                                 p.ProductVariantId ==
+                                                                 item.ProductVariantId).ProductAttributeValue.Name</span>
+                                                </p>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <div class="count-input d-flex justify-content-center">
+                                                    <input type="number" style="width: 70px;"
+                                                        class="text-center form-control p-0 quantity-input"
+                                                        data-productVariantId="@item.ProductVariant?.Id" name="name"
+                                                        value="@item.CartProductQuantity" min="1"
+                                                        max="@item.ProductVariant?.Quantity" />
+                                                </div>
+                                            </td>
+                                            <td class="border-bottom-0 text-center">
+                                                <p>@($"{item.ProductVariant?.Price:#,##0} đ")</p>
+                                            </td>
+                                            <td class="border-bottom-0 text-center">
+                                                @if (item.ProductVariant?.Product?.Discount != null)
+                                                {
+                                                    totalDiscount += item.ProductVariant?.Product?.Discount?.Price;
+                                                    <p>@($"{item.ProductVariant?.Product?.Discount?.Price:#,##0}đ")</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>0đ</p>
+                                                }
+                                            </td>
+                                            <td class="border-bottom-0 text-center">
+                                                <a style="cursor: pointer;" class="remove-item removeFromCartBtn"
+                                                    data-productVariantId="@item.ProductVariant?.Id"><i
+                                                        class="lni lni-close"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-12 p-2">
+                    <div class="total-amount">
+                        <div class="right p-3 mt-0">
+                            <form action="#" target="_blank">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" style="height: 50px;" placeholder="Mã giảm giá">
+                                    <button class="input-group-text">Apply</button>
+                                </div>
+                            </form>
+                            <ul>
+                                <li id="cart-total-price">Tổng tiền<span>@($"{@totalPrice:#,##0}đ")</span></li>
+                                <li>Giao hàng<span class="text-success">Miễn phí</span></li>
+                                <li>Tiết kiệm<span>@($"{@totalDiscount:#,##0}đ")</span></li>
+                                <li class="last">Thanh toán<span>@($"{(totalPrice - totalDiscount):#,##0}đ")</span>
+                                </li>
+                            </ul>
+                            <hr>
+                            <div class="button">
+                                <a href="checkout.html" class="btn">Checkout</a>
+                                <a asp-controller="Products" asp-action="Index" class="btn btn-alt">Continue
+                                    shopping</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!--/ End Shopping Cart -->
+<div class="modal fade bd-example-modal-lg" id="deliveryAddressModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                    <i class="lni lni-map-marker"></i> Địa chỉ giao hàng
+                    <button type="button" style="font-size: 14px; width: 80px" data-bs-toggle="modal"
+                        data-bs-target="#newAddressModal" class="ms-2 btn btn-outline-primary">
+                        <i style="font-size: 12px; font-weight: 600;" class="lni lni-plus vertical-middle"></i>
+                        <p class="d-inline-block vertical-middle">Thêm</p>
+                    </button>
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3" style="height: 500px; overflow-y: auto;">
+                <div class="row" id="listAddress">
+                    @if (user.DeliveryAddresses.Count() == 0)
+                    {
+                        <h6>Chưa có địa chỉ giao hàng</h6>
+                    }
+                    else
+                    {
+                        @foreach (var item in user.DeliveryAddresses)
+                        {
+                            <div class="col-lg-6 col-md-6 col-12 p-1">
+                                <div class="card">
+                                    <div class="form-floating">
+                                        <div class="address-fill d-flex p-3">
+                                            <div class="content-address col p-0 align-content-center">
+                                                <h6 class="content_address_fullname">@item.FullName</h6>
+                                                <b class="content_address_phonenumber">@item.PhoneNumber</b>
+                                                <p class="content_address_address">@item.Address</p>
+                                            </div>
+                                            <div class="col-3 p-0 d-grid gap-2">
+                                                <button type="button"
+                                                    class="address-select fw-400 btn btn-sm btn-outline-dark">Chọn</button>
+                                                <button type="button"
+                                                    class="address-update fw-400 btn btn-sm btn-outline-dark">Sửa</button>
+                                                <button type="button"
+                                                    class="address-delete fw-400 btn btn-sm btn-outline-danger">Xoá</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newAddressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="lni lni-map-marker"></i> Địa chỉ mới
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <div class="row p-3">
+                    <div class="col p-1">
+                        <input style="font-size: 14px;" type="text" class="form-control" id="new_fullName"
+                            placeholder="Họ và tên">
+                    </div>
+                    <div class="col p-1">
+                        <input style="font-size: 14px;" type="text" class="form-control" id="new_phoneNumber"
+                            placeholder="Số điện thoại">
+                    </div>
+                    <div class="col-12 p-1">
+                        <textarea style="font-size: 14px;" class="form-control" id="new_address"
+                            placeholder="Địa chỉ cụ thể"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                <button type="button" class="submit-createnew btn btn-primary">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('.submit-createnew').on('click', function () {
+            var fullName = $('#new_fullName').val();
+            var phoneNumber = $('#new_phoneNumber').val();
+            var address = $('#new_address').val();
+
+            $.ajax({
+                url: '/Cart/CreateAddress',
+                type: 'POST',
+                data: {
+                    userId: "@user.Id",
+                    fullName: fullName,
+                    phoneNumber: parseInt(phoneNumber),
+                    address: address
+                },
+                success: function (response) {
+                    console.log("Thêm địa chỉ mới thành công!");
+                    console.log(response);
+                    $('#listAddress').append(`
+                                            <div class="col-lg-6 col-md-6 col-12 p-1">
+                                                <div class="card">
+                                                    <div class="form-floating">
+                                                        <div class="address-fill d-flex p-3">
+                                                            <div class="content-address col p-0 align-content-center">
+                                                                <h6 class="content_address_fullname">` + response.fullName + `</h6>
+                                                                <b class="content_address_phonenumber">` + response.phoneNumber + `</b>
+                                                                <p class="content_address_address">` + response.address + `</p>
+                                                            </div>
+                                                            <div class="col-3 p-0 d-grid gap-2">
+                                                                <button type="button" class="address-select fw-400 btn btn-sm btn-outline-dark">Chọn</button>
+                                                                <button type="button" class="address-update fw-400 btn btn-sm btn-outline-dark">Sửa</button>
+                                                                <button type="button" class="address-delete fw-400 btn btn-sm btn-outline-danger">Xoá</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`);
+
+                    $('#new_fullName').val('');
+                    $('#new_phoneNumber').val('');
+                    $('#new_address').val('');
+                    $('#newAddressModal').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    notyf.error('Lỗi khi thêm địa chỉ mới:', error);
+                    console.error('Lỗi khi thêm địa chỉ mới:', error);
+                }
+            });
+        });
+        $(document).on('click', '.address-select', function () {
+            console.log($(this));
+            $('#deliveryAddressModal').modal('hide');
+            var fullName = $(this).closest('.address-fill').find('.content_address_fullname').text();
+            var phoneNumber = $(this).closest('.address-fill').find('.content_address_phonenumber').text();
+            var address = $(this).closest('.address-fill').find('.content_address_address').text();
+            $('#header_address_fullname').text(fullName);
+            $('#header_address_phonenumber').text(phoneNumber);
+            $('#header_address_address').text(address);
+        });
+        // cập nhật số lượng sản phẩm trong giỏ hàng
+        $('.quantity-input').change(function () {
+            var productVariantId = $(this).data('productvariantid');
+            var quantity = $(this).val();
+
+            $.ajax({
+                url: '/Cart/UpdateCartItem',
+                type: 'POST',
+                data: { productVariantId: productVariantId, quantity: quantity },
+                success: function (response) {
+                    if (response.success) {
+                        $('#cart-total-price').html('Tổng tiền<span>' + response.cartTotalPrice + '</span>');
+                        console.log("Cập nhật sản phẩm thành công!");
+                    }
+                    else {
+                        notyf.warning(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    notyf.error('Lỗi khi cập nhật sản phẩm trong giỏ hàng:', error);
+                    console.error('Lỗi khi cập nhật sản phẩm trong giỏ hàng:', error);
+                }
+            });
+        });
+
+        // xóa sản phẩm khỏi giỏ hàng
+        $('.removeFromCartBtn').click(function () {
+            var productVariantId = $(this).data('productvariantid');
+            var removeItem = $(this).closest('.itemOfList');
+
+            $.ajax({
+                url: '/Cart/RemoveCartItem',
+                type: 'POST',
+                data: {
+                    productVariantId: productVariantId,
+                    amount: @user.CartItems.Count()
+                                                                                                                                                                                                                                                                                                            },
+                success: function (response) {
+                    if (response.success) {
+                        loadCart();
+                        if (response.amount == 0) {
+                            var container = $('.cart-body');
+                            container.empty();
+                            container.append('<h1>Giỏ hàng trống!</h1>');
+                        }
+                        removeItem.remove();
+                    }
+                    else {
+                        notyf.warning(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    notyf.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng', error);
+                    console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
+                }
+            });
+        });
+    </script>
+}

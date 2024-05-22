@@ -15,6 +15,7 @@ namespace AppleStore.Models.Entities
         public DateOnly Birthdate { get; set; }
         [DisplayName("Địa chỉ")]
         public string? Address { get; set; }
-        public virtual ICollection<DeliveryAddress>? DeliveryAddresses { get; set; }
+        public virtual ICollection<DeliveryAddress>? DeliveryAddresses { get; set; } = new List<DeliveryAddress>();
+        public virtual ICollection<CartItem>? CartItems { get; set; } = new List<CartItem>();
     }
 }

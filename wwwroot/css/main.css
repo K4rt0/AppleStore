@@ -6316,7 +6316,7 @@ blockquote span {
   }
 }
 
-.cart-single-list .remove-item {
+.remove-item {
   color: #fff;
   background-color: #f44336;
   font-size: 8px;
@@ -6328,37 +6328,37 @@ blockquote span {
 }
 
 @media (max-width: 767px) {
-  .cart-single-list .remove-item {
+  .remove-item {
     margin-top: 5px;
   }
 }
 
-.cart-single-list .remove-item:hover {
+.remove-item:hover {
   color: #fff;
   background-color: #081828;
 }
 
-.cart-single-list .product-name {
+.product-name {
   line-height: 22px;
 }
 
-.cart-single-list .product-name a {
+.product-name a {
   font-size: 14px;
   color: #333;
   font-weight: 500;
 }
 
-.cart-single-list .product-des {
+.product-des {
   display: block;
 }
 
-.cart-single-list .product-des span {
+.product-des span {
   font-size: 13px;
   font-weight: 500;
   display: block;
 }
 
-.cart-single-list .product-des span em {
+.product-des span em {
   font-style: normal;
   color: #555;
 }

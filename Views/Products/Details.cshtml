@@ -1,14 +1,13 @@
-﻿@model AppleStore.Models.Entities.Product
+﻿@using AppleStore.Repositories
+@model AppleStore.Models.Entities.Product
 
 @{
     ViewData["Title"] = Model.Name;
-    var productVariant = (ProductVariant)ViewData["productVariant"]!;
+    @* var productVariant = (ProductVariant)ViewData["productVariant"]!;
+var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
     var colors = (List<VariantsAttributes>?)ViewData["detailsColorList"];
-    var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"];
-
-    var colorId = 0;
-    var storageId = 0;
 }
+
 <!-- Start Item Details -->
 <section class="item-details section pt-3">
     <div class="container">
@@ -21,9 +20,12 @@
                                 <img src="~/images/products/@Model.Avatar" id="current" alt="@Model.Name">
                             </div>
                             <div class="images">
-                                @foreach (var item in Model.ProductImages)
+                                @if (Model.ProductImages != null)
                                 {
-                                    <img src="~/images/product-details/@item.ImageUrl" class="img" alt="#">
+                                    @foreach (var item in Model.ProductImages)
+                                    {
+                                        <img src="~/images/product-details/@item.ImageUrl" class="img" alt="#">
+                                    }
                                 }
                             </div>
                         </main>
@@ -32,78 +34,42 @@
                 <div class="col-lg-6 col-md-12 col-12 h-100">
                     <div class="product-info mt-5 px-3">
                         <h2 class="title">@Model.Name</h2>
-                        <p class="category">
+                        <p class="category mb-2">
                             <i class="lni lni-tag"></i> Category:<a href="javascript:void(0)">
-                                @Model.Category.Name
+                                @Model.Category?.Name
                             </a>
                         </p>
-                        @* <h3 class="price">@($"{Model.ProductVariants.FirstOrDefault()?.Price:#,##0}đ")<span>$945</span></h3>
-                        <div class="form-group color-option">
-                            <label class="title-label">Màu sắc</label>
-                            @if (colors != null)
+                        <div id="qtyStatus"></div>
+                        <div id="productPrice"></div>
+                        <div id="colors" class="form-group color-option">
+                            @if (colors != null && colors.Count() > 0)
                             {
+                                <label class="title-label">Màu sắc</label>
+                                var firstColor = colors.First();
                                 @foreach (var color in colors)
                                 {
                                     if (color == null) continue;
-                                    var check = productVariant.VariantsAttributes!.FirstOrDefault(f => f.ProductAttributeValueId == color.ProductAttributeValue.Id) != null ? "checked" : "";
-                                    if (!string.IsNullOrEmpty(check)) colorId = color.ProductAttributeValue.Id;
+                                    var check = color.ProductVariant?.VariantsAttributes!.FirstOrDefault(f =>
+                                    f.ProductAttributeValueId == firstColor.ProductAttributeValueId) != null ? "checked" : "";
                                     <div class="form-check color-item m-0 p-0 me-1 form-check-inline">
-                                        <input type="radio" class="select-color" name="color-options" style="color: @color.ProductAttributeValue.Value;" id="color-@color.ProductAttributeValue.Id" value="@color.ProductAttributeValue.Id" @check onclick="SelectColor();" />
+                                        <input type="radio" class="select-color" name="color-options"
+                                            style="color: @(color.ProductAttributeValue?.Value);"
+                                            value="@color.ProductAttributeValueId" @(check) />
                                     </div>
                                 }
                             }
                         </div>
-                        <div class="form-group color-option">
-                            <label class="title-label">Dung lượng</label>
-                            @if (storages != null)
-                            {
-                                @foreach (var storage in storages)
-                                {
-                                    if (storage == null) continue;
-                                    var check = productVariant.VariantsAttributes!.FirstOrDefault(f => f.ProductAttributeValueId == storage.ProductAttributeValue.Id) != null ? "checked" : "";
-                                    if (!string.IsNullOrEmpty(check)) storageId = storage.ProductAttributeValue.Id;
-                                    <input type="radio" class="btn-check d-block select-storage" name="storage-options" id="storage-@storage.ProductAttributeValue.Id" autocomplete="off" value="@storage.ProductAttributeValue.Id" @check onclick="SelectStorage();" />
-                                    <label class="btn btn-outline-success" for="storage-@storage.ProductAttributeValue.Id">@storage.ProductAttributeValue.Value</label>
-                                }
-                            }
-                        </div> *@
-                        <div id="productPrice"></div>
-                        <div class="form-group color-option">
-                            <label class="title-label">Màu sắc</label>
-                            @if (colors != null)
-                            {
-                                if(colors.Count > 0)
-                                {
-                                    var firstColor = colors.First();
-                                    @foreach (var color in colors)
-                                    {
-                                        if (color == null) continue;
-                                        var check = color.ProductVariant.VariantsAttributes!.FirstOrDefault(f => f.ProductAttributeValueId == firstColor.ProductAttributeValueId) != null ? "checked" : "";
-                                        <div class="form-check color-item m-0 p-0 me-1 form-check-inline">
-                                            <input type="radio" class="select-color" name="color-options" style="color: @color.ProductAttributeValue.Value;" value="@color.ProductAttributeValueId" @(check) />
-                                        </div>
-                                    }
-                                }
-                            }
-                        </div>
-                        <div class="form-group color-option">
-                            <label class="title-label">Dung lượng</label>
-                            <div id="storages"></div>
-                            @* @if (storages != null)
-                            {
-                                @foreach (var storage in storages)
-                                {
-                                    if (storage == null) continue;
-                                    <input type="radio" class="btn-check d-block select-storage" name="storage-options" id="storage-@storage.ProductAttributeValue.Id" autocomplete="off" value="@storage.ProductAttributeValue.Id" />
-                                    <label class="btn btn-outline-success" for="storage-@storage.ProductAttributeValue.Id">@storage.ProductAttributeValue.Value</label>
-                                }
-                            } *@
-                        </div>
+                        <div id="storages" class="form-group color-option"></div>
                         <div class="bottom-content">
                             <div class="row align-items-end">
                                 <div class="col-lg-7 col-md-7 col-12">
                                     <div class="button cart-button">
-                                        <button class="btn" style="width: 100%;">Add to Cart</button>
+                                        @* <button class="btn addToCartBtn"
+                                        data-productVariantId="@Model.ProductVariants?.FirstOrDefault()?.Id"
+                                        style="width: 100%;">Add to Cart</button> *@
+                                        <button class="btn addToCartBtn" style="width: 100%;">Add to Cart</button>
+                                        <input type="hidden" id="p_color" value="">
+                                        <input type="hidden" id="p_storage" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-12 p-0">
@@ -120,42 +86,26 @@
         <div class="product-details-info">
             <div class="single-block">
                 <div class="row">
-                    <div class="col-lg-6 col-12">
-                        <div class="info-body custom-responsive-margin">
-                            <h4>Details</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.
-                            </p>
-                            <h4>Features</h4>
-                            <ul class="features">
-                                <li>Capture 4K30 Video and 12MP Photos</li>
-                                <li>Game-Style Controller with Touchscreen</li>
-                                <li>View Live Camera Feed</li>
-                                <li>Full Control of HERO6 Black</li>
-                                <li>Use App for Dedicated Camera Operation</li>
-                            </ul>
+                    <div class="col-lg-8 col-12">
+                        <div class="card p-3 shadow" style="border-radius: 10px;">
+                            @Html.Raw(Model.Description)
                         </div>
                     </div>
-                    <div class="col-lg-6 col-12">
+                    <div class="col-lg-4 col-12">
                         <div class="info-body">
-                            <h4>Specifications</h4>
-                            <ul class="normal-list">
-                                <li><span>Weight:</span> 35.5oz (1006g)</li>
-                                <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>
-                                <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>
-                                <li><span>Operating Frequency:</span> 2.4GHz</li>
-                                <li><span>Manufacturer:</span> GoPro, USA</li>
-                            </ul>
-                            <h4>Shipping Options:</h4>
-                            <ul class="normal-list">
-                                <li><span>Courier:</span> 2 - 4 days, $22.50</li>
-                                <li><span>Local Shipping:</span> up to one week, $10.00</li>
-                                <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>
-                                <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>
-                            </ul>
+                            <div class="card p-3 shadow" style="border-radius: 10px;">
+                                <h6>Thông số kĩ thuật</h6>
+                                <table class="mt-3 table table-striped">
+                                    <tbody id="attributes"></tbody>
+                                </table>
+                                <h4>Shipping Options:</h4>
+                                <ul class="normal-list">
+                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>
+                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>
+                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>
+                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,7 +158,7 @@
                         </ul>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn review-btn" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
+                            data-bs-target="#exampleModal">
                             Leave a Review
                         </button>
                     </div>
@@ -299,7 +249,7 @@
 <!-- End Item Details -->
 <!-- Review Modal -->
 <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -353,7 +303,108 @@
     </div>
 </div>
 <!-- End Review Modal -->
+@* @section Scripts {
+<script>
+var listPrice = [];
+var action = {
+init: function() {
+action.getStorageByColor();
+},
+firstLoading: function() {
+$.ajax({
+url: '/Products/GetColors',
+type: 'POST',
+data: { productId: @Model.Id },
+success: function(response) {
+var colorList = $("#colors");
+colorList.empty();
+$.each(response.colors, function(index, color) {
+colorList.append(
+`<div class="form-check color-item m-0 p-0 me-1 form-check-inline">
+<input type="radio" class="select-color" name="color-options"
+style="color: ${color.value};"
+data-id="${color.id}" />
+</div>`
+);
+});
+action.getStorageByColor();
+$('[name="color-options"]').first().click();
+}
+});
+alert('firstLoading');
+},
+getStorageByColor: function() {
+$('.select-color').off('change').on('change', function() {
+var value = $(this).data('id');
+$.ajax({
+url: '/Products/GetStorages',
+type: 'POST',
+data: { productId: @Model.Id, colorId: value },
+success: function(response) {
+listPrice = response;
+var storageList = $("#storages");
+storageList.empty();
+$.each(response.storages, function(index, storage) {
+storageList.append(
+`<input type="radio" class="btn-check d-block select-storage" name="storage-options" id="storage-${storage.id}"
+value="${storage.productAttributeValueId}" autocomplete="off">
+<label class="btn btn-outline-success" for="storage-${storage.id}">${storage.value}</label>`
+);
+alert('debug');
+});
+action.getPriceByStorage();
+$('[name="storage-options"]').first().click();
+}
+});
+});
+},
+getPriceByStorage: function() {
+$('.select-storage').off('change').on('change', function() {
+var value = $(this).val();
+let price = listPrice.storages.find(x => x.productAttributeValueId == value);
+var priceTag = $("#productPrice");
+priceTag.empty();
+priceTag.append(`<h3 class="price">${price.price}đ{discount}</h3>`);
+
+});
+alert('getPriceByStorage');
+},
+previewImgEvent: function() {
+const $current = $('#current');
+const opacity = 0.6;
+const $imgs = $('.img');
+
+$imgs.on('click', function() {
+$imgs.css('opacity', 1);
+$current.attr('src', $(this).attr('src'));
+$(this).css('opacity', opacity);
+});
+}
+}
+action.init();
+</script>
+} *@
+
+
 @section Scripts {
+    @if (@colors != null && @colors.Count > 0)
+    {
+        <script>
+            firstLoading(@Model.Id, @colors[0]?.ProductAttributeValue?.Id);
+            function firstLoading(productId, _colorId) {
+                $('#p_color').val(_colorId);
+                $.ajax({
+                    type: "GET",
+                    url: `/Products/GetStorages?productId=${@Model.Id}&colorId=${_colorId}`,
+                    success: function (data) {
+                        $("#storages").html(data);
+                        $('input[name=options-outlined]:first').prop('checked', true);
+                        $('[name="storage-options"]').first().click();
+                    }
+                });
+            }
+        </script>
+    }
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const current = document.getElementById("current");
@@ -368,40 +419,92 @@
                     e.target.style.opacity = opacity;
                 });
             });
-            updateStorages(@Model.Id, @colors[0].ProductAttributeValue.Id);
-
+            // thêm sản phẩm vào giỏ hàng
+            $('.addToCartBtn').click(function () {
+                $.ajax({
+                    url: '/Cart/AddToCart',
+                    type: 'POST',
+                    data: {
+                        productId: @Model.Id,
+                        colorId: $('#p_color').val(),
+                        storageId: $('#p_storage').val(),
+                        quantity: 1
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            loadCart();
+                            console.log("Thêm sản phẩm thành công!");
+                        }
+                        else {
+                            notyf.warning(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        notyf.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+                        console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+                    }
+                });
+            });
         });
         if (@colors.Count() > 0) {
             $(document).ready(function () {
                 $(document).on("change", ".select-color", function () {
-                    var _colorId = parseInt($(this).val());
-                    updateStorages(@Model.Id, _colorId);
+                    let colorId = parseInt($(this).val());
+                    if (!isNaN(colorId)) {
+                        $('#p_color').val(colorId);
+                        updateStorages(@Model.Id, colorId);
+                    }
                 });
                 $(document).on("change", ".select-storage", function () {
-                    var _storageId = parseInt($(this).val());
-                    storageId = _storageId;
-                    updatePrice(@Model.Id, colorId, storageId);
+                    let storageId = parseInt($(this).val());
+                    if (!isNaN(storageId)) {
+                        $('#p_storage').val(storageId);
+                        updatePrice(@Model.Id, $('#p_color').val(), storageId);
+                        updateAttributes(@Model.Id, $('#p_color').val(), storageId);
+                    }
                 });
             });
         }
 
-        function updatePrice(productId, _colorId, _storageId) {
+        function updateAttributes(productId, colorId, storageId) {
             $.ajax({
                 type: "GET",
-                url: `/Products/GetPrices?productId=${@Model.Id}&colorId=${_colorId}&storageId=${_storageId}`,
+                url: `/Products/GetAttributes?productId=${@Model.Id}&colorId=${colorId}&storageId=${storageId}`,
+                success: function (data) {
+                    $("#attributes").html(data);
+                }
+            });
+        }
+
+        function updatePrice(productId, colorId, storageId) {
+            $.ajax({
+                type: "GET",
+                url: `/Products/GetPrices?productId=${@Model.Id}&colorId=${colorId}&storageId=${storageId}`,
                 success: function (data) {
                     $("#productPrice").html(data);
                 }
             });
+            updateQuantityStatus(productId, colorId, storageId);
         }
-        function updateStorages(productId, _colorId) {
-            colorId = _colorId;
+
+        function updateQuantityStatus(productId, colorId, storageId) {
             $.ajax({
                 type: "GET",
-                url: `/Products/GetStorages?productId=${@Model.Id}&colorId=${colorId}`,
+                url: `/Products/GetQuantityStatus?productId=${@Model.Id}&colorId=${colorId}&storageId=${storageId}`,
+                success: function (data) {
+                    $("#qtyStatus").html(data);
+                }
+            });
+        }
+
+        function updateStorages(productId, _colorId) {
+            $.ajax({
+                type: "GET",
+                url: `/Products/GetStorages?productId=${@Model.Id}&colorId=${_colorId}`,
                 success: function (data) {
                     $("#storages").html(data);
                     $('input[name=options-outlined]:first').prop('checked', true);
+                    $('[name="storage-options"]').first().click();
                 }
             });
         }
