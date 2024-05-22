@@ -310,24 +310,24 @@
                     console.log("Thêm địa chỉ mới thành công!");
                     console.log(response);
                     $('#listAddress').append(`
-                                            <div class="col-lg-6 col-md-6 col-12 p-1">
-                                                <div class="card">
-                                                    <div class="form-floating">
-                                                        <div class="address-fill d-flex p-3">
-                                                            <div class="content-address col p-0 align-content-center">
-                                                                <h6 class="content_address_fullname">` + response.fullName + `</h6>
-                                                                <b class="content_address_phonenumber">` + response.phoneNumber + `</b>
-                                                                <p class="content_address_address">` + response.address + `</p>
-                                                            </div>
-                                                            <div class="col-3 p-0 d-grid gap-2">
-                                                                <button type="button" class="address-select fw-400 btn btn-sm btn-outline-dark">Chọn</button>
-                                                                <button type="button" class="address-update fw-400 btn btn-sm btn-outline-dark">Sửa</button>
-                                                                <button type="button" class="address-delete fw-400 btn btn-sm btn-outline-danger">Xoá</button>
+                                                <div class="col-lg-6 col-md-6 col-12 p-1">
+                                                    <div class="card">
+                                                        <div class="form-floating">
+                                                            <div class="address-fill d-flex p-3">
+                                                                <div class="content-address col p-0 align-content-center">
+                                                                    <h6 class="content_address_fullname">` + response.fullName + `</h6>
+                                                                    <b class="content_address_phonenumber">` + response.phoneNumber + `</b>
+                                                                    <p class="content_address_address">` + response.address + `</p>
+                                                                </div>
+                                                                <div class="col-3 p-0 d-grid gap-2">
+                                                                    <button type="button" class="address-select fw-400 btn btn-sm btn-outline-dark">Chọn</button>
+                                                                    <button type="button" class="address-update fw-400 btn btn-sm btn-outline-dark">Sửa</button>
+                                                                    <button type="button" class="address-delete fw-400 btn btn-sm btn-outline-danger">Xoá</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>`);
+                                                </div>`);
 
                     $('#new_fullName').val('');
                     $('#new_phoneNumber').val('');
@@ -386,7 +386,7 @@
                 data: {
                     productVariantId: productVariantId,
                     amount: @user.CartItems.Count()
-                                                                                                                                                                                                                                                                                                            },
+                                                                                                                                                                                                                                                                                                                },
                 success: function (response) {
                     if (response.success) {
                         loadCart();
