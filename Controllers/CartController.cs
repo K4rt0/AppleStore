@@ -70,6 +70,27 @@ namespace AppleStore.Controllers
             return View(new ShoppingCart { Items = cartItems.ToList() });
         }
 
+        [HttpGet("GetCartItems")]
+        public async Task<IActionResult> GetCartItems()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cartItems = await _cartItemRepository.GetAllByUserIdAsync(userId);
+
+            var cartItemsList = cartItems.Select(item => new
+            {
+                item.ProductVariant?.ProductId,
+                Name = item.ProductVariant?.Product?.Name,
+                Avatar = item.ProductVariant?.Product?.Avatar,
+                CartProductQuantity = item.CartProductQuantity,
+                Price = item.ProductVariant?.Price
+            }).ToList();
+            return Json(new
+            {
+                success = true,
+                cartItemsList = cartItemsList
+            }); ;
+        }
+
         [HttpPost("AddToCart/{productVariantId}")]
         public async Task<IActionResult> AddToCart(int productVariantId, [FromBody] int quantity)
         {
@@ -109,7 +130,7 @@ namespace AppleStore.Controllers
         }
 
         [HttpPost("UpdateCartItem/{productVariantId}")]
-        public async Task<IActionResult> UpdateCartItem(int productVariantId,  string? quantity)
+        public async Task<IActionResult> UpdateCartItem(int productVariantId, [FromForm] string? quantity)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
