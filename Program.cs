@@ -39,6 +39,7 @@ builder.Services.AddScoped<IDiscountRepository, EFDiscountRepository>();
 builder.Services.AddScoped<IProductVariantRepository, EFProductVariantRepository>();
 builder.Services.AddScoped<IProductAttributeRepository, EFProductAttributeRepository>();
 builder.Services.AddScoped<IProductAttributeValueRepository, EFProductAttributeValueRepository>();
+builder.Services.AddScoped<ICartItemRepository, EFCartItemRepository>();
 
 var app = builder.Build();
 

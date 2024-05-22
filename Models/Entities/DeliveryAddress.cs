@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppleStore.Models.Entities
 {
@@ -9,9 +10,9 @@ namespace AppleStore.Models.Entities
         public string? FullName { get; set; }
         public int PhoneNumber { get; set; }
         public string? Address { get; set; }
-        public string? City { get; set; }
-        public string? State { get; set; }
-        public string? Country { get; set; }
-        public int PostalCode { get; set; }
+        public bool Default { get; set; }
+        [ForeignKey("AspNetUsers")]
+        public string? ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
     }
 }

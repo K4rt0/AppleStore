@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\ckeditor\**" />
+    <Content Remove="wwwroot\ckeditor\**" />
+    <EmbeddedResource Remove="wwwroot\ckeditor\**" />
+    <None Remove="wwwroot\ckeditor\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
@@ -26,6 +33,11 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\images\product-details\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\summernote\font\summernote.hash" />
+    <None Include="wwwroot\summernote\font\summernote.woff2" />
   </ItemGroup>
 
 </Project>

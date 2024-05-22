@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="~/css/tiny-slider.css" />
     <link rel="stylesheet" href="~/css/glightbox.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
 </head>
 
@@ -46,21 +47,23 @@
                     <div class="col-lg-6 col-md-6 col-4">
                         <nav class="navbar navbar-expand-lg">
                             <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                    aria-expanded="false" aria-label="Toggle navigation">
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="toggler-icon"></span>
                                 <span class="toggler-icon"></span>
                                 <span class="toggler-icon"></span>
                             </button>
-                            <div class="collapse navbar-collapse sub-menu-bar" style="width: 220px;" id="navbarSupportedContent">
+                            <div class="collapse navbar-collapse sub-menu-bar" style="width: 220px;"
+                                id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
                                     <li class="nav-item">
-                                        <a asp-area="" asp-controller="Home" asp-action="Index" class="active" aria-label="Toggle navigation">Home</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="Index" class="active"
+                                            aria-label="Toggle navigation">Home</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                           data-bs-target="#submenu-1-2" aria-controls="navbarSupportedContent"
-                                           aria-expanded="false" aria-label="Toggle navigation">Pages</a>
+                                            data-bs-target="#submenu-1-2" aria-controls="navbarSupportedContent"
+                                            aria-expanded="false" aria-label="Toggle navigation">Pages</a>
                                         <ul class="sub-menu collapse" id="submenu-1-2">
                                             <li class="nav-item"><a href="about-us.html">About Us</a></li>
                                             <li class="nav-item"><a href="faq.html">Faq</a></li>
@@ -72,10 +75,11 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                           data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
-                                           aria-expanded="false" aria-label="Toggle navigation">Shop</a>
+                                            data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
+                                            aria-expanded="false" aria-label="Toggle navigation">Shop</a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a asp-controller="Products" asp-action="Index">Shop Grid</a></li>
+                                            <li class="nav-item"><a asp-controller="Products" asp-action="Index">Shop
+                                                    Grid</a></li>
                                             <li class="nav-item"><a href="product-list.html">Shop List</a></li>
                                             <li class="nav-item"><a href="product-details.html">shop Single</a></li>
                                             <li class="nav-item"><a href="cart.html">Cart</a></li>
@@ -84,8 +88,8 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                           data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent"
-                                           aria-expanded="false" aria-label="Toggle navigation">Blog</a>
+                                            data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent"
+                                            aria-expanded="false" aria-label="Toggle navigation">Blog</a>
                                         <ul class="sub-menu collapse" id="submenu-1-4">
                                             <li class="nav-item">
                                                 <a href="blog-grid-sidebar.html">Blog Grid Sidebar</a>
@@ -118,56 +122,23 @@
                                 <div class="cart-items me-3">
                                     <a href="javascript:void(0)" class="main-btn">
                                         <i class="lni lni-cart"></i>
-                                        <span class="total-items">2</span>
+                                        <span class="total-items total-item">0</span>
                                     </a>
                                     <!-- Shopping Item -->
-                                    <div class="shopping-item">
-                                        <div class="dropdown-cart-header">
-                                            <span>2 Items</span>
-                                            <a href="cart.html">View Cart</a>
+                                    <div class="shopping-item" style="width: 350px;">
+                                        <div class="dropdown-cart-header d-flex justify-content-between">
+                                            <span>0 Sản Phẩm Vừa Thêm</span>
                                         </div>
-                                        <ul class="shopping-list">
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item">
-                                                    <i class="lni lni-close"></i>
-                                                </a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html">
-                                                        <img src="~/images/header/cart-items/item1.jpg" alt="#">
-                                                    </a>
-                                                </div>
-
-                                                <div class="content">
-                                                    <h4>
-                                                        <a href="product-details.html">
-                                                            Apple Watch Series 6
-                                                        </a>
-                                                    </h4>
-                                                    <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item">
-                                                    <i class="lni lni-close"></i>
-                                                </a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html">
-                                                        <img src="~/images/header/cart-items/item2.jpg" alt="#">
-                                                    </a>
-                                                </div>
-                                                <div class="content">
-                                                    <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
-                                                    <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                        <ul class="shopping-list" id="Cart"></ul>
                                         <div class="bottom">
                                             <div class="total">
-                                                <span>Total</span>
-                                                <span class="total-amount">$134.00</span>
+                                                <span>Tổng</span>
+                                                <span class="total-amount total-amounts"
+                                                    style="font-weight: 700; color: #0167F3;">0.00 đ</span>
                                             </div>
                                             <div class="button">
-                                                <a href="checkout.html" class="btn animate">Checkout</a>
+                                                <a asp-controller="Cart" asp-action="Index" class="btn animate">Xem giỏ
+                                                    hàng</a>
                                             </div>
                                         </div>
                                     </div>
@@ -384,8 +355,59 @@
             }
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            loadCart();
+        });
+        function loadCart() {
+            $.ajax({
+                url: '/Cart/GetCartItems',
+                type: 'GET',
+                success: function (response) {
+
+                    let data = response.cartItemsList;
+
+                    let cartHTML = '';
+                    let totalItem = 0;
+                    let totalAmounts = 0;
+
+                    data.forEach(item => {
+                        const avatar = item.avatar ? `/images/products/${item.avatar}` : `/images/default-avatar.png`;
+                        const id = item.productId;
+                        cartHTML +=
+                            `<li>
+                                    <div class="cart-img-head">
+                                        <a class="cart-img" href="/Products/Details/${id}">
+                                            <img src="${avatar}" alt="#">
+                                        </a>
+                                    </div>
+                                    <div class="content">
+                                        <h4><a href="/Products/Details/${id}" class="d-flex justify-content-start">${item.name}</a></h4>
+                                        <p class="quantity d-flex justify-content-start" style="font-weight: 700;">
+                                            <span class="amount" style="color: #0167F3;">
+                                            ${item.price.toLocaleString('vi-VN')}đ
+                                            </span >
+                        <span style="font-size: 0.9rem; margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span ></p >
+                                    </div >
+                                </li > `;
+                        totalItem += item.cartProductQuantity;
+                        totalAmounts += item.cartProductQuantity * item.price;
+                    });
+
+                    $('#Cart').html(cartHTML);
+                    $('.total-item').text(totalItem);
+                    $('.dropdown-cart-header span').first().text(`${totalItem} Sản Phẩm Đã Thêm`);
+                    $('.total-amounts').text(`${totalAmounts.toLocaleString('vi-VN')}đ`);
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 
 </body>
+
 </html>

@@ -102,6 +102,32 @@ namespace AppleStore.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("AppleStore.Models.Entities.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CartProductQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductVariantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("AppleStore.Models.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -140,23 +166,14 @@ namespace AppleStore.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Default")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
-
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -582,6 +599,23 @@ namespace AppleStore.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AppleStore.Models.Entities.CartItem", b =>
+                {
+                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("AppleStore.Models.Entities.ProductVariant", "ProductVariant")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("ProductVariant");
+                });
+
             modelBuilder.Entity("AppleStore.Models.Entities.Category", b =>
                 {
                     b.HasOne("AppleStore.Models.Entities.Discount", "Discount")
@@ -593,9 +627,11 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.DeliveryAddress", b =>
                 {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("DeliveryAddresses")
                         .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Order", b =>
@@ -626,7 +662,7 @@ namespace AppleStore.Migrations
                     b.HasOne("AppleStore.Models.Entities.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -756,6 +792,8 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("CartItems");
+
                     b.Navigation("DeliveryAddresses");
                 });
 
@@ -799,6 +837,8 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.ProductVariant", b =>
                 {
+                    b.Navigation("CartItems");
+
                     b.Navigation("VariantsAttributes");
                 });
 #pragma warning restore 612, 618
