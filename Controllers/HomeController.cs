@@ -29,7 +29,7 @@ namespace AppleStore.Controllers
             foreach (var product in products)
             {
                 var minPrice = product.ProductVariants
-                                          .Select(p => p.Price)
+                                          .Select(p => p.Price )
                                           .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
                                           .Min();
                 minPrices.Add(minPrice);

@@ -88,10 +88,10 @@ namespace AppleStore.Controllers
                         products = products.OrderByDescending(p => p.Name);
                         break;
                     case "price_asc":
-                        products = products.OrderBy(p => p.ProductVariants.Min(v => v.Price));
+                        products = products.OrderBy(p => p.ProductVariants.Where(variant => variant.Price >= Pricefrom).Min(v => v.Price));
                         break;
                     case "price_desc":
-                        products = products.OrderByDescending(p => p.ProductVariants.Min(v => v.Price));
+                        products = products.OrderByDescending(p => p.ProductVariants.Where(variant => variant.Price >= Pricefrom).Min(v => v.Price));
                         break;
                     default:
                         break;
