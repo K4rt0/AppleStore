@@ -127,14 +127,14 @@
                                     <!-- Shopping Item -->
                                     <div class="shopping-item" style="width: 350px;">
                                         <div class="dropdown-cart-header d-flex justify-content-between">
-                                            <span>0 Sản Phẩm Vừa Thêm</span>
+                                            <span style="text-transform: none !important;">0 sản phẩm</span>
                                         </div>
                                         <ul class="shopping-list" id="Cart"></ul>
                                         <div class="bottom">
                                             <div class="total">
                                                 <span>Tổng</span>
                                                 <span class="total-amount total-amounts"
-                                                    style="font-weight: 700; color: #0167F3;">0.00 đ</span>
+                                                    style="font-weight: 700; color: #0167F3;">0đ</span>
                                             </div>
                                             <div class="button">
                                                 <a asp-controller="Cart" asp-action="Index" class="btn animate">Xem giỏ
@@ -315,6 +315,7 @@
     <script src="~/js/glightbox.min.js"></script>
     <script src="~/js/main.js"></script>
     <script src="~/js/jquery-3.7.1.min.js"></script>
+    @await Component.InvokeAsync("Notyf")
     <script type="text/javascript">
         //========= Hero Slider 
         tns({
@@ -376,27 +377,29 @@
                         const id = item.productId;
                         cartHTML +=
                             `<li>
-                                    <div class="cart-img-head">
-                                        <a class="cart-img" href="/Products/Details/${id}">
-                                            <img src="${avatar}" alt="#">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h4><a href="/Products/Details/${id}" class="d-flex justify-content-start">${item.name}</a></h4>
-                                        <p class="quantity d-flex justify-content-start" style="font-weight: 700;">
-                                            <span class="amount" style="color: #0167F3;">
+                                <div class="cart-img-head">
+                                    <a class="cart-img" href="/Products/Details/${id}">
+                                        <img src="${avatar}" alt="#">
+                                    </a>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="/Products/Details/${id}" class="d-flex justify-content-start">${item.name}</a>
+                                    </h4>
+                                    <p class="quantity d-flex justify-content-start" style="font-weight: 700;">
+                                        <span class="amount" style="color: #0167F3;">
                                             ${item.price.toLocaleString('vi-VN')}đ
-                                            </span >
-                        <span style="font-size: 0.9rem; margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span ></p >
-                                    </div >
-                                </li > `;
+                                        </span>
+                                    <span style="margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span></p>
+                                </div>
+                            </li>`;
                         totalItem += item.cartProductQuantity;
                         totalAmounts += item.cartProductQuantity * item.price;
                     });
 
                     $('#Cart').html(cartHTML);
                     $('.total-item').text(totalItem);
-                    $('.dropdown-cart-header span').first().text(`${totalItem} Sản Phẩm Đã Thêm`);
+                    $('.dropdown-cart-header span').first().text(`${totalItem} sản phẩm`);
                     $('.total-amounts').text(`${totalAmounts.toLocaleString('vi-VN')}đ`);
                 },
                 error: function (error) {
@@ -406,7 +409,6 @@
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
-    @await Component.InvokeAsync("Notyf")
 
 </body>
 

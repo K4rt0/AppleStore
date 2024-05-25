@@ -4,6 +4,7 @@ using AppleStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240523192935_EntitiesFix")]
+    partial class EntitiesFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,9 +264,6 @@ namespace AppleStore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeliveryAddressId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("DiscountId")
                         .HasColumnType("int");
 
@@ -282,8 +282,6 @@ namespace AppleStore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("DeliveryAddressId");
 
                     b.HasIndex("DiscountId");
 
@@ -642,17 +640,11 @@ namespace AppleStore.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("AppleStore.Models.Entities.DeliveryAddress", "DeliveryAddress")
-                        .WithMany()
-                        .HasForeignKey("DeliveryAddressId");
-
                     b.HasOne("AppleStore.Models.Entities.Discount", "Discount")
                         .WithMany("Orders")
                         .HasForeignKey("DiscountId");
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("DeliveryAddress");
 
                     b.Navigation("Discount");
                 });

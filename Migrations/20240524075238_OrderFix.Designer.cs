@@ -4,6 +4,7 @@ using AppleStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240524075238_OrderFix")]
+    partial class OrderFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,6 +265,9 @@ namespace AppleStore.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DeliveryAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DeliveryAddresstId")
                         .HasColumnType("int");
 
                     b.Property<int?>("DiscountId")
