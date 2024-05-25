@@ -17,9 +17,11 @@ Admin Panel:
 - Discount
 - Product
 - News On Top
+- Product Details Page
+- Payment by VNPay
 
 ****************** [Scripting] ******************
-- Product Details Page
+
 
 ```
 ### Việt:
