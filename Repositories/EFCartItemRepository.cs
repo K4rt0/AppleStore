@@ -17,20 +17,38 @@ namespace AppleStore.Repositories
         {
             return await _context.CartItems
                 .Include(p => p.ProductVariant)
-                .Include(p => p.ProductVariant.Product)
-                .Include(p => p.ProductVariant.Product.Category)
-                .Include(p => p.ProductVariant.Product.Discount)
+                .ThenInclude(p => p.VariantsAttributes)
+                .ThenInclude(p => p.ProductAttributeValue)
+                .ThenInclude(p => p.ProductAttribute)
+                .Include(p => p.ProductVariant)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Category)
+                .Include(p => p.ProductVariant)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Discount)
                 .ToListAsync();
         }
-
+        public async Task<int> GetProductVariantByAttributeIdAsync(int product, int colorId, int storageId)
+        {
+            return await _context.ProductVariants
+                .Where(p => p.ProductId == product && p.VariantsAttributes.Any(va => va.ProductAttributeValue.Id == colorId) && p.VariantsAttributes.Any(va => va.ProductAttributeValue.Id == storageId))
+                .Select(p => p.Id)
+                .FirstOrDefaultAsync();
+        }
         public async Task<IEnumerable<CartItem>> GetAllByUserIdAsync(string userId)
         {
             return await _context.CartItems
                 .Include(p => p.ProductVariant)
-                .Include(p => p.ProductVariant.Product)
-                .Include(p => p.ProductVariant.Product.Category)
-                .Include(p => p.ProductVariant.Product.Discount)
-                .Where(p => userId == p.UserId)
+                .ThenInclude(p => p.VariantsAttributes)
+                .ThenInclude(p => p.ProductAttributeValue)
+                .ThenInclude(p => p.ProductAttribute)
+                .Include(p => p.ProductVariant)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Category)
+                .Include(p => p.ProductVariant)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Discount)
+                .Where(p => userId == p.ApplicationUserId)
                 .ToListAsync();
         }
 
@@ -45,7 +63,7 @@ namespace AppleStore.Repositories
         {
             return await _context.CartItems
                 .Include(p => p.ProductVariant)
-                .FirstOrDefaultAsync(p => p.UserId == userId && p.ProductVariantId == productVariantId);
+                .FirstOrDefaultAsync(p => p.ApplicationUserId == userId && p.ProductVariantId == productVariantId);
         }
 
         public async Task AddAsync(CartItem cartItem)

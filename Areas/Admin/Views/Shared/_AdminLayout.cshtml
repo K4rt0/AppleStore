@@ -7,6 +7,7 @@
     <title>Smart Shopping - @ViewData["Title"]</title>
     <link rel="shortcut icon" type="image/png" href="~/Logo.png" />
     <link rel="stylesheet" href="~/adminAssets/css/styles.min.css" />
+    <link href="~/summernote/summernote-bs5.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -55,9 +56,13 @@
     <script src="~/adminAssets/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="~/adminAssets/libs/simplebar/dist/simplebar.js"></script>
     <script src="~/adminAssets/js/dashboard.js"></script>
-    <script src="~/adminAssets/js/select2.min.js"></script>
+    <script src="~/summernote/summernote-bs5.js"></script>
     <script>
         $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 400,
+                tabsize: 2
+            });
             $('.deleteButton').on('click', function () {
                 var itemId = $(this).data('item-id');
                 $('#itemId').val(itemId);

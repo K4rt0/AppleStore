@@ -18,6 +18,7 @@ namespace AppleStore.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Discount)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductVariants)
                 .ThenInclude(p => p.VariantsAttributes)
@@ -31,6 +32,7 @@ namespace AppleStore.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Discount)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductVariants)
                 .ThenInclude(p => p.VariantsAttributes)

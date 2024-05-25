@@ -1,5 +1,4 @@
-﻿using AppleStore.Data;
-using AppleStore.Extensions;
+using AppleStore.Data;
 using AppleStore.Models;
 using AppleStore.Models.Entities;
 using AppleStore.Repositories;
@@ -14,8 +13,6 @@ using System.Security.Claims;
 
 namespace AppleStore.Controllers
 {
-    [Route("/Cart/")]
-    [ApiController]
     [Authorize]
     public class CartController : Controller
     {
@@ -64,36 +61,14 @@ namespace AppleStore.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var cartItems = await _cartItemRepository.GetAllByUserIdAsync(userId);
-
-            return View(new ShoppingCart { Items = cartItems.ToList() });
+            ViewData["DbContext"] = _context;
+            return View();
         }
 
-        [HttpGet("GetCartItems")]
-        public async Task<IActionResult> GetCartItems()
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int productId, int colorId, int storageId, int quantity)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var cartItems = await _cartItemRepository.GetAllByUserIdAsync(userId);
-
-            var cartItemsList = cartItems.Select(item => new
-            {
-                item.ProductVariant?.ProductId,
-                Name = item.ProductVariant?.Product?.Name,
-                Avatar = item.ProductVariant?.Product?.Avatar,
-                CartProductQuantity = item.CartProductQuantity,
-                Price = item.ProductVariant?.Price
-            }).ToList();
-            return Json(new
-            {
-                success = true,
-                cartItemsList = cartItemsList
-            }); ;
-        }
-
-        [HttpPost("AddToCart/{productVariantId}")]
-        public async Task<IActionResult> AddToCart(int productVariantId, [FromBody] int quantity)
-        {
+            var productVariantId = await _cartItemRepository.GetProductVariantByAttributeIdAsync(productId, colorId, storageId);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var productVariant = await _productVariantRepository.GetByIdAsync(productVariantId);
@@ -117,7 +92,7 @@ namespace AppleStore.Controllers
             {
                 var cartItem = new CartItem
                 {
-                    UserId = userId,
+                    ApplicationUserId = userId,
                     ProductVariantId = productVariantId,
                     ProductVariant = productVariant,
                     CartProductQuantity = quantity,
@@ -129,8 +104,8 @@ namespace AppleStore.Controllers
             return Json(new { success = true });
         }
 
-        [HttpPost("UpdateCartItem/{productVariantId}")]
-        public async Task<IActionResult> UpdateCartItem(int productVariantId, [FromForm] string? quantity)
+        [HttpPost]
+        public async Task<IActionResult> UpdateCartItem(int productVariantId, string? quantity)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -164,8 +139,8 @@ namespace AppleStore.Controllers
             });
         }
 
-        [HttpPost("RemoveCartItem/{productVariantId}")]
-        public async Task<IActionResult> RemoveCartItem(int productVariantId)
+        [HttpPost]
+        public async Task<IActionResult> RemoveCartItem(int productVariantId, int amount)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -177,10 +152,51 @@ namespace AppleStore.Controllers
                 return Json(new { success = false });
             }
             _context.CartItems.Remove(cartItem);
+            ViewData["ShoppingCart"] = new ShoppingCart { Items = (await _cartItemRepository.GetAllByUserIdAsync(userId)).ToList() };
             await _context.SaveChangesAsync();
             _notyf.Success("Đã xóa sản phẩm khỏi giỏ hàng.");
 
-            return Json(new { success = true });
+            return Json(new { success = true, amount = amount - 1 });
+        }
+        [HttpPost]
+        public IActionResult CreateAddress(string userId, string fullName, int phoneNumber, string address)
+        {
+            DeliveryAddress deliveryAddress = new DeliveryAddress
+            {
+                FullName = fullName,
+                PhoneNumber = phoneNumber,
+                Address = address,
+                ApplicationUserId = userId
+            };
+            _context.Add(deliveryAddress);
+            _context.SaveChanges();
+            return Json(new
+            {
+                addressId = deliveryAddress.Id,
+                FullName = fullName,
+                PhoneNumber = phoneNumber,
+                Address = address
+            });
+        }
+
+        public async Task<IActionResult> GetCartItems()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cartItems = await _cartItemRepository.GetAllByUserIdAsync(userId);
+
+            var cartItemsList = cartItems.Select(item => new
+            {
+                item.ProductVariant?.ProductId,
+                Name = item.ProductVariant?.Product?.Name,
+                Avatar = item.ProductVariant?.Product?.Avatar,
+                CartProductQuantity = item.CartProductQuantity,
+                Price = item.ProductVariant?.Price
+            }).ToList();
+            return Json(new
+            {
+                success = true,
+                cartItemsList = cartItemsList
+            }); ;
         }
     }
 }

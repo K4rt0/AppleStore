@@ -7,6 +7,7 @@ namespace AppleStore.Repositories
         Task<IEnumerable<CartItem>> GetAllAsync();
         Task<IEnumerable<CartItem>> GetAllByUserIdAsync(string userId);
         Task<CartItem?> GetByIdAsync(int id);
+        Task<int> GetProductVariantByAttributeIdAsync(int product, int colorId, int storageId);
         Task<CartItem?> GetByIdAndUserIdAsync(int productVariantId, string userId);
         Task AddAsync(CartItem cartItem);
         Task UpdateAsync(CartItem cartItem);

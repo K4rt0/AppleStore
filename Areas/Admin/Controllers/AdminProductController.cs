@@ -136,6 +136,8 @@ namespace AppleStore.Areas.Admin.Controllers
                 }
                 existingProduct.Name = product.Name;
                 existingProduct.CategoryId = product.CategoryId;
+                existingProduct.DiscountId = product.DiscountId;
+                existingProduct.Description = product.Description;
                 await _productRepository.UpdateAsync(existingProduct);
                 _notyf.Success("Cập nhật sản phẩm thành công !");
                 return RedirectToAction("Index");

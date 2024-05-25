@@ -4,7 +4,7 @@
     ViewData["Title"] = "CreateVariant";
 }
 
-<h5 class="card-title fw-semibold mb-4 d-inline-block">THÊM CHI TIẾT SẢN PHẨM</h5>
+<h5 class="card-title fw-semibold mb-4 d-inline-block">CHỈNH SỬA CHI TIẾT SẢN PHẨM</h5>
 <form asp-action="EditVariant" asp-route-variantId="@ViewBag.VariantId" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label class="form-label" asp-for="Price"></label>
@@ -29,7 +29,7 @@
             </div>
         }
     </div>
-    <button type="submit" class="btn btn-primary">Thêm</button>
+    <button type="submit" class="btn btn-primary">Sửa</button>
     <a asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-secondary">Trở về</a>
     </div>
 </form>

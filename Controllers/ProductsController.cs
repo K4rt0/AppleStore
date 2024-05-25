@@ -31,137 +31,13 @@ namespace AppleStore.Controllers
         }
         public async Task<IActionResult> Index(string? name, decimal? Pricefrom, int? CategoryId, string? sortOrder, int? CategoryIdShow, int? page)
         {
-            var products = await _productRepository.GetAllAsync();
-            var categories = await _categoryRepository.GetAllAsync();
-            var listCategories = categories.ToList();
-            listCategories.Insert(0, new Category { Id = 0, Name = "All" });
-            ViewBag.CategoryID = new SelectList(listCategories, "Id", "Name", CategoryId);
-
-            Pricefrom = Pricefrom ?? 0;
-            //LỌC
-            if (!string.IsNullOrEmpty(name))
-            {
-                if (CategoryId > 0)
-                {
-                    products = products.Where(x => x.CategoryId == CategoryId && x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-                }
-                else
-                {
-                    products = products.Where(x => x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-                }
-            }
-            else
-            {
-                if (CategoryId > 0)
-                {
-                    products = products.Where(x => x.CategoryId == CategoryId && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-
-                }
-                else
-                {
-                    products = products.Where(x => x.ProductVariants.Any(v => v.Price >= Pricefrom));
-                }
-            }
-
-            //ĐẾM SỐ LOẠI
-            var categoryCounts = (from c in _categoryRepository.GetAllAsync().Result
-                                  join p in products on c.Id equals p.CategoryId into productGroup
-                                  from pg in productGroup.DefaultIfEmpty()
-                                  group pg by new { c.Id, c.Name } into g
-                                  select new
-                                  {
-                                      CategoryId = g.Key.Id,
-                                      CategoryName = g.Key.Name,
-                                      Count = g.Count(t => t != null && t.CategoryId == g.Key.Id)
-                                  }).ToList();
-
-            categoryCounts.Insert(0, new { CategoryId = 0, CategoryName = "All Categories", Count = products.Count() });
-            ViewBag.CategoryCounts = categoryCounts;
-            if (CategoryIdShow == null)
-            {
-                CategoryIdShow = 0;
-            }
-
-            // SẮP XẾP
-            switch (sortOrder)
-            {
-                case "name_asc":
-                    products = products.OrderBy(p => p.Name);
-                    break;
-                case "name_desc":
-                    products = products.OrderByDescending(p => p.Name);
-                    break;
-                case "price_asc":
-                    products = products.OrderBy(p => p.ProductVariants.Min(v => v.Price));
-                    break;
-                case "price_desc":
-                    products = products.OrderByDescending(p => p.ProductVariants.Min(v => v.Price));
-                    break;
-                default:
-                    break;
-            }
-
-            List<decimal> minPrices = new List<decimal>();
-            foreach (var product in products)
-            {
-                var minPrice = product.ProductVariants
-                                          .Where(variant => variant.Price >= Pricefrom)
-                                          .Select(p => p.Price)
-                                          .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
-                                          .Min();
-                minPrices.Add(minPrice);
-            }
-            ViewBag.MinPrices = minPrices;
-            if (CategoryIdShow.HasValue && CategoryIdShow.Value > 0)
-            {
-                products = products.Where(p => p.CategoryId == CategoryIdShow.Value);
-            }
-            ViewBag.TotalProducts = products.Count();
-
-            //PHÂN TRANG
-            var pageNumber = page ?? 1; // Nếu không có số trang được cung cấp, mặc định là trang 1
-            var pageSize = 12; // Số lượng sản phẩm trên mỗi trang
-            products = await products.ToPagedListAsync(pageNumber, pageSize);
-            ViewBag.CategoryIdShow = CategoryIdShow;
-            ViewBag.CurrentName = name;
-            ViewBag.CurrentPriceFrom = Pricefrom;
-            ViewBag.CurrentCategoryId = CategoryId;
-            ViewBag.CurrentSortOrder = sortOrder;
-            ViewBag.Page = pageNumber;
-            ViewBag.PageSize = pageSize;
-
-            return View(products);
+            return View();
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            /*var productVariant = await _productVariantRepository.GetByIdAsync(id);
-            if (productVariant == null) return NotFound();*/
             var product = await _productRepository.GetByIdAsync(id);
             if (product == null) return NotFound();
-            var productVariantsRelated = await _productVariantRepository.GetByProductIdAsync(product.Id);
-
-            List<ProductVariant> _productVariantsRelated = new();
-            if (productVariantsRelated != null)
-            {
-                foreach (var productVariantRelated in productVariantsRelated)
-                {
-                    var variantsAttributes = new List<VariantsAttributes>();
-                    foreach (var variantAttributes in productVariantRelated.VariantsAttributes!)
-                    {
-                        variantsAttributes.Add(new VariantsAttributes
-                        {
-                            Id = variantAttributes.Id,
-                            ProductAttributeValueId = variantAttributes.ProductAttributeValueId,
-                        });
-                    }
-                    _productVariantsRelated.Add(new ProductVariant
-                    {
-                        Id = productVariantRelated.Id,
-                        VariantsAttributes = variantsAttributes
-                    });
-                }
-            }
 
             var colors = product.ProductVariants
                 .SelectMany(p => p.VariantsAttributes)
@@ -170,18 +46,53 @@ namespace AppleStore.Controllers
                 .Select(p => p.First())
                 .ToList();
 
-            //var storages = new List<VariantsAttributes>();
             var storages = product.ProductVariants
                 .SelectMany(p => p.VariantsAttributes)
                 .Where(p => p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ")
                 .GroupBy(va => va.ProductAttributeValueId)
                 .Select(p => p.First())
                 .ToList();
+
             ViewData["detailsColorList"] = colors;
             ViewData["detailsStorageList"] = storages;
-
             return View(product);
         }
+        /* [HttpPost]
+        public async Task<JsonResult> GetColors(int productId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            if(product == null) return Json(null);
+            var colors = product.ProductVariants
+                .SelectMany(pv => pv.VariantsAttributes)
+                .Where(va => va.ProductAttributeValue.ProductAttribute.Name == "Màu sắc")
+                .Select(va => new {
+                    id = va.ProductAttributeValueId,
+                    value = va.ProductAttributeValue.Value
+                })
+                .Distinct()
+                .ToList();
+            return Json(new { colors });
+        }
+        [HttpPost]
+        public async Task<JsonResult> GetStorages(int productId, int colorId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product == null) return Json(null);
+
+            var storages = product.ProductVariants
+                .SelectMany(p => p.VariantsAttributes)
+                .Where(p => p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ" && p.ProductVariant.ProductId == productId && p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == colorId))
+                .Select(p => new {
+                    id = p.Id,
+                    productAttributeValueId = p.ProductAttributeValueId,
+                    value = p.ProductAttributeValue.Value,
+                    price = p.ProductVariant.Price
+                })
+                .Distinct()
+                .ToList();
+
+            return Json(new { storages });
+        } */
         public async Task<IActionResult> GetStorages(int productId, int colorId)
         {
             var product = await _productRepository.GetByIdAsync(productId);
@@ -196,17 +107,39 @@ namespace AppleStore.Controllers
                 .ToList();
 
             var result = "";
-            foreach (var storage in storages)
+            if (storages != null && storages.Count > 0)
             {
-                result += $@"
-                    <input type='radio' class='btn-check d-block select-storage' name='storage-options' id='storage-{storage.Id}' value='{storage.ProductAttributeValueId}' autocomplete='off'>
-                    <label class='btn btn-outline-success' for='storage-{storage.Id}' style='color: {storage.ProductAttributeValue.Value};'>{storage.ProductAttributeValue.Value}</label>
-                ";
+                result += $"<label class=\"title-label\">Dung lượng</label>";
+                foreach (var storage in storages)
+                {
+                    result += $@"
+                        <input type='radio' class='btn-check d-block select-storage' name='storage-options' id='storage-{storage.Id}' value='{storage.ProductAttributeValueId}' autocomplete='off'>
+                        <label class='btn btn-outline-success' for='storage-{storage.Id}' style='color: {storage.ProductAttributeValue.Value};'>{storage.ProductAttributeValue.Value}</label>
+                    ";
+                }
             }
-
             return Content(result, "text/html");
         }
         public async Task<IActionResult> GetPrices(int productId, int colorId, int storageId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+
+            if (product == null)
+                return NotFound();
+
+            var variant = _context.VariantsAttributes
+                        .FirstOrDefault(p =>
+                            p.ProductVariant.ProductId == productId &&
+                            p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == colorId) &&
+                            p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == storageId)).ProductVariant;
+
+            decimal discountApply = product.Discount != null ? (product.Discount.Price > 0 ? product.Discount.Price : (product.Discount.Percent > 0 ? variant.Price * (product.Discount.Percent / (Decimal)100) : 0)) : 0;
+            string discount = discountApply != 0 ? $"<span>{variant.Price:#,##0}đ</span>" : "";
+            var result = $"<h3 class='price'>{variant.Price - discountApply:#,##0}đ{discount}</h3>";
+
+            return Content(result, "text/html");
+        }
+        public async Task<IActionResult> GetQuantityStatus(int productId, int colorId, int storageId)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             var color = await _productAttributeValueRepository.GetByIdAsync(colorId);
@@ -215,15 +148,60 @@ namespace AppleStore.Controllers
             if (product == null)
                 return NotFound();
 
-            var variant = _context.VariantsAttributes!
+            var variant = _context.VariantsAttributes
                 .FirstOrDefault(p =>
                     p.ProductVariant.ProductId == productId &&
                     p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == colorId) &&
                     p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == storageId)).ProductVariant;
 
-            var result = $"<h3 class=\"price\">{variant.Price:#,##0}đ<span>$945</span></h3>";
+            string result = "";
+
+            if (variant.Quantity > 1)
+            {
+                result = $@"
+                    <div class='category text-success'>
+                        <i class='lni lni-thumbs-up'></i> Còn hàng
+                    </div>";
+            }
+            else
+            {
+                result = $@"
+                    <div class='category text-danger'>
+                        <i class='lni lni-thumbs-down'></i> Hết hàng
+                    </div>";
+            }
 
             return Content(result, "text/html");
         }
+        public async Task<IActionResult> GetAttributes(int productId, int colorId, int storageId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            var color = await _productAttributeValueRepository.GetByIdAsync(colorId);
+            var storage = await _productAttributeRepository.GetByIdAsync(storageId);
+
+            if (product == null)
+                return NotFound();
+
+            var variant = _context.VariantsAttributes
+                .FirstOrDefault(p =>
+                    p.ProductVariant.ProductId == productId &&
+                    p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == colorId) &&
+                    p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == storageId)).ProductVariant;
+
+            var attributes = variant.VariantsAttributes.Where(p => p.ProductVariantId == variant.Id).ToList();
+
+            var result = "";
+            foreach (var item in attributes)
+            {
+                result += $@"
+                    <tr>
+                    <th scope='row'>{item.ProductAttributeValue.ProductAttribute.Name}</th>
+                    <td>{item.ProductAttributeValue.Name}</td>
+                </tr>";
+            }
+            result += "</ul>";
+            return Content(result, "text/html");
+        }
+
     }
 }

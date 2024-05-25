@@ -356,30 +356,27 @@
             }
         });
     </script>
-
     <script>
         $(document).ready(function () {
-            const baseUrl = window.location.origin;
             loadCart();
+        });
+        function loadCart() {
+            $.ajax({
+                url: '/Cart/GetCartItems',
+                type: 'GET',
+                success: function (response) {
 
-            //lấy thông tin sản phẩm vào giỏ 
-            function loadCart() {
-                $.ajax({
-                    url: '/Cart/GetCartItems',
-                    type: 'GET',
-                    success: function (response) {
+                    let data = response.cartItemsList;
 
-                        let data = response.cartItemsList;
+                    let cartHTML = '';
+                    let totalItem = 0;
+                    let totalAmounts = 0;
 
-                        let cartHTML = '';
-                        let totalItem = 0;
-                        let totalAmounts = 0;
-
-                        data.forEach(item => {
-                            const avatar = item.avatar ? `${baseUrl}/images/products/${item.avatar}` : `${baseUrl}/images/default-avatar.png`;
-                            const id = item.productId;
-                            cartHTML +=
-                                `<li>
+                    data.forEach(item => {
+                        const avatar = item.avatar ? `/images/products/${item.avatar}` : `/images/default-avatar.png`;
+                        const id = item.productId;
+                        cartHTML +=
+                            `<li>
                                     <div class="cart-img-head">
                                         <a class="cart-img" href="/Products/Details/${id}">
                                             <img src="${avatar}" alt="#">
@@ -387,115 +384,28 @@
                                     </div>
                                     <div class="content">
                                         <h4><a href="/Products/Details/${id}" class="d-flex justify-content-start">${item.name}</a></h4>
-                                        <p class="quantity d-flex justify-content-start" style="font-weight: 700;"><span class="amount" style="color: #0167F3;">
-                                            ${item.price.toFixed(2)}đ <span style="font-size: 0.9rem; margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span></p>
-                                    </div>
-                                </li>`;
-                            totalItem += item.cartProductQuantity;
-                            totalAmounts += item.cartProductQuantity * item.price;
-                        });
+                                        <p class="quantity d-flex justify-content-start" style="font-weight: 700;">
+                                            <span class="amount" style="color: #0167F3;">
+                                            ${item.price.toLocaleString('vi-VN')}đ
+                                            </span >
+                        <span style="font-size: 0.9rem; margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span ></p >
+                                    </div >
+                                </li > `;
+                        totalItem += item.cartProductQuantity;
+                        totalAmounts += item.cartProductQuantity * item.price;
+                    });
 
-                        $('#Cart').html(cartHTML);
-                        $('.total-item').text(totalItem);
-                        $('.dropdown-cart-header span').first().text(`${totalItem} Sản Phẩm Đã Thêm`);
-                        $('.total-amounts').text(`${totalAmounts.toFixed(2)}đ`);
-                    },
-                    error: function (error) {
-                        console.log('Error:', error);
-                    }
-                });
-            }
-
-
-
-            // thêm sản phẩm vào giỏ hàng
-            $('.addToCartBtn').click(function () {
-                var productVariantId = $(this).data('productvariantid');
-                var quantity = 1;
-
-                $.ajax({
-                    url: '/Cart/AddToCart/' + productVariantId,
-                    type: 'POST',
-                    headers:
-                    {
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(quantity),
-                    success: function (response) {
-                        if (response.success) {
-                            loadCart();
-                            console.log("Thêm sản phẩm thành công!");
-                        }
-                        else {
-                            notyf.warning(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        notyf.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
-                        console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
-                    }
-                });
+                    $('#Cart').html(cartHTML);
+                    $('.total-item').text(totalItem);
+                    $('.dropdown-cart-header span').first().text(`${totalItem} Sản Phẩm Đã Thêm`);
+                    $('.total-amounts').text(`${totalAmounts.toLocaleString('vi-VN')}đ`);
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
             });
-
-            // cập nhật số lượng sản phẩm trong giỏ hàng
-            $('.quantity-input').change(function () {
-                var productVariantId = $(this).data('productvariantid');
-                var quantity = $(this).val();
-
-                $.ajax({
-                    url: '/Cart/UpdateCartItem/' + productVariantId,
-                    type: 'POST',
-                    data: { quantity: quantity },
-                    success: function (response) {
-                        if (response.success) {
-                            $('#item-total-' + productVariantId).text(response.itemTotalPrice);
-                            $('#cart-total-price').html('Cart Subtotal<span>' + response.cartTotalPrice + '</span>');
-                            loadCart();
-                            console.log("Cập nhật sản phẩm thành công!");
-                        }
-                        else {
-                            notyf.warning(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        notyf.error('Lỗi khi cập nhật sản phẩm trong giỏ hàng:', error);
-                        console.error('Lỗi khi cập nhật sản phẩm trong giỏ hàng:', error);
-                    }
-                });
-            });
-
-            // xóa sản phẩm khỏi giỏ hàng
-            $('.removeFromCartBtn').click(function () {
-                var productVariantId = $(this).data('productvariantid');
-                var removeItem = $(this).closest('.cart-single-list');
-
-                $.ajax({
-                    url: '/Cart/RemoveCartItem/' + productVariantId,
-                    type: 'POST',
-                    headers:
-                    {
-                        'Content-Type': 'application/json'
-                    },
-                    data: { productVariantId: productVariantId },
-                    success: function (response) {
-                        if (response.success) {
-                            loadCart();
-                            console.log("Xóa sản phẩm thành công!");
-                            removeItem.remove();
-                        }
-                        else {
-                            notyf.warning(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        notyf.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng', error);
-                        console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
-                    }
-                });
-            });
-        });
+        }
     </script>
-
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 

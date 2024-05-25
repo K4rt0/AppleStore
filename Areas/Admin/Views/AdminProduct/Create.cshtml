@@ -43,11 +43,13 @@
                 <input class="form-check-input" type="checkbox" asp-for="Display" />
                 <label class="form-check-label" asp-for="Display"></label>
             </div>
+            
             <button type="submit" class="btn btn-primary">Thêm</button>
             <a asp-action="Index" class="btn btn-secondary">Trở về</a>
         </div>
     </div>
-    <div class="form-floating">
+    <textarea asp-for="Description" class="summernote"></textarea>
+    <div class="form-floating mt-4">
         <div class="card">
             <div class="card-header bg-body-secondary">
                 <h6 class="mb-0">
@@ -61,72 +63,74 @@
     </div>
 </form>
 
-<script>
-    document.querySelector('#imageInput').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.querySelector('#previewImage').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-    document.querySelectorAll('.image-input').forEach(input => {
-        let files = [];
-        input.addEventListener('change', async function (event) {
-            for (const file of event.target.files) {
-                files.push(file);
-                await new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.alt = file.name;
-                        img.classList.add('object-fit-cover', 'preview-image');
-
-                        const div = document.createElement('div');
-                        div.classList.add('ratio', 'ratio-1x1', 'me-3', 'mb-3');
-                        div.style.width = '195px';
-                        div.style.position = 'relative';
-                        div.appendChild(img);
-
-                        const formFloating = document.createElement('div');
-                        formFloating.classList.add('form-floating');
-                        div.appendChild(formFloating);
-
-                        const button = document.createElement('button');
-                        button.classList.add('d-flex', 'align-items-center', 'justify-content-center');
-                        button.style.position = 'absolute';
-                        button.style.top = '3px';
-                        button.style.right = '3px';
-                        button.style.width = '20px';
-                        button.style.height = '20px';
-                        button.style.borderRadius = '3px';
-                        button.addEventListener('click', function () {
-                            div.remove();
-                            files = files.filter(f => f !== file);
-                            const dataTransfer = new DataTransfer();
-                            files.forEach(f => dataTransfer.items.add(f));
-                            input.files = dataTransfer.files;
-                        });
-                        formFloating.appendChild(button);
-
-                        const iconClose = document.createElement('i');
-                        iconClose.classList.add('ti', 'ti-close',);
-                        iconClose.style.fontSize = '8px';
-                        button.appendChild(iconClose);
-
-                        input.parentElement.insertBefore(div, input);
-
-                        resolve();
-                    };
-                    reader.readAsDataURL(file);
-                });
+@section Scripts {
+    <script>
+        document.querySelector('#imageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.querySelector('#previewImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
             }
-            const dataTransfer = new DataTransfer();
-            files.forEach(f => dataTransfer.items.add(f));
-            input.files = dataTransfer.files;
         });
-    });
-</script>
+        document.querySelectorAll('.image-input').forEach(input => {
+            let files = [];
+            input.addEventListener('change', async function (event) {
+                for (const file of event.target.files) {
+                    files.push(file);
+                    await new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = file.name;
+                            img.classList.add('object-fit-cover', 'preview-image');
+
+                            const div = document.createElement('div');
+                            div.classList.add('ratio', 'ratio-1x1', 'me-3', 'mb-3');
+                            div.style.width = '195px';
+                            div.style.position = 'relative';
+                            div.appendChild(img);
+
+                            const formFloating = document.createElement('div');
+                            formFloating.classList.add('form-floating');
+                            div.appendChild(formFloating);
+
+                            const button = document.createElement('button');
+                            button.classList.add('d-flex', 'align-items-center', 'justify-content-center');
+                            button.style.position = 'absolute';
+                            button.style.top = '3px';
+                            button.style.right = '3px';
+                            button.style.width = '20px';
+                            button.style.height = '20px';
+                            button.style.borderRadius = '3px';
+                            button.addEventListener('click', function () {
+                                div.remove();
+                                files = files.filter(f => f !== file);
+                                const dataTransfer = new DataTransfer();
+                                files.forEach(f => dataTransfer.items.add(f));
+                                input.files = dataTransfer.files;
+                            });
+                            formFloating.appendChild(button);
+
+                            const iconClose = document.createElement('i');
+                            iconClose.classList.add('ti', 'ti-close',);
+                            iconClose.style.fontSize = '8px';
+                            button.appendChild(iconClose);
+
+                            input.parentElement.insertBefore(div, input);
+
+                            resolve();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+                const dataTransfer = new DataTransfer();
+                files.forEach(f => dataTransfer.items.add(f));
+                input.files = dataTransfer.files;
+            });
+        });
+    </script>
+}

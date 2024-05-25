@@ -146,8 +146,9 @@ namespace AppleStore.Areas.Identity.Pages.Account.Manage
                         return RedirectToPage();
                     }
                 }
-                user.Avatar = await CommonFunc.UploadFile(avatar, "profiles", CommonFunc.SEOUrl(user.Email) + Path.GetExtension(avatar.FileName));
-                
+                if (avatar != null)
+                    user.Avatar = await CommonFunc.UploadFile(avatar, "profiles", CommonFunc.SEOUrl(user.Email) + Path.GetExtension(avatar.FileName));
+
                 await _signInManager.RefreshSignInAsync(user);
                 await _userManager.UpdateAsync(user);
                 StatusMessage = "Thông tin của bạn đã được cập nhật.";

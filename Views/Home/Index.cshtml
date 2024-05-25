@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Trang chủ";
 }
 
@@ -22,26 +21,19 @@
             </div>
         </div>
         <div class="row">
-            @{
-                int index = 0; // Khởi tạo chỉ số cho danh sách giá nhỏ nhất
-            }
-            @foreach (var product in Model)
-            {
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Product -->
-                    <div class="single-product">
-                        <div class="product-image">
-                            <img src="@Url.Content($"~/images/products/{product.Avatar}")" alt="@product.Name">                            
-                            <div class="button">
-                                <a href="@Url.Action("Details", "Products", new { id = product.Id })" class="btn">
-                                    <i class="lni lni-magnifier"></i> Chi tiết
-                                </a>
-                            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Product -->
+                <div class="single-product">
+                    <div class="product-image">
+                        <img src="~/images/products/product-1.jpg" alt="#">
+                        <div class="button">
+                            <a href="product-details.html" class="btn"><i class="lni lni-magnifier"></i> Chi tiết</a>
                         </div>
                         <div class="product-info">
                             <span class="category">@product.Category.Name</span>
                             <h4 class="title">
-                                <a href="@Url.Action("ProductGrids", "Products", new { id = product.Id })">@product.Name</a>
+                                <a
+                                    href="@Url.Action("ProductGrids", "Products", new { id = product.Id })">@product.Name</a>
                             </h4>
                             <div class="price">
                                 <span>@ViewBag.MinPrices[index].ToString("C")</span>
@@ -52,9 +44,9 @@
                     <!-- End Single Product -->
                 </div>
                 index++;
-            }
+                }
+            </div>
         </div>
-    </div>
 </section>
 <!-- End Trending Product Area -->
 <!-- Start Banner Area -->
@@ -74,7 +66,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-12">
                 <div class="single-banner custom-responsive-margin"
-                     style="background-image:url('./images/banner/banner-2-bg.jpg')">
+                    style="background-image:url('./images/banner/banner-2-bg.jpg')">
                     <div class="content">
                         <h2>Smart Headphone</h2>
                         <p>
@@ -207,7 +199,7 @@
                 </div>
                 <!-- Start Banner -->
                 <div class="single-banner right"
-                     style="background-image:url('./images/banner/banner-3-bg.jpg');margin-top: 30px;">
+                    style="background-image:url('./images/banner/banner-3-bg.jpg');margin-top: 30px;">
                     <div class="content">
                         <h2>Samsung Notebook 9 </h2>
                         <p>
