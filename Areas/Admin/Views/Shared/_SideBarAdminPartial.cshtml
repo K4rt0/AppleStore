@@ -28,22 +28,23 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-dashboard"></i>
                         </span>
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
-                @* User Panel *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Users Panel</span>
                 </li>
-                @if(isOwner)
+                @if (isOwner)
                 {
                     <li class="sidebar-item">
-                        <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListAdmin" class="sidebar-link" aria-expanded="false">
+                        <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListAdmin" class="sidebar-link"
+                            aria-expanded="false">
                             <span>
                                 <i class="ti ti-list"></i>
                             </span>
@@ -52,7 +53,8 @@
                     </li>
                 }
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListUser" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListUser" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-user"></i>
                         </span>
@@ -60,11 +62,44 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListUserBlocked" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListUserBlocked" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-na"></i>
                         </span>
                         <span class="hide-menu">List User Blocked</span>
+                    </a>
+                </li>
+                @* Orders *@
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Đơn hàng</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminOrder" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách đơn hàng</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminOrder" asp-action="OrderPending" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-time"></i>
+                        </span>
+                        <span class="hide-menu">Đơn hàng chưa duyệt</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminOrder" asp-action="OrderCancel" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-na"></i>
+                        </span>
+                        <span class="hide-menu">Đơn hàng từ chối</span>
                     </a>
                 </li>
                 @* Discounts *@
@@ -73,7 +108,8 @@
                     <span class="hide-menu">Discount Panel</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
@@ -81,7 +117,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Create" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Create" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-plus"></i>
                         </span>
@@ -94,7 +131,8 @@
                     <span class="hide-menu">News On Top</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
@@ -102,7 +140,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Create" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Create" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-plus"></i>
                         </span>
@@ -115,7 +154,8 @@
                     <span class="hide-menu">Products</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
@@ -123,7 +163,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminProductAttribute" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminProductAttribute" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
@@ -136,7 +177,8 @@
                     <span class="hide-menu">Categories</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
@@ -144,7 +186,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Create" class="sidebar-link" aria-expanded="false">
+                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Create" class="sidebar-link"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-plus"></i>
                         </span>
