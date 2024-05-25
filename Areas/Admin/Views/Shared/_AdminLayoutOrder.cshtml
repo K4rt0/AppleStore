@@ -1,0 +1,99 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Shopping - @ViewData["Title"]</title>
+    <link rel="shortcut icon" type="image/png" href="~/Logo.png" />
+    <link rel="stylesheet" href="~/adminAssets/css/styles.min.css" />
+    <link href="~/summernote/summernote-bs5.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed">
+        <!-- Sidebar Start -->
+
+        <partial name="_SideBarAdminPartial" />
+        <!--  Sidebar End -->
+        <!--  Main wrapper -->
+        <div class="body-wrapper">
+            <!--  Header Start -->
+            <header class="app-header">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-block d-xl-none">
+                            <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse"
+                               href="javascript:void(0)">
+                                <i class="ti ti-menu"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                                <i class="ti ti-bell-ringing"></i>
+                                <div class="notification bg-primary rounded-circle"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <partial name="_AdminProfilePartial" />
+                </nav>
+            </header>
+            <!--  Header End -->
+            <div class="container-fluid" style="max-width: none;">
+                <div class="card">
+                    <div class="card-body">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/adminAssets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/adminAssets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/adminAssets/js/sidebarmenu.js"></script>
+    <script src="~/adminAssets/js/app.min.js"></script>
+    <script src="~/adminAssets/libs/apexcharts/dist/apexcharts.min.js"></script>
+    <script src="~/adminAssets/libs/simplebar/dist/simplebar.js"></script>
+    <script src="~/adminAssets/js/dashboard.js"></script>
+    <script src="~/summernote/summernote-bs5.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 400,
+                tabsize: 2
+            });
+            $('.deleteButton').on('click', function () {
+                var itemId = $(this).data('item-id');
+                $('#itemId').val(itemId);
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("Notyf")
+
+    <div class="modal fade" id="deleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Xoá danh mục</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @ViewData["DeleteModalText"]
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="@ViewData["DeleteModalAction"]" method="post">
+                        <input type="hidden" id="itemId" name="id" />
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -35,12 +35,25 @@
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
+                @*Invoices*@
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">ĐƠN HÀNG</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminInvoices" asp-action="Index" class="sidebar-link" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách đơn hàng</span>
+                    </a>
+                </li>
                 @* User Panel *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Users Panel</span>
                 </li>
-                @if(isOwner)
+                @if (isOwner)
                 {
                     <li class="sidebar-item">
                         <a asp-area="Admin" asp-controller="AdminUser" asp-action="ListAdmin" class="sidebar-link" aria-expanded="false">

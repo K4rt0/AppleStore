@@ -20,5 +20,6 @@ namespace AppleStore.Models.Entities
         public string? UserId { get; set; }
         public ApplicationUser? ApplicationUser { get; set; }
         public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
+        public OrderStatus? Status { get; set; }
     }
 }

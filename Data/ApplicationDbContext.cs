@@ -24,6 +24,5 @@ namespace AppleStore.Data
         public DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<NewsOnTop> NewsOnTops { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
     }
 }
