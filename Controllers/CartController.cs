@@ -205,6 +205,11 @@ namespace AppleStore.Controllers
         }
         public async Task<IActionResult> Checkout(int addressId)
         {
+            if (addressId == 0)
+            {
+                _notyf.Warning("Vui lòng chọn địa chỉ giao hàng!");
+                return RedirectToAction("Index");
+            }
             var user = await _userManager.GetUserAsync(User);
             ViewData["user"] = _context.ApplicationUsers?
                     .Include(p => p.CartItems)
@@ -280,7 +285,7 @@ namespace AppleStore.Controllers
                 {
                     var orderDetail = new OrderDetail
                     {
-                        ProductId = item.ProductVariant.ProductId,
+                        ProductVariantId = item.ProductVariant.Id,
                         Quantity = item.CartProductQuantity,
                         Price = item.ProductVariant.Price,
                     };
@@ -305,7 +310,7 @@ namespace AppleStore.Controllers
                     return Redirect(_vnPayRespository.CreatePaymentUrl(HttpContext, vnPayModel));
                 }
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

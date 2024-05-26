@@ -27,7 +27,7 @@ namespace AppleStore.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["newsOnTops"] = _context.NewsOnTops.ToList();
             var product = _context.Products
@@ -49,7 +49,8 @@ namespace AppleStore.Controllers
                     ViewBag.Price = 0;
                 }
             }
-            return View();
+            var products = (await _productRepository.GetAllAsync()).Where(p => p.Display == true && p.HotSeller == true).Take(8);
+            return View(products);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

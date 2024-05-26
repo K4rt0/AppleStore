@@ -4,6 +4,7 @@ using AppleStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525113516_updateEntities_02")]
+    partial class updateEntities_02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,6 +310,9 @@ namespace AppleStore.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
@@ -316,6 +322,8 @@ namespace AppleStore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("ProductVariantId");
 
@@ -668,8 +676,12 @@ namespace AppleStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.ProductVariant", "ProductVariant")
+                    b.HasOne("AppleStore.Models.Entities.Product", null)
                         .WithMany("OrderDetails")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("AppleStore.Models.Entities.ProductVariant", "ProductVariant")
+                        .WithMany()
                         .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -827,6 +839,8 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.Product", b =>
                 {
+                    b.Navigation("OrderDetails");
+
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductVariants");
@@ -845,8 +859,6 @@ namespace AppleStore.Migrations
             modelBuilder.Entity("AppleStore.Models.Entities.ProductVariant", b =>
                 {
                     b.Navigation("CartItems");
-
-                    b.Navigation("OrderDetails");
 
                     b.Navigation("VariantsAttributes");
                 });

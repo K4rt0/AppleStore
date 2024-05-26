@@ -9,6 +9,7 @@ namespace AppleStore.Models.Entities
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool Confirmed { get; set; }
+        public bool Canceled { get; set; }
         public bool Paid { get; set; }
         public string? PaymentMethod { get; set; }
         public decimal TotalPrice { get; set; }
