@@ -5,6 +5,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AppleStore.Controllers
 {
@@ -25,6 +26,7 @@ namespace AppleStore.Controllers
             _productAttributeRepository = productAttributeRepository;
             _context = context;
             _notyf = notyf;
+            _productRepository = productRepository;
         }
 
         public async Task<IActionResult> Index()
