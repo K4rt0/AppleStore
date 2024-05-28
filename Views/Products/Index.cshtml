@@ -1,7 +1,8 @@
-﻿@    using AppleStore.Models.Entities
-@    using X.PagedList
-@    using X.PagedList.Mvc.Core    
-@    using static AppleStore.Helpers.HtmlHelpers
+﻿@using AppleStore.Helpers
+@using AppleStore.Models.Entities
+@using X.PagedList
+@using X.PagedList.Mvc.Core    
+@using static AppleStore.Helpers.HtmlHelpers
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
     var pagedProducts = Model as IPagedList<Product>;
@@ -12,32 +13,6 @@
     var endItem = currentPage * pageSize;
     endItem = (endItem > totalProducts) ? totalProducts : endItem;
     var htmlHelper = Html as IHtmlHelper<dynamic>;
-
-    var options = new PagedListRenderOptions
-            {
-                DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-                DisplayLinkToLastPage = PagedListDisplayMode.Always,
-                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-                DisplayLinkToNextPage = PagedListDisplayMode.Always,
-                DisplayLinkToIndividualPages = true,
-                DisplayPageCountAndCurrentLocation = false,
-                MaximumPageNumbersToDisplay = 5,
-                DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-                EllipsesFormat = "&#8230;",
-                LinkToFirstPageFormat = "««",
-                LinkToPreviousPageFormat = "«",
-                LinkToNextPageFormat = "»",
-                LinkToLastPageFormat = "»»",
-                PageCountAndCurrentLocationFormat = "Page {0} of {1}.",
-                ItemSliceAndTotalFormat = "Showing items {0} through {1} of {2}.",
-                FunctionToDisplayEachPageNumber = null,
-                ClassToApplyToFirstListItemInPager = "first",
-                ClassToApplyToLastListItemInPager = "last",
-                ContainerDivClasses = new[] { "pagination", "left" },
-                UlElementClasses = new[] { "pagination-list" },
-                LiElementClasses = new[] { "page-item" }, // Thêm class này cho mỗi li
-                PageClasses = new[] { "page-link" }
-            };
 }
 
 <!DOCTYPE html>
