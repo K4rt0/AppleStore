@@ -107,7 +107,7 @@
 
                 <div class="delivery-sec">
 
-                    <a href="javascript:" onclick="w=window.open('/Admin/Invoices/Print?invoice_id=1023'); w.print();" data-bs-original-title="" title="">In hoá đơn</a>
+                    <a href="@Url.Action("Print", new { invoiceId = Model.Id })" data-bs-original-title="" title="">In hoá đơn</a>
                 </div>
                 <div class="delivery-sec">
                     <h5 class="fw-semibold">Đổi trạng thái đơn hàng</h5>

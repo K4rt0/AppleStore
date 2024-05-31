@@ -41,6 +41,11 @@ namespace AppleStore.Areas.Admin.Controllers
                 return NotFound();
             }
         }
+
+        public async Task<IActionResult> Print(int invoiceId)
+        {
+            return View();
+        }
     }
 
     public static class StatusHelper
