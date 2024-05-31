@@ -13,7 +13,7 @@ var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
     <div class="container">
         <div class="top-area d-flex">
             <div class="row align-items-center">
-                <div class="col-lg-6 col-md-12 col-12">
+                <div class="col-lg-5 col-md-12 col-12">
                     <div class="product-images">
                         <main id="gallery">
                             <div class="main-img">
@@ -31,7 +31,7 @@ var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
                         </main>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-12 h-100">
+                <div class="col-lg-7 col-md-12 col-12 h-100">
                     <div class="product-info mt-5 px-3">
                         <h2 class="title">@Model.Name</h2>
                         <p class="category mb-2">
@@ -39,8 +39,32 @@ var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
                                 @Model.Category?.Name
                             </a>
                         </p>
-                        <div id="qtyStatus"></div>
-                        <div id="productPrice"></div>
+                        @{
+                            var variant = Model.ProductVariants;
+                            if (variant.Count == 1 && variant.FirstOrDefault().VariantsAttributes.Count == 0)
+                            {
+                                if (variant.FirstOrDefault().Price > 1)
+                                {
+                                    <div class='category text-success'>
+                                        <i class='lni lni-thumbs-up'></i> Còn hàng
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class='category text-danger'>
+                                        <i class='lni lni-thumbs-down'></i> Hết hàng
+                                    </div>
+                                }
+                                <h4 class="price">
+                                    @Model.ProductVariants.FirstOrDefault().Price.ToString("#,##0")đ
+                                </h4>
+                            }
+                            else
+                            {
+                                <div id="qtyStatus"></div>
+                                <div id="productPrice"></div>
+                            }
+                        }
                         <div id="colors" class="form-group color-option">
                             @if (colors != null && colors.Count() > 0)
                             {
@@ -64,17 +88,14 @@ var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
                             <div class="row align-items-end">
                                 <div class="col-lg-7 col-md-7 col-12">
                                     <div class="button cart-button">
-                                        @* <button class="btn addToCartBtn"
-                                        data-productVariantId="@Model.ProductVariants?.FirstOrDefault()?.Id"
-                                        style="width: 100%;">Add to Cart</button> *@
-                                        <button class="btn addToCartBtn" style="width: 100%;">Add to Cart</button>
+                                        <button class="btn addToCartBtn" style="width: 100%;">Mua ngay</button>
                                         <input type="hidden" id="p_color" value="">
                                         <input type="hidden" id="p_storage" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-12 p-0">
                                     <div class="wish-button">
-                                        <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                        <button class="btn"><i class="lni lni-heart"></i> Yêu thích</button>
                                     </div>
                                 </div>
                             </div>
@@ -84,165 +105,7 @@ var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
             </div>
         </div>
         <div class="product-details-info">
-            <div class="single-block">
-                <div class="row">
-                    <div class="col-lg-8 col-12">
-                        <div class="card p-3 shadow" style="border-radius: 10px;">
-                            @Html.Raw(Model.Description)
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <div class="info-body">
-                            <div class="card p-3 shadow" style="border-radius: 10px;">
-                                <h6>Thông số kĩ thuật</h6>
-                                <table class="mt-3 table table-striped">
-                                    <tbody id="attributes"></tbody>
-                                </table>
-                                <h4>Shipping Options:</h4>
-                                <ul class="normal-list">
-                                    <li><span>Courier:</span> 2 - 4 days, $22.50</li>
-                                    <li><span>Local Shipping:</span> up to one week, $10.00</li>
-                                    <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>
-                                    <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-12">
-                    <div class="single-block give-review">
-                        <h4>4.5 (Overall)</h4>
-                        <ul>
-                            <li>
-                                <span>5 stars - 38</span>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                            </li>
-                            <li>
-                                <span>4 stars - 10</span>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star"></i>
-                            </li>
-                            <li>
-                                <span>3 stars - 3</span>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star"></i>
-                                <i class="lni lni-star"></i>
-                            </li>
-                            <li>
-                                <span>2 stars - 1</span>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star"></i>
-                                <i class="lni lni-star"></i>
-                                <i class="lni lni-star"></i>
-                            </li>
-                            <li>
-                                <span>1 star - 0</span>
-                                <i class="lni lni-star-filled"></i>
-                                <i class="lni lni-star"></i>
-                                <i class="lni lni-star"></i>
-                                <i class="lni lni-star"></i>
-                                <i class="lni lni-star"></i>
-                            </li>
-                        </ul>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn review-btn" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            Leave a Review
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-8 col-12">
-                    <div class="single-block">
-                        <div class="reviews">
-                            <h4 class="title">Latest Reviews</h4>
-                            <!-- Start Single Review -->
-                            <div class="single-review">
-                                <img src="~/assets/images/blog/comment1.jpg" alt="#">
-                                <div class="review-info">
-                                    <h4>
-                                        Awesome quality for the price
-                                        <span>
-                                            Jacob Hammond
-                                        </span>
-                                    </h4>
-                                    <ul class="stars">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                    </ul>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                        tempor...
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- End Single Review -->
-                            <!-- Start Single Review -->
-                            <div class="single-review">
-                                <img src="~/assets/images/blog/comment2.jpg" alt="#">
-                                <div class="review-info">
-                                    <h4>
-                                        My husband love his new...
-                                        <span>
-                                            Alex Jaza
-                                        </span>
-                                    </h4>
-                                    <ul class="stars">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star"></i></li>
-                                    </ul>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                        tempor...
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- End Single Review -->
-                            <!-- Start Single Review -->
-                            <div class="single-review">
-                                <img src="~/assets/images/blog/comment3.jpg" alt="#">
-                                <div class="review-info">
-                                    <h4>
-                                        I love the built quality...
-                                        <span>
-                                            Jacob Hammond
-                                        </span>
-                                    </h4>
-                                    <ul class="stars">
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                    </ul>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                        tempor...
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- End Single Review -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="single-block" id="productDescription"></div>
         </div>
     </div>
 </section>
@@ -303,88 +166,6 @@ var storages = (List<VariantsAttributes>?)ViewData["detailsStorageList"]; *@
     </div>
 </div>
 <!-- End Review Modal -->
-@* @section Scripts {
-<script>
-var listPrice = [];
-var action = {
-init: function() {
-action.getStorageByColor();
-},
-firstLoading: function() {
-$.ajax({
-url: '/Products/GetColors',
-type: 'POST',
-data: { productId: @Model.Id },
-success: function(response) {
-var colorList = $("#colors");
-colorList.empty();
-$.each(response.colors, function(index, color) {
-colorList.append(
-`<div class="form-check color-item m-0 p-0 me-1 form-check-inline">
-<input type="radio" class="select-color" name="color-options"
-style="color: ${color.value};"
-data-id="${color.id}" />
-</div>`
-);
-});
-action.getStorageByColor();
-$('[name="color-options"]').first().click();
-}
-});
-alert('firstLoading');
-},
-getStorageByColor: function() {
-$('.select-color').off('change').on('change', function() {
-var value = $(this).data('id');
-$.ajax({
-url: '/Products/GetStorages',
-type: 'POST',
-data: { productId: @Model.Id, colorId: value },
-success: function(response) {
-listPrice = response;
-var storageList = $("#storages");
-storageList.empty();
-$.each(response.storages, function(index, storage) {
-storageList.append(
-`<input type="radio" class="btn-check d-block select-storage" name="storage-options" id="storage-${storage.id}"
-value="${storage.productAttributeValueId}" autocomplete="off">
-<label class="btn btn-outline-success" for="storage-${storage.id}">${storage.value}</label>`
-);
-alert('debug');
-});
-action.getPriceByStorage();
-$('[name="storage-options"]').first().click();
-}
-});
-});
-},
-getPriceByStorage: function() {
-$('.select-storage').off('change').on('change', function() {
-var value = $(this).val();
-let price = listPrice.storages.find(x => x.productAttributeValueId == value);
-var priceTag = $("#productPrice");
-priceTag.empty();
-priceTag.append(`<h3 class="price">${price.price}đ{discount}</h3>`);
-
-});
-alert('getPriceByStorage');
-},
-previewImgEvent: function() {
-const $current = $('#current');
-const opacity = 0.6;
-const $imgs = $('.img');
-
-$imgs.on('click', function() {
-$imgs.css('opacity', 1);
-$current.attr('src', $(this).attr('src'));
-$(this).css('opacity', opacity);
-});
-}
-}
-action.init();
-</script>
-} *@
-
 
 @section Scripts {
     @if (@colors != null && @colors.Count > 0)
@@ -419,6 +200,7 @@ action.init();
                     e.target.style.opacity = opacity;
                 });
             });
+            getProductDescription(@Model.Id, 0, 0);
             // thêm sản phẩm vào giỏ hàng
             $('.addToCartBtn').click(function () {
                 $.ajax({
@@ -460,22 +242,21 @@ action.init();
                     if (!isNaN(storageId)) {
                         $('#p_storage').val(storageId);
                         updatePrice(@Model.Id, $('#p_color').val(), storageId);
-                        updateAttributes(@Model.Id, $('#p_color').val(), storageId);
+                        getProductDescription(@Model.Id, $('#p_color').val(), storageId);
                     }
                 });
             });
         }
 
-        function updateAttributes(productId, colorId, storageId) {
+        function getProductDescription(productId, colorId, storageId) {
             $.ajax({
                 type: "GET",
-                url: `/Products/GetAttributes?productId=${@Model.Id}&colorId=${colorId}&storageId=${storageId}`,
+                url: `/Products/GetProductDescription?productId=${@Model.Id}&colorId=${colorId}&storageId=${storageId}`,
                 success: function (data) {
-                    $("#attributes").html(data);
+                    $("#productDescription").html(data);
                 }
             });
         }
-
         function updatePrice(productId, colorId, storageId) {
             $.ajax({
                 type: "GET",

@@ -1,0 +1,141 @@
+﻿@using AppleStore.Areas.Admin.Controllers
+@model AppleStore.Models.Entities.Order
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayoutOrder.cshtml";
+}
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="table-responsive table-details">
+            <table class="table text-nowrap mb-0 align-middle">
+                <thead class="text-dark fs-4" style="background-color: #eff2f7;">
+                    <tr>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Hình Ảnh</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Tên sản phẩm</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Số lượng</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Đơn Giá</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Thành tiền</h6>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.OrderDetails != null)
+                    {
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td class="border-bottom-0 align-content-center">
+                                    <img src="~/images/products/@item.ProductVariant?.Product?.Avatar" style="max-width: 100px;" class="object-fit-cover" alt="" />
+                                </td>
+                                <td class="border-bottom-0">
+                                    <p class="mb-0 fw-normal">@item.ProductVariant?.Product?.Name</p>
+                                </td>
+                                <td class="border-bottom-0">
+                                    <p class="mb-0 fw-normal">@item.Quantity</p>
+                                </td>
+                                <td class="border-bottom-0">
+                                    <p class="mb-0 fw-normal">@($"{item.Price:#,##0}đ")</p>
+                                </td>
+                                <td class="border-bottom-0">
+                                    <p class="mb-0 fw-normal">@($"{item.Quantity * item.Price:#,##0}đ")</p>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="table-order" style="border-top: 1px solid #d2cbcb;">
+                        <td colspan="4">
+                            <h5 class="theme-color fw-bold" style="color: red;">Tổng cộng:</h5>
+                        </td>
+                        <td>
+                            <h5 class="theme-color fw-bold" style="color: red;">@($"{Model.TotalPrice:#,##0}đ")</h5>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="order-success" style="background-color: #eff2f7; padding: 30px">
+            <div class="row g-4" style="line-height: 25px;">
+                <h5 class="fw-semibold">Thông tin</h5>
+                <ul class="order-details">
+                    <li>Mã đơn hàng: @Model.Id</li>
+                    <li>Ngày đặt: @Model.CreatedAt.ToString()</li>
+
+                </ul>
+
+                <h5 class="fw-semibold">Người nhận</h5>
+                <ul class="order-details">
+                    <li>Họ tên: @Model.ApplicationUser?.FullName</li>
+                    <li>Số điện thoại: @Model.ApplicationUser?.PhoneNumber</li>
+                    <li>Email: @Model.ApplicationUser?.Email</li>
+                    <li>Địa chỉ: @Model.DeliveryAddress?.Address</li>
+                </ul>
+
+                <h5 class="fw-semibold">Trạng thái đơn hàng</h5>
+                <ul class="order-details">
+                    <span class="w-45 badge rounded-3 fw-semibold @(StatusHelper.GetStatusClass(Model.Status))">
+                        @StatusHelper.GetDisplayNameStatus(Model.Status)
+                    </span>
+                </ul>
+
+                <div class="payment-mode">
+                    <h5 class="fw-semibold">Phương thức thanh toán</h5>
+                    @if (Model.Paid == false)
+                    {
+                        <p>Thanh toán khi nhận hàng (@Model.PaymentMethod)</p>
+                    }
+                    else
+                    {
+                        <p>Thanh toán trực tuyến (@Model.PaymentMethod)</p>
+                    }
+                </div>
+
+                <div class="delivery-sec">
+
+                    <a href="javascript:" onclick="w=window.open('/Admin/Invoices/Print?invoice_id=1023'); w.print();" data-bs-original-title="" title="">In hoá đơn</a>
+                </div>
+                <div class="delivery-sec">
+                    <h5 class="fw-semibold">Đổi trạng thái đơn hàng</h5>
+                    @foreach (var status in Enum.GetValues(typeof(AppleStore.Models.Entities.OrderStatus)))
+                    {
+                        var statusValue = (AppleStore.Models.Entities.OrderStatus)status;
+                        if (statusValue != Model.Status)
+                        {
+                            <a href="@Url.Action("UpdateStatus", new { orderId = Model.Id, newStatus = status })">@StatusHelper.GetDisplayNameStatus(statusValue)</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .order-details {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .delivery-sec a {
+        font-size: 16px;
+        text-transform: capitalize;
+        margin-top: 5px;
+        display: block;
+        font-weight: 600;
+    }
+</style>

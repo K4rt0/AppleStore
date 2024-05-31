@@ -36,9 +36,24 @@
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
+                @*Invoices*@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Users Panel</span>
+                    <span class="hide-menu">ĐƠN HÀNG</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminInvoices" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách đơn hàng</span>
+                    </a>
+                </li>
+                @* User Panel *@
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Người dùng</span>
                 </li>
                 @if (isOwner)
                 {
@@ -48,7 +63,7 @@
                             <span>
                                 <i class="ti ti-list"></i>
                             </span>
-                            <span class="hide-menu">List Admin</span>
+                            <span class="hide-menu">Danh sách Administrator</span>
                         </a>
                     </li>
                 }
@@ -58,7 +73,7 @@
                         <span>
                             <i class="ti ti-user"></i>
                         </span>
-                        <span class="hide-menu">List User</span>
+                        <span class="hide-menu">Danh sách người dùng</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -67,59 +82,36 @@
                         <span>
                             <i class="ti ti-na"></i>
                         </span>
-                        <span class="hide-menu">List User Blocked</span>
+                        <span class="hide-menu">Người dùng đã bị cấm</span>
                     </a>
                 </li>
-                @* Discounts *@
+                @* Categories *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Discount Panel</span>
+                    <span class="hide-menu">Danh mục</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="sidebar-link"
-                        aria-expanded="false">
-                        <span>
-                            <i class="ti ti-list"></i>
-                        </span>
-                        <span class="hide-menu">Discount List</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Create" class="sidebar-link"
+                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Create" class="sidebar-link"
                         aria-expanded="false">
                         <span>
                             <i class="ti ti-plus"></i>
                         </span>
-                        <span class="hide-menu">Create new</span>
+                        <span class="hide-menu">Thêm mới</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách danh mục</span>
                     </a>
                 </li>
                 @* Products *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">News On Top</span>
-                </li>
-                <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Index" class="sidebar-link"
-                        aria-expanded="false">
-                        <span>
-                            <i class="ti ti-list"></i>
-                        </span>
-                        <span class="hide-menu">News On Top List</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Create" class="sidebar-link"
-                        aria-expanded="false">
-                        <span>
-                            <i class="ti ti-plus"></i>
-                        </span>
-                        <span class="hide-menu">Create new</span>
-                    </a>
-                </li>
-                @* Products *@
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Products</span>
+                    <span class="hide-menu">Sản phẩm</span>
                 </li>
                 <li class="sidebar-item">
                     <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Index" class="sidebar-link"
@@ -127,7 +119,7 @@
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
-                        <span class="hide-menu">Product List</span>
+                        <span class="hide-menu">Danh sách sản phẩm</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -136,30 +128,53 @@
                         <span>
                             <i class="ti ti-list"></i>
                         </span>
-                        <span class="hide-menu">Attribute List</span>
+                        <span class="hide-menu">Thuộc tính sản phẩm</span>
                     </a>
                 </li>
-                @* Categories *@
+                @* Discounts *@
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Categories</span>
+                    <span class="hide-menu">Giảm giá</span>
                 </li>
                 <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Index" class="sidebar-link"
-                        aria-expanded="false">
-                        <span>
-                            <i class="ti ti-list"></i>
-                        </span>
-                        <span class="hide-menu">Category List</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a asp-area="Admin" asp-controller="AdminCategory" asp-action="Create" class="sidebar-link"
+                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Create" class="sidebar-link"
                         aria-expanded="false">
                         <span>
                             <i class="ti ti-plus"></i>
                         </span>
-                        <span class="hide-menu">Create new</span>
+                        <span class="hide-menu">Thêm mới</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminDiscount" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách mã giảm giá</span>
+                    </a>
+                </li>
+                @* News On Top *@
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Tin nổi bật</span>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Create" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-plus"></i>
+                        </span>
+                        <span class="hide-menu">Thêm mới</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a asp-area="Admin" asp-controller="AdminNewsOnTop" asp-action="Index" class="sidebar-link"
+                        aria-expanded="false">
+                        <span>
+                            <i class="ti ti-list"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách tin mới</span>
                     </a>
                 </li>
             </ul>

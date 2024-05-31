@@ -32,27 +32,12 @@ namespace AppleStore.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["newsOnTops"] = _context.NewsOnTops.ToList();
-            var product = _context.Products
-                                .OrderByDescending(p => p.Id)
-                                .Include(p => p.ProductVariants)
-                                .FirstOrDefault();
-            if (product != null)
-            {
-                var price = _context.ProductVariants.Where(p => p.ProductId == product.Id);
-                if (price.Any())
-                {
-                    var priceMin = price.Min(p => p.Price);
-                    ViewBag.NewProduct = product;
-                    ViewBag.Price = priceMin;
-                }
-                else
-                {
-                    ViewBag.NewProduct = product;
-                    ViewBag.Price = 0;
-                }
-            }
             var products = (await _productRepository.GetAllAsync()).Where(p => p.Display == true && p.HotSeller == true).Take(8);
-            return View(products);
+            if (products != null)
+            {
+                return View(products);
+            }
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -20,9 +20,9 @@ namespace AppleStore.Data
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<NewsOnTop> NewsOnTops { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
     }
 }

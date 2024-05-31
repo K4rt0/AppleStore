@@ -42,11 +42,11 @@ namespace AppleStore.Controllers
             {
                 if (CategoryId > 0)
                 {
-                    products = products.Where(x => x.CategoryId == CategoryId && x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                    products = products.Where(x => x.CategoryId == CategoryId && x.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0 && x.ProductVariants.Any(v => v.Price >= Pricefrom));
                 }
                 else
                 {
-                    products = products.Where(x => x.Name.Contains(name) && x.ProductVariants.Any(v => v.Price >= Pricefrom));
+                    products = products.Where(x => x.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0 && x.ProductVariants.Any(v => v.Price >= Pricefrom));
                 }
             }
             else
@@ -54,7 +54,6 @@ namespace AppleStore.Controllers
                 if (CategoryId > 0)
                 {
                     products = products.Where(x => x.CategoryId == CategoryId && x.ProductVariants.Any(v => v.Price >= Pricefrom));
-
                 }
                 else
                 {
@@ -94,10 +93,10 @@ namespace AppleStore.Controllers
                     products = products.OrderByDescending(p => p.Name);
                     break;
                 case "price_asc":
-                    products = products.OrderBy(p => p.ProductVariants.Min(v => v.Price));
+                    products = products.OrderBy(p => p.ProductVariants.Where(variant => variant.Price >= Pricefrom).Min(v => v.Price));
                     break;
                 case "price_desc":
-                    products = products.OrderByDescending(p => p.ProductVariants.Min(v => v.Price));
+                    products = products.OrderByDescending(p => p.ProductVariants.Where(variant => variant.Price >= Pricefrom).Min(v => v.Price));
                     break;
                 default:
                     break;
@@ -108,10 +107,10 @@ namespace AppleStore.Controllers
             foreach (var product in products)
             {
                 var minPrice = product.ProductVariants
-                                          .Where(variant => variant.Price >= Pricefrom)
-                                          .Select(p => p.Price)
-                                          .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
-                                          .Min();
+                                            .Where(variant => variant.Price >= Pricefrom)
+                                            .Select(p => p.Price)
+                                            .DefaultIfEmpty(0m) // 0m là giá trị mặc định cho decimal
+                                            .Min();
                 minPrices.Add(minPrice);
             }
             ViewBag.MinPrices = minPrices;
@@ -123,7 +122,7 @@ namespace AppleStore.Controllers
 
             //PHÂN TRANG
             var pageNumber = page ?? 1; // Nếu không có số trang được cung cấp, mặc định là trang 1
-            var pageSize = 1; // Số lượng sản phẩm trên mỗi trang
+            var pageSize = 12; // Số lượng sản phẩm trên mỗi trang
             products = await products.ToPagedListAsync(pageNumber, pageSize);
             ViewBag.CategoryIdShow = CategoryIdShow;
             ViewBag.CurrentName = name;
@@ -135,11 +134,11 @@ namespace AppleStore.Controllers
 
             return View(products);
         }
-
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
             if (product == null) return NotFound();
+
 
             var colors = product.ProductVariants
                 .SelectMany(p => p.VariantsAttributes)
@@ -275,35 +274,64 @@ namespace AppleStore.Controllers
 
             return Content(result, "text/html");
         }
-        public async Task<IActionResult> GetAttributes(int productId, int colorId, int storageId)
+
+        public async Task<IActionResult> GetProductDescription(int productId, int colorId, int storageId)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             var color = await _productAttributeValueRepository.GetByIdAsync(colorId);
             var storage = await _productAttributeRepository.GetByIdAsync(storageId);
 
             if (product == null)
-                return NotFound();
+                return Content("", "text/html");
 
-            var variant = _context.VariantsAttributes
-                .FirstOrDefault(p =>
-                    p.ProductVariant.ProductId == productId &&
-                    p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == colorId) &&
-                    p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == storageId)).ProductVariant;
 
-            var attributes = variant.VariantsAttributes.Where(p => p.ProductVariantId == variant.Id).ToList();
-
-            var result = "";
-            foreach (var item in attributes)
+            ProductVariant variant = new ProductVariant();
+            List<VariantsAttributes>? attributes = new List<VariantsAttributes>();
+            if (product.ProductVariants.Count() > 0 && product.ProductVariants.FirstOrDefault().VariantsAttributes.Count() != 0)
             {
-                result += $@"
-                    <tr>
-                    <th scope='row'>{item.ProductAttributeValue.ProductAttribute.Name}</th>
-                    <td>{item.ProductAttributeValue.Name}</td>
-                </tr>";
+                variant = _context.VariantsAttributes
+                    .FirstOrDefault(p =>
+                        p.ProductVariant.ProductId == productId &&
+                        p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == colorId) &&
+                        p.ProductVariant.VariantsAttributes.Any(va => va.ProductAttributeValueId == storageId)).ProductVariant;
+
+                attributes = variant.VariantsAttributes.Where(p => p.ProductVariantId == variant.Id).ToList();
             }
-            result += "</ul>";
+
+            string result = "";
+
+            if (attributes.Count != 0)
+            {
+                result = $@"
+                    <div class='row'>
+                        <div class='col-lg-8 col-12'>
+                            <div class='card p-3 shadow' style='border-radius: 10px;'>
+                                {product.Description}
+                            </div>
+                        </div>
+                        <div class='col-lg-4 col-12'>
+                            <div class='info-body'>
+                                <div class='card p-3 shadow' style='border-radius: 10px;'>
+                                    <h6>Thông số kĩ thuật</h6>
+                                    <table class='mt-3 table table-striped'>
+                                    <tbody>";
+                foreach (var item in attributes)
+                {
+                    result += $@"
+                        <tr>
+                        <th scope='row'>{item.ProductAttributeValue.ProductAttribute.Name}</th>
+                        <td>{item.ProductAttributeValue.Name}</td>
+                    </tr>";
+                }
+                result += "</tbody></table></div></div></div></div>";
+            }
+            else
+            {
+                result = $@"
+                    <div class='card p-3 shadow' style='border-radius: 10px;'>{product.Description}</div>";
+            }
+
             return Content(result, "text/html");
         }
-
     }
 }

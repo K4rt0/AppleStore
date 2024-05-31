@@ -165,7 +165,6 @@ namespace AppleStore.Areas.Identity.Pages.Account
                 user.Gender = Input.Gender;
                 user.FullName = Input.FullName;
                 user.Birthdate = Input.Birthdate;
-                user.Avatar = "~/adminAssets/images/profile/user-1.jpg";
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

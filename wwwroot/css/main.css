@@ -1915,16 +1915,6 @@ ol {
   background-color: #0167F3;
 }
 
-.header .navbar-cart .cart-items .shopping-item .shopping-list li .cart-img-head {
-  width: 40%;
-}
-
-@media (max-width: 767px) {
-  .header .navbar-cart .cart-items .shopping-item .shopping-list li .cart-img-head {
-    width: 30%;
-    margin-right: 12px;
-  }
-}
 
 .header .navbar-cart .cart-items .shopping-item .shopping-list li .cart-img {
   border: 1px solid #ededed;
@@ -2724,7 +2714,6 @@ ol {
   font-weight: 600;
   transition: all 0.3s ease-out 0s;
   position: relative;
-  text-transform: capitalize;
 }
 
 .navbar-nav .nav-item:hover .dd-menu::before {
@@ -3414,13 +3403,15 @@ ol {
   top: 2px;
 }
 
-    .single-product .product-image img {
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-        -webkit-transition: all 0.4s ease;
-        transition: all 0.4s ease;
-    }
+.single-product .product-image img {
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 290px;
+  min-height: 290px;
+  object-fit: cover;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
 
 .single-product:hover .product-image .button {
   bottom: 30px;
