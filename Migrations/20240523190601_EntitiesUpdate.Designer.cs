@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppleStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240517120009_update_CartItem")]
-    partial class update_CartItem
+    [Migration("20240523190601_EntitiesUpdate")]
+    partial class EntitiesUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,9 +122,6 @@ namespace AppleStore.Migrations
                     b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
@@ -172,23 +169,14 @@ namespace AppleStore.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Default")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
-
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -276,7 +264,7 @@ namespace AppleStore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DiscountId")
+                    b.Property<int?>("DiscountId")
                         .HasColumnType("int");
 
                     b.Property<string>("Note")
@@ -448,7 +436,7 @@ namespace AppleStore.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -616,7 +604,7 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.CartItem", b =>
                 {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("CartItems")
                         .HasForeignKey("ApplicationUserId");
 
@@ -625,6 +613,8 @@ namespace AppleStore.Migrations
                         .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("ProductVariant");
                 });
@@ -640,9 +630,11 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.DeliveryAddress", b =>
                 {
-                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", null)
+                    b.HasOne("AppleStore.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("DeliveryAddresses")
                         .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Order", b =>
@@ -653,9 +645,7 @@ namespace AppleStore.Migrations
 
                     b.HasOne("AppleStore.Models.Entities.Discount", "Discount")
                         .WithMany("Orders")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DiscountId");
 
                     b.Navigation("ApplicationUser");
 
@@ -673,7 +663,7 @@ namespace AppleStore.Migrations
                     b.HasOne("AppleStore.Models.Entities.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");

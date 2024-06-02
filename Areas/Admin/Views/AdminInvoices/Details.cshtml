@@ -1,7 +1,7 @@
 ﻿@using AppleStore.Areas.Admin.Controllers
 @model AppleStore.Models.Entities.Order
 @{
-    ViewData["Title"] = "Details Invoices";
+    ViewData["Title"] = "Chi tiết đơn hàng";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayoutOrder.cshtml";
 }
 
@@ -36,10 +36,10 @@
                         {
                             <tr>
                                 <td class="border-bottom-0 align-content-center">
-                                    <img src="~/images/products/@item.Product?.Avatar" style="max-width: 100px;" class="object-fit-cover" alt="" />
+                                    <img src="~/images/products/@item.ProductVariant?.Product?.Avatar" style="max-width: 100px;" class="object-fit-cover" alt="" />
                                 </td>
                                 <td class="border-bottom-0">
-                                    <p class="mb-0 fw-normal">@item.Product?.Name</p>
+                                    <p class="mb-0 fw-normal">@item.ProductVariant?.Product?.Name</p>
                                 </td>
                                 <td class="border-bottom-0">
                                     <p class="mb-0 fw-normal">@item.Quantity</p>
@@ -83,7 +83,7 @@
                     <li>Họ tên: @Model.ApplicationUser?.FullName</li>
                     <li>Số điện thoại: @Model.ApplicationUser?.PhoneNumber</li>
                     <li>Email: @Model.ApplicationUser?.Email</li>
-                    <li>Địa chỉ: @Model.ApplicationUser?.Address</li>
+                    <li>Địa chỉ: @Model.DeliveryAddress?.Address</li>
                 </ul>
 
                 <h5 class="fw-semibold">Trạng thái đơn hàng</h5>

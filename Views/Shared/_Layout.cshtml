@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@inject AppleStore.Repositories.ICategoryRepository categoryReposotiry
+
+@{
+    var categories = await categoryReposotiry.GetAllAsync();
+}
+
+<!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
 <head>
@@ -16,7 +22,7 @@
     <link rel="stylesheet" href="~/css/glightbox.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap">
 
 </head>
 
@@ -46,70 +52,29 @@
                     <div class="col-lg-6 col-md-6 col-4">
                         <nav class="navbar navbar-expand-lg">
                             <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                    aria-expanded="false" aria-label="Toggle navigation">
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="toggler-icon"></span>
                                 <span class="toggler-icon"></span>
                                 <span class="toggler-icon"></span>
                             </button>
                             <div class="collapse navbar-collapse sub-menu-bar" style="width: 220px;"
-                                 id="navbarSupportedContent">
+                                id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
+                                    @foreach (var item in categories)
+                                    {
+                                        <li class="nav-item">
+                                            <a asp-area="" asp-controller="Products" asp-action="Index"
+                                                asp-route-CategoryIdShow="@item.Id"
+                                                aria-label="Toggle navigation">@item.Name</a>
+                                        </li>
+                                    }
                                     <li class="nav-item">
-                                        <a asp-area="" asp-controller="Home" asp-action="Index" class="active"
-                                           aria-label="Toggle navigation">Home</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                           data-bs-target="#submenu-1-2" aria-controls="navbarSupportedContent"
-                                           aria-expanded="false" aria-label="Toggle navigation">Pages</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item"><a href="about-us.html">About Us</a></li>
-                                            <li class="nav-item"><a href="faq.html">Faq</a></li>
-                                            <li class="nav-item"><a href="login.html">Login</a></li>
-                                            <li class="nav-item"><a href="register.html">Register</a></li>
-                                            <li class="nav-item"><a href="mail-success.html">Mail Success</a></li>
-                                            <li class="nav-item"><a href="404.html">404 Error</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                           data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
-                                           aria-expanded="false" aria-label="Toggle navigation">Shop</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item">
-                                                <a asp-controller="Products" asp-action="Index">
-                                                    Shop
-                                                    Grid
-                                                </a>
-                                            </li>
-                                            <li class="nav-item"><a href="product-list.html">Shop List</a></li>
-                                            <li class="nav-item"><a href="product-details.html">shop Single</a></li>
-                                            <li class="nav-item"><a href="cart.html">Cart</a></li>
-                                            <li class="nav-item"><a href="checkout.html">Checkout</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                           data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent"
-                                           aria-expanded="false" aria-label="Toggle navigation">Blog</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-4">
-                                            <li class="nav-item">
-                                                <a href="blog-grid-sidebar.html">Blog Grid Sidebar</a>
-                                            </li>
-                                            <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
-                                            <li class="nav-item">
-                                                <a href="blog-single-sidebar.html">
-                                                    Blog Single
-                                                    Sibebar
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="contact.html" aria-label="Toggle navigation">Contact Us</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="Index"
+                                            aria-label="Toggle navigation">Liên hệ</a>
                                     </li>
                                 </ul>
+
                             </div> <!-- navbar collapse -->
                         </nav>
                     </div>
@@ -130,14 +95,15 @@
                                     <!-- Shopping Item -->
                                     <div class="shopping-item" style="width: 350px;">
                                         <div class="dropdown-cart-header d-flex justify-content-between">
-                                            <span>0 Sản Phẩm Vừa Thêm</span>
+                                            <span style="text-transform: none !important;">0 sản phẩm</span>
                                         </div>
-                                        <ul class="shopping-list" id="Cart"></ul>
+                                        <ul class="shopping-list  text-start" id="Cart"
+                                            style="max-height: 350px; overflow-y: auto;"></ul>
                                         <div class="bottom">
                                             <div class="total">
                                                 <span>Tổng</span>
                                                 <span class="total-amount total-amounts"
-                                                      style="font-weight: 700; color: #0167F3;">0.00 đ</span>
+                                                    style="font-weight: 700; color: #0167F3;">0đ</span>
                                             </div>
                                             <div class="button">
                                                 <a asp-controller="Cart" asp-action="Index" class="btn animate">
@@ -170,143 +136,125 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-12">
                             <div class="footer-logo">
-                                <a href="index-2.html">
-                                    <img src="~/images/logo/white-logo.svg" alt="#">
+                                <a href="#">
+                                    <img src="~/Logo-Horizontal.png" alt="#">
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-9 col-md-8 col-12">
                             <div class="footer-newsletter">
                                 <h4 class="title">
-                                    Subscribe to our Newsletter
-                                    <span>Get all the latest information, Sales and Offers.</span>
+                                    Đăng ký thông báo mới
+                                    <span>Nhận tất cả các thông tin mới nhất, giảm giá,...</span>
                                 </h4>
                                 <div class="newsletter-form-head">
-                                    <form action="#" method="get" target="_blank" class="newsletter-form">
-                                        <input name="EMAIL" placeholder="Email address here..." type="email">
+                                    <div class="newsletter-form">
+                                        <input id="email-sub" name="EMAIL" placeholder="email@example.com" type="email">
                                         <div class="button">
-                                            <button class="btn">Subscribe<span class="dir-part"></span></button>
+                                            <button id="btn-email" class="btn">Đăng ký<span class="dir-part"></span>
+                                            </button>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- End Footer Top -->
-        <!-- Start Footer Middle -->
-        <div class="footer-middle">
-            <div class="container">
-                <div class="bottom-inner">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer f-contact">
-                                <h3>Get In Touch With Us</h3>
-                                <p class="phone">Phone: +1 (900) 33 169 7720</p>
-                                <ul>
-                                    <li><span>Monday-Friday: </span> 9.00 am - 8.00 pm</li>
-                                    <li><span>Saturday: </span> 10.00 am - 6.00 pm</li>
-                                </ul>
-                                <p class="mail">
-                                    <a href="mailto:support@shopgrids.com">support@shopgrids.com</a>
-                                </p>
+            <!-- End Footer Top -->
+            <!-- Start Footer Middle -->
+            <div class="footer-middle">
+                <div class="container">
+                    <div class="bottom-inner">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 col-12">
+                                <!-- Single Widget -->
+                                <div class="single-footer f-link">
+                                    <h3>Thông tin thêm</h3>
+                                    <ul>
+                                        <li><a href="javascript:void(0)">Về chúng tôi</a></li>
+                                        <li><a href="javascript:void(0)">Liên hệ chúng tôi</a></li>
+                                        <li><a href="javascript:void(0)">Điểm đến cửa hàng</a></li>
+                                        <li><a href="javascript:void(0)">Câu hỏi liên quan</a></li>
+                                    </ul>
+                                </div>
+                                <!-- End Single Widget -->
                             </div>
-                            <!-- End Single Widget -->
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer our-app">
-                                <h3>Our Mobile App</h3>
-                                <ul class="app-btn">
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-apple"></i>
-                                            <span class="small-title">Download on the</span>
-                                            <span class="big-title">App Store</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-play-store"></i>
-                                            <span class="small-title">Download on the</span>
-                                            <span class="big-title">Google Play</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                            <div class="col-lg-4 col-md-12 col-12">
+                                <!-- Single Widget -->
+                                <div class="single-footer f-link">
+                                    <h3>Danh mục</h3>
+                                    <ul>
+                                        @foreach (var item in categories)
+                                        {
+                                            <li class="nav-item">
+                                                <a asp-area="" asp-controller="Products" asp-action="Index"
+                                                    asp-route-CategoryIdShow="@item.Id">@item.Name</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                                <!-- End Single Widget -->
                             </div>
-                            <!-- End Single Widget -->
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer f-link">
-                                <h3>Information</h3>
-                                <ul>
-                                    <li><a href="javascript:void(0)">About Us</a></li>
-                                    <li><a href="javascript:void(0)">Contact Us</a></li>
-                                    <li><a href="javascript:void(0)">Downloads</a></li>
-                                    <li><a href="javascript:void(0)">Sitemap</a></li>
-                                    <li><a href="javascript:void(0)">FAQs Page</a></li>
-                                </ul>
+                            <div class="col-lg-4 col-md-12 col-12">
+                                <!-- Single Widget -->
+                                <div class="single-footer our-app">
+                                    <h3>Ứng dụng</h3>
+                                    <ul class="app-btn">
+                                        <li style="width: 210px">
+                                            <a href="javascript:void(0)">
+                                                <i class="lni lni-apple"></i>
+                                                <span class="small-title">Tải về tại cửa hàng</span>
+                                                <span class="big-title">App Store</span>
+                                            </a>
+                                        </li>
+                                        <li style="width: 210px">
+                                            <a href="javascript:void(0)">
+                                                <i class="lni lni-play-store"></i>
+                                                <span class="small-title">Tải về tại cửa hàng</span>
+                                                <span class="big-title">Google Play</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- End Single Widget -->
                             </div>
-                            <!-- End Single Widget -->
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer f-link">
-                                <h3>Shop Departments</h3>
-                                <ul>
-                                    <li><a href="javascript:void(0)">Computers & Accessories</a></li>
-                                    <li><a href="javascript:void(0)">Smartphones & Tablets</a></li>
-                                    <li><a href="javascript:void(0)">TV, Video & Audio</a></li>
-                                    <li><a href="javascript:void(0)">Cameras, Photo & Video</a></li>
-                                    <li><a href="javascript:void(0)">Headphones</a></li>
-                                </ul>
-                            </div>
-                            <!-- End Single Widget -->
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- End Footer Middle -->
-        <!-- Start Footer Bottom -->
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="inner-content">
-                    <div class="row align-items-center">
-                        <div class="col-lg-4 col-12">
-                            <div class="payment-gateway">
-                                <span>We Accept:</span>
-                                <img src="~/images/footer/credit-cards-footer.png" alt="#">
+            <!-- End Footer Middle -->
+            <!-- Start Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="inner-content">
+                        <div class="row align-items-center">
+                            <div class="col-lg-4 col-12">
+                                <div class="payment-gateway">
+                                    <img src="~/images/footer/credit-cards-footer.png" alt="#">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <div class="copyright">
-                                <p>
-                                    Designed and Developed by<a href="https://graygrids.com/" rel="nofollow"
-                                                                target="_blank">GrayGrids</a>
-                                </p>
+                            <div class="col-lg-4 col-12">
+                                <div class="copyright">
+                                    <p></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <ul class="socila">
-                                <li>
-                                    <span>Follow Us On:</span>
-                                </li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-google"></i></a></li>
-                            </ul>
+                            <div class="col-lg-4 col-12">
+                                <ul class="socila">
+                                    <li>
+                                        <span>Mạng xã hội:</span>
+                                    </li>
+                                    <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="lni lni-google"></i></a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- End Footer Bottom -->
+            <!-- End Footer Bottom -->
     </footer>
     <!--/ End Footer Area -->
     <!-- ========================= scroll-top ========================= -->
@@ -320,6 +268,7 @@
     <script src="~/js/glightbox.min.js"></script>
     <script src="~/js/main.js"></script>
     <script src="~/js/jquery-3.7.1.min.js"></script>
+    @await Component.InvokeAsync("Notyf")
     <script type="text/javascript">
         //========= Hero Slider
         tns({
@@ -363,6 +312,15 @@
     <script>
         $(document).ready(function () {
             loadCart();
+            $('#btn-email').on('click', function () {
+                var email = $('#email-sub').val();
+                if (email == '') {
+                    notyf.error('Vui lòng nhập email !');
+                }
+                else {
+                    notyf.success('Đăng ký thành công, kiểm tra email để nhận thông tin !');
+                }
+            });
         });
         function loadCart() {
             $.ajax({
@@ -387,21 +345,26 @@
                                     </a>
                                 </div>
                                 <div class="content">
-                                    <h4><a href="/Products/Details/${id}" class="d-flex justify-content-start">${item.name}</a></h4>
+                                    <h4>
+                                        <a href="/Products/Details/${id}" class="d-flex justify-content-start">${item.name}</a>
+                                        ${item.color ? `<p class="text-muted" style="font-size: 13px;">Màu: ${item.color}</p>` : ''}
+                                        ${item.storage ? `<p class="text-muted" style="font-size: 13px;">Dung lượng: ${item.storage}</p>` : ''}
+                                    </h4>
                                     <p class="quantity d-flex justify-content-start" style="font-weight: 700;">
                                         <span class="amount" style="color: #0167F3;">
-                                        ${item.price.toLocaleString('vi-VN')}đ
-                                        </span >
-                                        <span style="font-size: 0.9rem; margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span ></p >
-                                </div >
-                            </li > `;
+                                            ${item.price.toLocaleString('vi-VN')}đ
+                                        </span>
+                                        <span style="margin: 0 4px; color: #757575;">x</span> ${item.cartProductQuantity}</span>
+                                    </p>
+                                </div>
+                            </li>`;
                         totalItem += item.cartProductQuantity;
                         totalAmounts += item.cartProductQuantity * item.price;
                     });
 
                     $('#Cart').html(cartHTML);
                     $('.total-item').text(totalItem);
-                    $('.dropdown-cart-header span').first().text(`${totalItem} Sản Phẩm Đã Thêm`);
+                    $('.dropdown-cart-header span').first().text(`${totalItem} sản phẩm`);
                     $('.total-amounts').text(`${totalAmounts.toLocaleString('vi-VN')}đ`);
                 },
                 error: function (error) {
@@ -411,7 +374,6 @@
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
-    @await Component.InvokeAsync("Notyf")
 
 </body>
 

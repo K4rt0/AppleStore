@@ -1,0 +1,136 @@
+@{
+    var user = (ApplicationUser?)ViewData["user"];
+    var deli = (DeliveryAddress?)ViewData["deliveryAddress"];
+    decimal? totalPrice = 0;
+    decimal? totalDiscount = 0;
+    if (user != null)
+    {
+        totalPrice = user.CartItems.Sum(item => item.ProductVariant.Price * item.CartProductQuantity);
+    }
+}
+
+<div class="container">
+    <div class="form-group d-flex justify-content-center">
+        <div class="card text-dark w-50 my-5" style="font-size: 15px;">
+            <div class="card-body">
+                <div class="card-title fs-5 fw-bolder text-center">THANH TOÁN HOÁ ĐƠN</div>
+                <h6>Địa chỉ giao hàng</h6>
+                @if (deli != null)
+                {
+                    <p>(<span class="text-danger">*</span>) <b>Người nhận:</b> @deli.FullName</p>
+                    <p>(<span class="text-danger">*</span>) <b>Số điện thoại:</b> @deli.PhoneNumber</p>
+                    <p>(<span class="text-danger">*</span>) <b>Địa chỉ:</b> @deli.Address</p>
+                }
+                else
+                {
+                    <p>(<span class="text-danger">*</span>) <b>Người nhận:</b> Chưa cập nhật</p>
+                    <p>(<span class="text-danger">*</span>) <b>Số điện thoại:</b> Chưa cập nhật</p>
+                    <p>(<span class="text-danger">*</span>) <b>Địa chỉ:</b> Chưa cập nhật</p>
+                }
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Sản phẩm</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 14px;">
+                        @if (user != null)
+                        {
+                            foreach (var item in user.CartItems)
+                            {
+                                <tr>
+                                    <td>
+                                        <p>
+                                            @item.ProductVariant.Product.Name ×
+                                            <span>@item.CartProductQuantity</span>
+                                        </p>
+                                        @if (item.ProductVariant.VariantsAttributes.Count() > 0)
+                                        {
+                                            <p class="text-muted" style="font-size: 13px;">Màu:
+                                                @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
+                                                         p.ProductAttributeValue.ProductAttribute.Name == "Màu sắc" &&
+                                                         p.ProductVariantId
+                                                         == item.ProductVariantId).ProductAttributeValue.Name</p>
+                                            <p class="text-muted" style="font-size: 13px;">Dung lượng:
+                                                @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
+                                                         p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ" &&
+                                                         p.ProductVariantId
+                                                         == item.ProductVariantId).ProductAttributeValue.Name</p>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        @($"{(item.ProductVariant.Price * item.CartProductQuantity):#,##0}đ")
+                                        @if (item.ProductVariant?.Product?.Discount != null)
+                                        {
+                                            if (item.ProductVariant?.Product?.Discount?.Price != 0)
+                                            {
+                                                totalDiscount += item.ProductVariant?.Product?.Discount?.Price;
+                                                <p class="text-muted" style="font-size: 13px;">Giảm giá: @($"{item.ProductVariant?.Product?.Discount?.Price:#,##0}đ")</p>
+                                            }
+                                            else if (item.ProductVariant?.Product?.Discount?.Percent != 0)
+                                            {
+                                                double amount = (double)item.ProductVariant?.Product?.Discount?.Percent / 100.0;
+                                                totalDiscount += (item.ProductVariant?.Price * item.CartProductQuantity) * (decimal)amount;
+                                                <p class="text-muted" style="font-size: 13px;">Giảm giá: @($"{(item.ProductVariant?.Price * item.CartProductQuantity) * (decimal)amount:#,##0}đ")</p>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td style="vertical-align: middle;">
+                                <p>Hình thức thanh toán</p>
+                            </td>
+                            <td>
+                                <select class="form-select" id="payment-select" style="font-size: 14px;">
+                                    <option value="0" disabled selected>Chưa chọn hình thức</option>
+                                    <option value="1">Thanh toán khi nhận hàng (COD)</option>
+                                    <option value="2">Thanh toán VNPAY</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Tổng tiền</h6>
+                            </td>
+                            <td class="text-end">
+                                <b><span>@($"{totalPrice - totalDiscount:#,##0}đ")</span></b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="button">
+                                    <form asp-action="CheckoutSubmit" asp-route-deliId="@deli.Id" id="form-checkout">
+                                        <input type="hidden" name="amount" value="@(totalPrice - totalDiscount)" />
+                                        <input type="hidden" id="payment-type" name="payment" value="" />
+                                        <button type="submit" id="btn-checkout" class="btn w-100">Checkout</button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="button">
+                                    <a asp-controller="Products" asp-action="Index" class="btn btn-alt w-100">Continue
+                                        shopping</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#payment-select").change(function () {
+                var payment = $(this).val();
+                $("#payment-type").val(payment);
+            });
+        });
+    </script>
+}

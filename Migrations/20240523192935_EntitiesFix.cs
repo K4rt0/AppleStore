@@ -5,24 +5,24 @@
 namespace AppleStore.Migrations
 {
     /// <inheritdoc />
-    public partial class update_database : Migration
+    public partial class EntitiesFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "Status",
-                table: "Orders",
-                type: "int",
-                nullable: true);
+            migrationBuilder.DropColumn(
+                name: "UserId",
+                table: "Orders");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Orders");
+            migrationBuilder.AddColumn<string>(
+                name: "UserId",
+                table: "Orders",
+                type: "nvarchar(max)",
+                nullable: true);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using AppleStore.Models.Entities
 @using Microsoft.AspNetCore.Identity
 @model IEnumerable<AppleStore.Models.Entities.ApplicationUser>
-    
+
 @inject UserManager<ApplicationUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 
@@ -43,9 +43,12 @@
                 {
                     id++;
                     <tr>
-                        <td class="border-bottom-0"><h6 class="fw-semibold mb-0">@id</h6></td>
+                        <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">@id</h6>
+                        </td>
                         <td class="border-bottom-0 d-flex align-items-center">
-                            <img src="~/adminAssets/images/profile/user-1.jpg" width="50px" height="50px" class="rounded-circle border border-1 border-dark-light border-opacity-50" />
+                            <img src="~/adminAssets/images/profile/user-1.jpg" width="50px" height="50px"
+                                class="rounded-circle border border-1 border-dark-light border-opacity-50" />
                             <div class="d-flex flex-column ms-3 form-floating d-inline-block">
                                 <h6 class="fw-semibold mb-1">@item.FullName</h6>
                                 <span style="color: #e0c55e;" class="fs-2 text-opacity-50">Admin</span>
@@ -62,15 +65,20 @@
                         </td>
                         <td class="border-bottom-0">
                             <div class="dropdown">
-                                <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow"
+                                    data-bs-toggle="dropdown">
                                     <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu">
                                     <form asp-action="AdminPanel" asp-route-type="Take" asp-route-id="@item.Id" method="post">
-                                        <button type="submit" class="dropdown-item"><i class="ti ti-close me-1"></i> Take Admin</button>
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="ti ti-close me-1"></i> Thu hồi chức vụ
+                                        </button>
                                     </form>
                                     <form asp-action="DeleteConfirmed" asp-route-id="@item.Id">
-                                        <button type="submit" class="btn dropdown-item"><i class="ti ti-lock me-1"></i> Ban User</button>
+                                        <button type="submit" class="btn dropdown-item">
+                                            <i class="ti ti-lock me-1"></i> Cấm
+                                        </button>
                                     </form>
                                 </div>
                             </div>

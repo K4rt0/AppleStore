@@ -24,7 +24,6 @@ namespace AppleStore.Repositories
                 .ThenInclude(p => p.VariantsAttributes)
                 .ThenInclude(p => p.ProductAttributeValue)
                 .ThenInclude(p => p.ProductAttribute)
-                .Include(p => p.OrderDetails)
                 .ToListAsync();
         }
 
@@ -38,7 +37,6 @@ namespace AppleStore.Repositories
                 .ThenInclude(p => p.VariantsAttributes)
                 .ThenInclude(p => p.ProductAttributeValue)
                 .ThenInclude(p => p.ProductAttribute)
-                .Include(p => p.OrderDetails)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 

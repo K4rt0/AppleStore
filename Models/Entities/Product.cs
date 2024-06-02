@@ -31,6 +31,5 @@ namespace AppleStore.Models.Entities
         [DisplayName("Hình ảnh mô tả")]
         public virtual ICollection<ProductImage>? ProductImages { get; set; }
         public virtual ICollection<ProductVariant>? ProductVariants { get; set; }
-        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

@@ -17,6 +17,11 @@
     .Include(p => p.CartItems)
     .ThenInclude(p => p.ProductVariant)
     .ThenInclude(p => p.Product)
+    .ThenInclude(p => p.Discount)
+    .Include(p => p.CartItems)
+    .ThenInclude(p => p.ProductVariant)
+    .ThenInclude(p => p.Product)
+    .ThenInclude(p => p.Category)
     .FirstOrDefaultAsync(u => u.Id == _user.Id);
 
     decimal? totalPrice = user.CartItems.Sum(s => s.CartProductQuantity * s.ProductVariant?.Price);
@@ -125,17 +130,24 @@
                                                 </h5>
                                                 <p class="product-des d-flex flex-column">
                                                     <span><em>Loại:</em> @item.ProductVariant?.Product?.Category?.Name</span>
-                                                    <span><em>Màu:</em>
-                                                        @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
-                                                                 p.ProductAttributeValue.ProductAttribute.Name == "Màu sắc" &&
-                                                                 p.ProductVariantId
-                                                                 == item.ProductVariantId).ProductAttributeValue.Name </span>
-                                                    <span><em>Dung lượng:</em>
-                                                        @item.ProductVariant.VariantsAttributes.FirstOrDefault(p
-                                                                 => p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ"
-                                                                 &&
-                                                                 p.ProductVariantId ==
-                                                                 item.ProductVariantId).ProductAttributeValue.Name</span>
+                                                    @if (item.ProductVariant?.VariantsAttributes.Count != 0)
+                                                    {
+                                                        <span>
+                                                            <em>Màu:</em>
+                                                            @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
+                                                                     p.ProductAttributeValue.ProductAttribute.Name == "Màu sắc" &&
+                                                                     p.ProductVariantId
+                                                                     == item.ProductVariantId).ProductAttributeValue.Name
+                                                        </span>
+                                                        <span>
+                                                            <em>Dung lượng:</em>
+                                                            @item.ProductVariant.VariantsAttributes.FirstOrDefault(p
+                                                                     => p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ"
+                                                                     &&
+                                                                     p.ProductVariantId ==
+                                                                     item.ProductVariantId).ProductAttributeValue.Name
+                                                        </span>
+                                                    }
                                                 </p>
                                             </td>
                                             <td class="border-bottom-0">
@@ -148,13 +160,22 @@
                                                 </div>
                                             </td>
                                             <td class="border-bottom-0 text-center">
-                                                <p>@($"{item.ProductVariant?.Price:#,##0} đ")</p>
+                                                <p>@($"{item.ProductVariant?.Price:#,##0}đ")</p>
                                             </td>
                                             <td class="border-bottom-0 text-center">
                                                 @if (item.ProductVariant?.Product?.Discount != null)
                                                 {
-                                                    totalDiscount += item.ProductVariant?.Product?.Discount?.Price;
-                                                    <p>@($"{item.ProductVariant?.Product?.Discount?.Price:#,##0}đ")</p>
+                                                    if (item.ProductVariant?.Product?.Discount?.Price != 0)
+                                                    {
+                                                        totalDiscount += item.ProductVariant?.Product?.Discount?.Price;
+                                                        <p>@($"{item.ProductVariant?.Product?.Discount?.Price:#,##0}đ")</p>
+                                                    }
+                                                    else if (item.ProductVariant?.Product?.Discount?.Percent != 0)
+                                                    {
+                                                        double amount = (double)item.ProductVariant?.Product?.Discount?.Percent / 100.0;
+                                                        totalDiscount += (item.ProductVariant?.Price * item.CartProductQuantity) * (decimal)amount;
+                                                        <p>@($"{(item.ProductVariant?.Price * item.CartProductQuantity) * (decimal)amount:#,##0}đ")</p>
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -191,9 +212,11 @@
                             </ul>
                             <hr>
                             <div class="button">
-                                <a href="checkout.html" class="btn">Checkout</a>
-                                <a asp-controller="Products" asp-action="Index" class="btn btn-alt">Continue
-                                    shopping</a>
+                                <form asp-action="Checkout" id="form-checkout">
+                                    <input type="hidden" name="addressId" id="input-addressId" value="" />
+                                    <button type="submit" class="btn">Thanh toán</button>
+                                </form>
+                                <a asp-controller="Products" asp-action="Index" class="btn btn-alt">Tiếp tục mua sắm</a>
                             </div>
                         </div>
                     </div>
@@ -233,6 +256,7 @@
                                     <div class="form-floating">
                                         <div class="address-fill d-flex p-3">
                                             <div class="content-address col p-0 align-content-center">
+                                                <input type="hidden" class="address-id" value="@item.Id">
                                                 <h6 class="content_address_fullname">@item.FullName</h6>
                                                 <b class="content_address_phonenumber">@item.PhoneNumber</b>
                                                 <p class="content_address_address">@item.Address</p>
@@ -310,24 +334,26 @@
                     console.log("Thêm địa chỉ mới thành công!");
                     console.log(response);
                     $('#listAddress').append(`
-                                                    <div class="col-lg-6 col-md-6 col-12 p-1">
-                                                        <div class="card">
-                                                            <div class="form-floating">
-                                                                <div class="address-fill d-flex p-3">
-                                                                    <div class="content-address col p-0 align-content-center">
-                                                                        <h6 class="content_address_fullname">` + response.fullName + `</h6>
-                                                                        <b class="content_address_phonenumber">` + response.phoneNumber + `</b>
-                                                                        <p class="content_address_address">` + response.address + `</p>
-                                                                    </div>
-                                                                    <div class="col-3 p-0 d-grid gap-2">
-                                                                        <button type="button" class="address-select fw-400 btn btn-sm btn-outline-dark">Chọn</button>
-                                                                        <button type="button" class="address-update fw-400 btn btn-sm btn-outline-dark">Sửa</button>
-                                                                        <button type="button" class="address-delete fw-400 btn btn-sm btn-outline-danger">Xoá</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>`);
+                                                                                            <div class="col-lg-6 col-md-6 col-12 p-1">
+                                                                                                <div class="card">
+                                                                                                    <div class="form-floating">
+                                                                                                        <div class="address-fill d-flex p-3">
+                                                                                                            <div class="content-address col p-0 align-content-center">
+                                                                                                                <input type="hidden" class="address-id" value="` + response.addressId + `">
+                                                                                                                <h6 class="content_address_fullname">` + response.fullName + `</h6>
+                                                                                                                <b class="content_address_phonenumber">` + response.phoneNumber + `</b>
+                                                                                                                <p class="content_address_address">` + response.address + `</p>
+                                                                                                            </div>
+                                                                                                            <div class="col-3 p-0 d-grid gap-2">
+                                                                                                                <button type="button" class="address-select fw-400 btn btn-sm btn-outline-dark">Chọn</button>
+                                                                                                                <button type="button" class="address-update fw-400 btn btn-sm btn-outline-dark">Sửa</button>
+                                                                                                                <button type="button" class="address-delete fw-400 btn btn-sm btn-outline-danger">Xoá</button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        `);
 
                     $('#new_fullName').val('');
                     $('#new_phoneNumber').val('');
@@ -343,18 +369,21 @@
         $(document).on('click', '.address-select', function () {
             console.log($(this));
             $('#deliveryAddressModal').modal('hide');
+            var addressId = $(this).closest('.address-fill').find('.address-id').val();
             var fullName = $(this).closest('.address-fill').find('.content_address_fullname').text();
             var phoneNumber = $(this).closest('.address-fill').find('.content_address_phonenumber').text();
             var address = $(this).closest('.address-fill').find('.content_address_address').text();
+            console.log(addressId + fullName + phoneNumber + address);
+
             $('#header_address_fullname').text(fullName);
             $('#header_address_phonenumber').text(phoneNumber);
             $('#header_address_address').text(address);
+            $('#input-addressId').val(addressId);
         });
         // cập nhật số lượng sản phẩm trong giỏ hàng
         $('.quantity-input').change(function () {
             var productVariantId = $(this).data('productvariantid');
             var quantity = $(this).val();
-
             $.ajax({
                 url: '/Cart/UpdateCartItem',
                 type: 'POST',
@@ -385,8 +414,7 @@
                 type: 'POST',
                 data: {
                     productVariantId: productVariantId,
-                    amount: @user.CartItems.Count()
-                                                                                                                                                                                                                                                                                                                    },
+                    amount: @user.CartItems.Count()},
                 success: function (response) {
                     if (response.success) {
                         loadCart();

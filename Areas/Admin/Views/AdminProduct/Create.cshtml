@@ -30,26 +30,25 @@
             <div class="mb-3">
                 <label class="form-label" asp-for="Category"></label>
                 <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-control" required>
-                    <option disabled selected>- Select Category -</option>
+                    <option disabled selected>Chọn danh mục</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="disabledSelect" class="form-label">Danh sách mã giảm giá</label>
                 <select asp-for="DiscountId" class="form-control" asp-items="ViewBag.Discounts" class="form-select">
-                    <option value="" selected>Không chọn</option>
+                    <option value="" selected>Chọn mã giảm giá</option>
                 </select>
             </div>
             <div class="form-check form-switch mb-3">
                 <input class="form-check-input" type="checkbox" asp-for="Display" />
                 <label class="form-check-label" asp-for="Display"></label>
             </div>
-            
+
             <button type="submit" class="btn btn-primary">Thêm</button>
             <a asp-action="Index" class="btn btn-secondary">Trở về</a>
         </div>
     </div>
-    <textarea asp-for="Description" class="summernote"></textarea>
-    <div class="form-floating mt-4">
+    <div class="form-floating">
         <div class="card">
             <div class="card-header bg-body-secondary">
                 <h6 class="mb-0">
@@ -61,6 +60,7 @@
             </div>
         </div>
     </div>
+    <textarea asp-for="Description" class="summernote"></textarea>
 </form>
 
 @section Scripts {
