@@ -21,7 +21,13 @@ namespace AppleStore.Repositories
                 .Include(o => o.ApplicationUser)
                 .Include(o => o.OrderDetails)
                 .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Category)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
                 .ThenInclude(p => p.ProductVariants)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .ThenInclude(p => p.Discount)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
         public async Task<List<Order>> GetOrdersByStatusAsync(OrderStatus status)
@@ -47,6 +53,12 @@ namespace AppleStore.Repositories
             order.Status = newStatus;
             await _context.SaveChangesAsync();
             return true;
+        }
+        public async Task<Order> GetUserOrderAsync(int id)
+        {
+            return await _context.Orders
+                .Include(o => o.ApplicationUser)
+                .FirstAsync(o => o.Id == id);
         }
     }
 }

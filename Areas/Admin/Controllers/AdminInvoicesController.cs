@@ -1,6 +1,9 @@
-﻿using AppleStore.Models.Entities;
+﻿using AppleStore.Data;
+using AppleStore.Models.Entities;
 using AppleStore.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppleStore.Areas.Admin.Controllers
 {
@@ -8,9 +11,13 @@ namespace AppleStore.Areas.Admin.Controllers
     public class AdminInvoicesController : Controller
     {
         private readonly IOrderRepository _orderRepository;
-        public AdminInvoicesController(IOrderRepository orderRepository)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
+        public AdminInvoicesController(IOrderRepository orderRepository, UserManager<ApplicationUser> userManager,ApplicationDbContext context)
         {
             _orderRepository = orderRepository;
+            _userManager = userManager;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -29,6 +36,18 @@ namespace AppleStore.Areas.Admin.Controllers
             return View(order);
         }
 
+        public async Task<IActionResult> UserDetails(int id)
+        {
+            var userOrder = await _orderRepository.GetUserOrderAsync(id);
+            ViewBag.OrderConfirmed = await _context.Orders.CountAsync(o => o.Status == OrderStatus.Confirmed);
+            ViewBag.OrderCancelled = await _context.Orders.CountAsync(o => o.Status == OrderStatus.Cancelled);
+            if(userOrder == null)
+            {
+                return NotFound();
+            }
+            return View(userOrder);
+        }
+
         public async Task<IActionResult> UpdateStatus(int orderId, OrderStatus newStatus)
         {
             var result = await _orderRepository.UpdateOrderStatusAsync(orderId, newStatus);
@@ -42,9 +61,17 @@ namespace AppleStore.Areas.Admin.Controllers
             }
         }
 
-        public async Task<IActionResult> Print(int invoiceId)
+        public async Task<IActionResult> Print(int id)
         {
-            return View();
+            var order = await _orderRepository.GetOrderByIdAsync(id);
+            ViewBag.SubTotal = order.TotalPrice;
+            ViewBag.Tax = (order.TotalPrice * 5/100);
+            ViewBag.Total = (order.TotalPrice - (order.Discount?.Price) - (order.TotalPrice * 5 / 100));
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return View(order);
         }
     }
 

@@ -41,21 +41,21 @@
         <tbody>
             @foreach (var item in Model)
             {
-            var image = $"/images/profiles/{(string.IsNullOrEmpty(item.ApplicationUser?.Avatar) ? "user-default.jpg" : item.ApplicationUser?.Avatar)}";
+            @* var image = $"/images/profiles/{(string.IsNullOrEmpty(item.ApplicationUser?.Avatar) ? "user-default.jpg" : item.ApplicationUser?.Avatar)}"; *@
                 <tr>
                     <td class="border-bottom-0">
                         <p class="mb-0 fw-normal">@item.Id</p>
                     </td>
                     <td class="border-bottom-0">
-                        <div style="display: flex;
+                        @* <div style="display: flex;
                                     justify-content: space-evenly;
                                     align-items: center; ">
                             <img src="@image" alt="user-avatar"
                                  style="
                             width: 30%;
                             border-radius: 50% !important; " />
+                        </div> *@
                             <p class="mb-0 fw-normal">@item.ApplicationUser?.FullName</p>
-                        </div>
                     </td>
                     <td class="border-bottom-0">
                         <p class="mb-0 fw-normal">@item.ApplicationUser?.Email</p>
@@ -80,7 +80,7 @@
                                 <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-action="" asp-route-id="@item.Id"><i class="ti ti-user"></i> Thông tin khách hàng</a>
+                                <a class="dropdown-item" asp-action="UserDetails" asp-route-id="@item.Id"><i class="ti ti-user"></i> Thông tin khách hàng</a>
                                 <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id"><i class="ti ti-eye me-1"></i> Chi tiết đơn hàng</a>
                             </div>
                         </div>

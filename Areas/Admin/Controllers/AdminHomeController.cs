@@ -35,7 +35,27 @@ namespace AppleStore.Areas.Admin.Controllers
             ViewBag.UserCount = userCount.Count;
             ViewBag.OrderCount = orderCount;
             ViewBag.OrderTotal = orderTotal;
-            return View();
+
+            var orderStats = await _context.Orders
+                .GroupBy(o => new { o.CreatedAt.Year, o.CreatedAt.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    OrderCount = g.Count(),
+                    CategoryStats = g.SelectMany(o => o.OrderDetails)
+                                     .GroupBy(od => od.Product.Category.Name)
+                                     .Select(cg => new
+                                     {
+                                         CategoryName = cg.Key,
+                                         QuantitySold = cg.Sum(od => od.Quantity)
+                                     })
+                                     .OrderByDescending(cs => cs.QuantitySold)
+                                     .ToList()
+                })
+                .ToListAsync();
+
+            return View(orderStats);
         }
     }
 }

@@ -1,0 +1,91 @@
+﻿@model AppleStore.Models.Entities.Order;
+@{
+    ViewData["Title"] = "Details Invoices";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayoutOrder.cshtml";
+}
+<div class="row">
+    @{
+        var image = $"/images/profiles/{(string.IsNullOrEmpty(Model.ApplicationUser?.Avatar) ? "user-default.jpg" : Model.ApplicationUser?.Avatar)}";
+     }
+    <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0" style="align-self: center;">
+        <!-- User Card -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="user-avatar-section">
+                    <div class=" d-flex align-items-center flex-column">
+                        <img class="img-fluid rounded my-4" src="@image" height="150" width="150" alt="User avatar">
+                        <div class="user-info text-center">
+                            <h4 class="mb-2">@Model.ApplicationUser?.FullName</h4>
+                            <span class="badge bg-label-primary" style="color: #e0c55e;">Khách hàng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3" style="
+                    justify-content: space-evenly;
+                    font-size: 1.25rem;
+                    color: blueviolet;
+                    font-weight: 500;
+            ">
+            <li class="nav-item">Tổng đơn đã đặt: <span>@ViewBag.OrderConfirmed</span></li>
+            <li class="nav-item">Tổng đơn đã hủy: <span>@ViewBag.OrderCancelled</span></li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+                <form class="theme-form theme-form-2 mega-form">
+                    <div class="row">
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Họ tên</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="text" value="@Model.ApplicationUser?.FullName" disabled="" data-bs-original-title="" title="" fdprocessedid="ufs5ir">
+                            </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Email</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="email" value="@Model.ApplicationUser?.Email" disabled="" data-bs-original-title="" title="" fdprocessedid="byunlc">
+                            </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Giới tính</label>
+                            <div class="col-md-9 col-lg-10">
+                                @if (Model.ApplicationUser?.Gender == true) {
+                                    <input class="form-control" type="email" value="Nam" disabled="" data-bs-original-title="" title="" fdprocessedid="byunlc">
+                                }
+                                else {
+                                    <input class="form-control" type="email" value="Nữ" disabled="" data-bs-original-title="" title="" fdprocessedid="byunlc">
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Ngày sinh</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="email" value="@Model.ApplicationUser?.Birthdate" disabled="" data-bs-original-title="" title="" fdprocessedid="byunlc">
+                            </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Số điện thoại</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="tel" value="@Model.ApplicationUser?.PhoneNumber" disabled="" data-bs-original-title="" title="" fdprocessedid="8z9pw">
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Địa chỉ</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="text" disabled="" value="@Model.ApplicationUser?.Address" data-bs-original-title="" title="" fdprocessedid="u7pmzg">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -106,8 +106,8 @@
                 </div>
 
                 <div class="delivery-sec">
-
-                    <a href="@Url.Action("Print", new { invoiceId = Model.Id })" data-bs-original-title="" title="">In hoá đơn</a>
+                    <a onclick="w=window.open('@Url.Action("Print", new { id = @Model.Id })'); w.print();"
+                    style="color: rgb(206 121 26); cursor: pointer;">In hoá đơn</a>
                 </div>
                 <div class="delivery-sec">
                     <h5 class="fw-semibold">Đổi trạng thái đơn hàng</h5>

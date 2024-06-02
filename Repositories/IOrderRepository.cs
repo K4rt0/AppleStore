@@ -11,5 +11,6 @@ namespace AppleStore.Repositories
         Task<List<Order>> GetOrdersByStatusAsync(OrderStatus status);
         Task<OrderStatus?> GetOrderStatusAsync(int orderId);
         Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus);
+        Task<Order> GetUserOrderAsync(int id);
     }
 }
