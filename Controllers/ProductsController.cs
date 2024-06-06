@@ -76,7 +76,7 @@ namespace AppleStore.Controllers
                                   }).ToList();
 
 
-            categoryCounts.Insert(0, new { CategoryId = 0, CategoryName = "All Categories", Count = products.Count() });
+            categoryCounts.Insert(0, new { CategoryId = 0, CategoryName = "Tất cả danh mục", Count = products.Count() });
             ViewBag.CategoryCounts = categoryCounts;
             if (CategoryIdShow == null)
             {
