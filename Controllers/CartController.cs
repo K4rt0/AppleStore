@@ -249,6 +249,7 @@ namespace AppleStore.Controllers
             var order = _context.Orders.FirstOrDefault(p => p.Id == Convert.ToInt32(response.OrderDescription));
 
             order.Paid = true;
+            order.Status = OrderStatus.Confirmed;
             _context.SaveChanges();
 
             _notyf.Success($"Hoá đơn #{order.Id} đã được tạo và thanh toán thành công!");
@@ -286,7 +287,8 @@ namespace AppleStore.Controllers
                     TotalPrice = cartItems.Sum(ci => ci.CartProductQuantity * ci.ProductVariant.Price),
                     ApplicationUserId = user,
                     DeliveryAddressId = deliId,
-                    OrderDetails = new List<OrderDetail>()
+                    OrderDetails = new List<OrderDetail>(),
+                    Status = payment == 1 ? OrderStatus.Pending : OrderStatus.Confirmed
                 };
 
                 foreach (var item in cartItems)

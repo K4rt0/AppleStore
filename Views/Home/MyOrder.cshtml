@@ -1,0 +1,254 @@
+﻿@using AppleStore.Areas.Admin.Controllers
+
+@model IEnumerable<AppleStore.Models.Entities.Order>
+@{
+    ViewData["Title"] = "MyOrder";
+    Layout = "/Views/Shared/_layout.cshtml";
+}
+
+
+<style>
+    .nav-link {
+        width: 100%;
+        text-align: left;
+        border-radius: 5px;
+        background: transparent;
+        border: 1px solid transparent;
+        position: relative;
+        font-size: 16px;
+        transition: all 0.3s ease-in-out;
+        color: #212529 !important;
+    }
+
+    .nav-link:hover {
+        border-color: transparent !important;
+        padding-left: 20px;
+        color: #6f12dc !important;
+    }
+
+    .active {
+        padding-left: 20px;
+        color: #6f12dc !important;
+        font-weight: 600;
+        background-color: transparent !important;
+        border-color: transparent !important;
+    }
+
+    .order-box {
+        padding: 20px 30px;
+        border-radius: 6px;
+        background-color: #eff2f7;
+    }
+
+    table.cart-table th {
+        border-style: none;
+        padding: 16px 12px;
+    }
+
+    table.cart-table thead tr {
+        background: #eff2f7;
+        text-align: center;
+    }
+
+    table.cart-table tbody tr {
+        text-align: center;
+        padding: 16px !important;
+    }
+
+    table.cart-table tbody tr td {
+        padding: 16px;
+    }
+
+</style>
+
+<script>
+    const actives = document.querySelectorAll('.nav-link');
+
+    actives.forEach(active => {
+        active.addEventListener('click', () => {
+            actives.forEach(t => t.classList.remove('active'));
+            active.classList.add('active');
+        }); 
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Đặt tab "Tổng Quan" là tab mặc định khi tải trang
+        var myTab = new bootstrap.Tab(document.querySelector('#tab'));
+        myTab.show();
+    });
+</script>
+
+<div class="container pt-80 pb-80">
+    <div class="row">
+        <div class="col-lg-3">
+            <ul class="nav nav-tabs custome-nav-tabs flex-column category-option" id="myTab"
+            style="
+                padding: 20px;
+                color: black;
+                border: none;
+                border-radius: 5px;
+                position: sticky;
+                top: 10px;
+                background: #eff2f7;
+                height: 200px;
+            ">
+                <li class="nav-item mb-2">
+                    <button class="nav-link" id="tab" data-bs-toggle="tab" data-bs-target="#dash" type="button" fdprocessedid="c1rbi8">
+                        <i class="fas fa-angle-right"></i>Tổng Quan
+                    </button>
+                </li>
+                <li class="nav-item mb-2">
+                    <button class="nav-link" id="1-tab" data-bs-toggle="tab" data-bs-target="#order" type="button" fdprocessedid="tui3wg">
+                        <i class="fas fa-angle-right"></i>Đơn hàng
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" id="dash">
+                    <div class="dashboard-right">
+                        <div class="dashboard">
+                            <div class="page-title title title1 title-effect">
+                                <h2>Tổng quan</h2>
+                            </div>
+                            <div class="welcome-msg">
+                                <h6 class="font-light">Hello, <span>@ViewBag.UserName</span></h6>
+                            </div>
+                            <div class="order-box-contain my-4">
+                                <div class="row g-4">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="order-box d-flex justify-content-around">
+                                            <div class="order-box-image">
+                                                <i class="fa-solid fa-truck-fast" style="font-size: 60px"></i>
+                                            </div>
+                                            <div class="order-box-contain d-flex">
+                                                <div>
+                                                    <h5 class="font-light">Tổng đơn</h5>
+                                                    <h3>@ViewBag.OrderCount</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="order-box d-flex justify-content-around">
+                                            <div class="order-box-image">
+                                                <i class="fa-solid fa-check" style="font-size: 60px"></i>
+                                            </div>
+                                            <div class="order-box-contain d-flex">
+                                                <div>
+                                                    <h5 class="font-light">Đơn đang xử lý</h5>
+                                                    <h3>@ViewBag.OrderPending</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="order-box d-flex justify-content-around">
+                                            <div class="order-box-image">
+                                                <i class="fa-solid fa-xmark" style="font-size: 60px"></i>
+                                            </div>
+                                            <div class="order-box-contain d-flex">
+                                                <div>
+                                                    <h5 class="font-light">Đơn đã huỷ</h5>
+                                                    <h3>@ViewBag.OrderCancelled</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade table-dashboard dashboard wish-list-section active show" id="order">
+                    <div class="box-head mb-3">
+                        <h3>Lịch sử mua hàng</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table cart-table">
+                            <thead>
+                                <tr class="table-head">
+                                    <th scope="col">Mã đơn</th>
+                                    <th scope="col">Thanh toán</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Tổng tiền</th>
+                                    <th scope="col">Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <p class="mt-0">#@item.Id</p>
+                                        </td>
+                                        <td>
+                                            <p class="-button btn btn-sm">@item.PaymentMethod</p>
+                                        </td>
+                                        <td>
+                                            <p class="-button btn btn-sm @StatusHelper.GetStatusClass(item.Status)">@StatusHelper.GetDisplayNameStatus(item.Status)</p>
+                                        </td>
+                                        <td>
+                                            <p class="theme-color fs-6" style="color: #6f12dc;">@($"{item.TotalPrice:#,##0}đ")</p>
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Home" asp-action="OrderDetails" asp-route-id="@item.Id">
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade dashboard-profile dashboard" id="profile">
+                    <div class="box-head">
+                        <h3>Thông tin cá nhân</h3>
+
+                    </div>
+                    <div class="box-head mt-lg-5 mt-3">
+                        <h3>Login Details</h3>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#resetEmail">Edit</a>
+                    </div>
+                    <ul class="dash-profile">
+                        <li>
+                            <div class="left">
+                                <h6 class="font-light">Email</h6>
+                            </div>
+                            <div class="right">
+                                <h6>phatvphat@gmail.com</h6>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="left">
+                                <h6 class="font-light">Số điện thoại</h6>
+                            </div>
+                            <div class="right">
+                                <h6>012345</h6>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="left">
+                                <h6 class="font-light">Địa chỉ</h6>
+                            </div>
+                            <div class="right">
+                                <h6>asd</h6>
+                            </div>
+                        </li>
+                        <li class="mb-0">
+                            <div class="left">
+                                <h6 class="font-light">Password</h6>
+                            </div>
+                            <div class="right">
+                                <h6>●●●●●●</h6>
+                            </div>
+                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#resetPassword">Sửa</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

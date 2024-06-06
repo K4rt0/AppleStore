@@ -78,8 +78,8 @@
                         @foreach(var item in Model.OrderDetails)
                         {
                             <tr>
-                                <td class="text-nowrap">@item.Product?.Name</td>
-                                <td class="text-nowrap">@item.Product?.Category?.Name</td>
+                                <td class="text-nowrap">@item.ProductVariant?.Product?.Name</td>
+                                <td class="text-nowrap">@item.ProductVariant?.Product?.Category?.Name</td>
                                 <td>@($"{item.Price:#,##0}đ")</td>
                                 <td>@item.Quantity</td>
                                 <td>@($"{(item.Quantity * item.Price):#,##0}đ")</td>

@@ -44,7 +44,7 @@ namespace AppleStore.Areas.Admin.Controllers
                     Month = g.Key.Month,
                     OrderCount = g.Count(),
                     CategoryStats = g.SelectMany(o => o.OrderDetails)
-                                     .GroupBy(od => od.Product.Category.Name)
+                                     .GroupBy(od => od.ProductVariant.Product.Category.Name)
                                      .Select(cg => new
                                      {
                                          CategoryName = cg.Key,

@@ -1,0 +1,197 @@
+﻿@using AppleStore.Areas.Admin.Controllers
+@model AppleStore.Models.Entities.Order
+@{
+    ViewData["Title"] = "OrderDetails"; 
+    Layout = "/Views/Shared/_layout.cshtml";
+}
+
+<style>
+    .table cart-table thead tr {
+        text-align: center;
+    }
+
+    thead {
+        text-align: center;
+        background-color: #eff2f7;
+        padding: 12px;
+    }
+    
+    thead th {
+        border-bottom: none;
+    }
+
+    tbody tr {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .cart-box {
+        background-color: #eff2f7;
+        border-radius: 10px;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .top-details {
+        border-bottom: 1px solid #c7c7c5;
+        padding: 22px;
+        margin-bottom: 0;
+    }
+</style>
+
+<section class="section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 overflow-hidden">
+                <div class="order-left-image ratio_asos">
+                    <div class="order-image-contain">
+
+                        <div class="tracker-number" style="margin-top: 50px">
+                            <p class="font-light">Mã đơn: <span>#@Model.Id</span></p>
+                            <p class="font-light mb-0">Ngày đặt: <span>@Model.CreatedAt</span></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cart-section section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-3" style="text-align: center;padding: 15px;">
+                    Thông tin người nhận
+                </h3>
+                <form class="needs-validation" method="post" action="">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label for="fname" class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" id="fname" placeholder="họ tên" value="@Model.ApplicationUser?.FullName" name="invoice_user_fullname" disabled="" fdprocessedid="5gdmzt">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="lname" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="lname" placeholder="số điện thoại" value="@Model.ApplicationUser?.PhoneNumber" name="invoice_user_phone_number" disabled="" fdprocessedid="jz0puc">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="" value="@Model.ApplicationUser?.Email" name="invoice_user_email" disabled="" fdprocessedid="fq6ttj">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" id="address" aria-describedby="emailHelp" value="@Model.DeliveryAddress?.Address" name="invoice_user_address" placeholder="1234 Main St" disabled="" fdprocessedid="28e9o">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="note" class="form-label">Ghi chú</label>
+                            <input type="text" class="form-control" id="note" name="invoice_note" placeholder="Ghi chú đơn hàng" value="@Model.Note" disabled="" fdprocessedid="b5yms5">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 table-responsive mt-4">
+                <h3 class="mb-3" style=" text-align: center;padding: 15px;">
+                    Danh sách sản phẩm
+                </h3>
+                <table class="table cart-table">
+                    <thead>
+                        <tr class="table-head">
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col" style="text-align:left;">Số lượng</th>
+                            <th scope="col">Tổng cộng</th>
+                        </tr>
+                    </thead>
+                    @if(Model.OrderDetails != null)
+                    {
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void();">
+                                            <img src="~/images/products/@item.ProductVariant?.Product?.Avatar" style="max-width: 100px;" class="object-fit-cover" alt="" />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a >@item.ProductVariant?.Product?.Name</a>
+                                    </td>
+                                    <td>
+                                        <h2 style="font-size: 20px; color: #6f12dc;" class="product_price">@($"{item.ProductVariant?.Price:#,##0}đ")</h2>
+                                    </td>
+                                    <td>
+                                        <div class="qty-box" style="width: 65px; height: 50px;">
+                                            <div class="input-group">
+                                                <input type="number" name="quantity" class="form-control input-number" value="@item.Quantity" disabled />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h2 style="font-size: 20px; color: #6f12dc;" class="td-color">@($"{item.ProductVariant?.Price * item.Quantity:#,##0}đ")</h2>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        }
+                    }
+                </table>
+            </div>
+
+            <div class="cart-checkout-section">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-sm-6">
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6 ">
+                    </div>
+
+                    <div class="col-lg-4" style="padding: 10px 0px 50px;">
+                        <div class="cart-box">
+                            <div class="cart-box-details">
+                                <div class="total-details">
+                                    <div class="top-details">
+                                        <h3 style="font-size: 19px; margin-bottom: 10px;"
+                                            >Tổng đơn hàng</h3>
+                                        <h6 class="d-flex justify-content-between" style="line-height: 1.9; color: #212529;">
+                                            Thành tiền <span id="cart_subtotal" style="color: #6f12dc;">@($"{Model.TotalPrice:#,##0}đ")</span>
+                                        </h6>
+                                        @{
+                                            string payment = "";
+                                            if (Model.Paid == false)
+                                            {
+                                                payment = "COD";
+                                            }
+                                            else
+                                            {
+                                                payment = "VNPAY";
+                                            }
+                                        }
+                                        <h6 class="d-flex justify-content-between" style="line-height: 1.9; color: #212529;">
+                                            Phương thức thanh toán <span id="cart_subtotal">@payment</span>
+                                        </h6>
+                                        <h6 class="d-flex justify-content-between" style="line-height: 1.9; color: #212529;">
+                                            Trạng thái đơn hàng <span id="cart_subtotal">@StatusHelper.GetDisplayNameStatus(Model.Status)</span>
+                                        </h6>
+                                        @if(Model.Status != OrderStatus.Cancelled)
+                                        {
+                                            <a style="cursor: pointer; color: red;margin-top: 20px;" href="@Url.Action("UpdateStatus", new {orderId = Model.Id})">Hủy đơn hàng</a>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-top: 20px">Đơn hàng của bạn đã bị hủy</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

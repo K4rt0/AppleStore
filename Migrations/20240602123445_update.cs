@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppleStore.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_Final : Migration
+    public partial class update : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,6 +72,23 @@ namespace AppleStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Discounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsOnTops",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Header = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubHeader = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsOnTops", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,10 +220,7 @@ namespace AppleStore.Migrations
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<int>(type: "int", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostalCode = table.Column<int>(type: "int", nullable: false),
+                    Default = table.Column<bool>(type: "bit", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -240,38 +254,6 @@ namespace AppleStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Confirmed = table.Column<bool>(type: "bit", nullable: false),
-                    Paid = table.Column<bool>(type: "bit", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DiscountId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Orders_Discounts_DiscountId",
-                        column: x => x.DiscountId,
-                        principalTable: "Discounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductAttributeValues",
                 columns: table => new
                 {
@@ -293,6 +275,44 @@ namespace AppleStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Confirmed = table.Column<bool>(type: "bit", nullable: false),
+                    Canceled = table.Column<bool>(type: "bit", nullable: false),
+                    Paid = table.Column<bool>(type: "bit", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryAddressId = table.Column<int>(type: "int", nullable: true),
+                    DiscountId = table.Column<int>(type: "int", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_DeliveryAddresses_DeliveryAddressId",
+                        column: x => x.DeliveryAddressId,
+                        principalTable: "DeliveryAddresses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_Discounts_DiscountId",
+                        column: x => x.DiscountId,
+                        principalTable: "Discounts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -301,9 +321,9 @@ namespace AppleStore.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Display = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HotSeller = table.Column<bool>(type: "bit", nullable: false),
-                    DiscountId = table.Column<int>(type: "int", nullable: false),
+                    DiscountId = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -319,36 +339,7 @@ namespace AppleStore.Migrations
                         name: "FK_Products_Discounts_DiscountId",
                         column: x => x.DiscountId,
                         principalTable: "Discounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -378,92 +369,96 @@ namespace AppleStore.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ColorId = table.Column<int>(type: "int", nullable: false),
-                    DisplaySizeId = table.Column<int>(type: "int", nullable: false),
-                    ResolutionId = table.Column<int>(type: "int", nullable: false),
-                    ProcessorId = table.Column<int>(type: "int", nullable: false),
-                    MemoryId = table.Column<int>(type: "int", nullable: false),
-                    StorageCapacityId = table.Column<int>(type: "int", nullable: false),
-                    CameraId = table.Column<int>(type: "int", nullable: false),
-                    BatteryId = table.Column<int>(type: "int", nullable: false),
-                    ConnectivityId = table.Column<int>(type: "int", nullable: false),
-                    OperatingId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductAttributeValueId = table.Column<int>(type: "int", nullable: true)
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductVariants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_BatteryId",
-                        column: x => x.BatteryId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_CameraId",
-                        column: x => x.CameraId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_ConnectivityId",
-                        column: x => x.ConnectivityId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_DisplaySizeId",
-                        column: x => x.DisplaySizeId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_MemoryId",
-                        column: x => x.MemoryId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_OperatingId",
-                        column: x => x.OperatingId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_ProcessorId",
-                        column: x => x.ProcessorId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_ProductAttributeValueId",
-                        column: x => x.ProductAttributeValueId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_ResolutionId",
-                        column: x => x.ResolutionId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_ProductAttributeValues_StorageCapacityId",
-                        column: x => x.StorageCapacityId,
-                        principalTable: "ProductAttributeValues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_ProductVariants_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartProductQuantity = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductVariantId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CartItems_ProductVariants_ProductVariantId",
+                        column: x => x.ProductVariantId,
+                        principalTable: "ProductVariants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    ProductVariantId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_ProductVariants_ProductVariantId",
+                        column: x => x.ProductVariantId,
+                        principalTable: "ProductVariants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VariantsAttributes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductVariantId = table.Column<int>(type: "int", nullable: false),
+                    ProductAttributeValueId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VariantsAttributes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VariantsAttributes_ProductAttributeValues_ProductAttributeValueId",
+                        column: x => x.ProductAttributeValueId,
+                        principalTable: "ProductAttributeValues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VariantsAttributes_ProductVariants_ProductVariantId",
+                        column: x => x.ProductVariantId,
+                        principalTable: "ProductVariants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -508,6 +503,16 @@ namespace AppleStore.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ApplicationUserId",
+                table: "CartItems",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ProductVariantId",
+                table: "CartItems",
+                column: "ProductVariantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Categories_DiscountId",
                 table: "Categories",
                 column: "DiscountId");
@@ -523,14 +528,19 @@ namespace AppleStore.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_ProductId",
+                name: "IX_OrderDetails_ProductVariantId",
                 table: "OrderDetails",
-                column: "ProductId");
+                column: "ProductVariantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ApplicationUserId",
                 table: "Orders",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_DeliveryAddressId",
+                table: "Orders",
+                column: "DeliveryAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_DiscountId",
@@ -558,64 +568,19 @@ namespace AppleStore.Migrations
                 column: "DiscountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_BatteryId",
-                table: "ProductVariants",
-                column: "BatteryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_CameraId",
-                table: "ProductVariants",
-                column: "CameraId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_ColorId",
-                table: "ProductVariants",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_ConnectivityId",
-                table: "ProductVariants",
-                column: "ConnectivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_DisplaySizeId",
-                table: "ProductVariants",
-                column: "DisplaySizeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_MemoryId",
-                table: "ProductVariants",
-                column: "MemoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_OperatingId",
-                table: "ProductVariants",
-                column: "OperatingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_ProcessorId",
-                table: "ProductVariants",
-                column: "ProcessorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_ProductAttributeValueId",
-                table: "ProductVariants",
-                column: "ProductAttributeValueId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductVariants_ProductId",
                 table: "ProductVariants",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_ResolutionId",
-                table: "ProductVariants",
-                column: "ResolutionId");
+                name: "IX_VariantsAttributes_ProductAttributeValueId",
+                table: "VariantsAttributes",
+                column: "ProductAttributeValueId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_StorageCapacityId",
-                table: "ProductVariants",
-                column: "StorageCapacityId");
+                name: "IX_VariantsAttributes_ProductVariantId",
+                table: "VariantsAttributes",
+                column: "ProductVariantId");
         }
 
         /// <inheritdoc />
@@ -637,7 +602,10 @@ namespace AppleStore.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DeliveryAddresses");
+                name: "CartItems");
+
+            migrationBuilder.DropTable(
+                name: "NewsOnTops");
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
@@ -646,7 +614,7 @@ namespace AppleStore.Migrations
                 name: "ProductImages");
 
             migrationBuilder.DropTable(
-                name: "ProductVariants");
+                name: "VariantsAttributes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -658,13 +626,19 @@ namespace AppleStore.Migrations
                 name: "ProductAttributeValues");
 
             migrationBuilder.DropTable(
+                name: "ProductVariants");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryAddresses");
+
+            migrationBuilder.DropTable(
+                name: "ProductAttributes");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "ProductAttributes");
 
             migrationBuilder.DropTable(
                 name: "Categories");

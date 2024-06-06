@@ -1,5 +1,6 @@
 ﻿using AppleStore.Data;
 using AppleStore.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppleStore.Repositories
@@ -15,19 +16,29 @@ namespace AppleStore.Repositories
         {
             return await _context.Orders.Include(o => o.ApplicationUser).ToListAsync();
         }
+        public async Task<List<Order>> GetAllOrdersByUserIdAsync(string userId)
+        {
+            return await _context.Orders.Where(o => o.ApplicationUserId == userId).ToListAsync();
+        }
         public async Task<Order> GetOrderByIdAsync(int id)
         {
             return await _context.Orders
+                //.Include(o => o.ApplicationUser)
+                //.Include(o => o.OrderDetails)
+                //.ThenInclude(p => p.Product)
+                //.ThenInclude(p => p.Category)
+                //.Include(o => o.OrderDetails)
+                //.ThenInclude(od => od.Product)
+                //.ThenInclude(p => p.ProductVariants)
+                //.Include(o => o.OrderDetails)
+                //.ThenInclude(od => od.Product)
+                //.ThenInclude(p => p.Discount)
+                //.ThenInclude(od => od.ProductVariant)
+                //.ThenInclude(od => od.Product)
+                //.Include(o => o.DeliveryAddress)
+                //.FirstOrDefaultAsync(o => o.Id == id);
                 .Include(o => o.ApplicationUser)
                 .Include(o => o.OrderDetails)
-                .ThenInclude(p => p.Product)
-                .ThenInclude(p => p.Category)
-                .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product)
-                .ThenInclude(p => p.ProductVariants)
-                .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product)
-                .ThenInclude(p => p.Discount)
                 .ThenInclude(od => od.ProductVariant)
                 .ThenInclude(od => od.Product)
                 .Include(o => o.DeliveryAddress)
