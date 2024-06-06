@@ -9,7 +9,8 @@
 - Base Source
 - Login / Register (Template + Code-Behind)
 - Shop Template
-- Fix Header Main Site
+- Fix Header Main Site + Main Header (Category,....)
+- Home (Trending Products - Discount)
 
 Admin Panel:
 - Admin Template
@@ -18,10 +19,13 @@ Admin Panel:
 - Role Manager for Owner
 - Discount
 - Product
+ + CRD Product Details (template, image, description html script, image description)
 - News On Top
+- Product Details Page
+- Payment by VNPay
 
 ****************** [Scripting] ******************
-- Product Details Page
+
 
 ```
 

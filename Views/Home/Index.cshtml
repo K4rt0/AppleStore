@@ -48,7 +48,7 @@
                             <div class="product-info">
                                 <span class="category">@item.Category.Name</span>
                                 <h4 class="title">
-                                    <a href="product-grids.html">@item.Name</a>
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
                                 </h4>
                                 <div class="price">
                                     <span>
