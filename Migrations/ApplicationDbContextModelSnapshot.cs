@@ -255,6 +255,9 @@ namespace AppleStore.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("Canceled")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Confirmed")
                         .HasColumnType("bit");
 
@@ -275,6 +278,9 @@ namespace AppleStore.Migrations
 
                     b.Property<string>("PaymentMethod")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -304,7 +310,7 @@ namespace AppleStore.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -314,7 +320,7 @@ namespace AppleStore.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -665,15 +671,15 @@ namespace AppleStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppleStore.Models.Entities.Product", "Product")
+                    b.HasOne("AppleStore.Models.Entities.ProductVariant", "ProductVariant")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductVariant");
                 });
 
             modelBuilder.Entity("AppleStore.Models.Entities.Product", b =>
@@ -824,8 +830,6 @@ namespace AppleStore.Migrations
 
             modelBuilder.Entity("AppleStore.Models.Entities.Product", b =>
                 {
-                    b.Navigation("OrderDetails");
-
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductVariants");
@@ -844,6 +848,8 @@ namespace AppleStore.Migrations
             modelBuilder.Entity("AppleStore.Models.Entities.ProductVariant", b =>
                 {
                     b.Navigation("CartItems");
+
+                    b.Navigation("OrderDetails");
 
                     b.Navigation("VariantsAttributes");
                 });

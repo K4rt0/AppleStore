@@ -30,10 +30,16 @@ namespace AppleStore.Repositories
         }
         public async Task<int> GetProductVariantByAttributeIdAsync(int product, int colorId, int storageId)
         {
-            return await _context.ProductVariants
-                .Where(p => p.ProductId == product && p.VariantsAttributes.Any(va => va.ProductAttributeValue.Id == colorId) && p.VariantsAttributes.Any(va => va.ProductAttributeValue.Id == storageId))
-                .Select(p => p.Id)
-                .FirstOrDefaultAsync();
+            if (colorId == 0 && storageId == 0)
+                return await _context.ProductVariants
+                    .Where(p => p.ProductId == product)
+                    .Select(p => p.Id)
+                    .FirstOrDefaultAsync();
+            else
+                return await _context.ProductVariants
+                    .Where(p => p.ProductId == product && p.VariantsAttributes.Any(va => va.ProductAttributeValue.Id == colorId) && p.VariantsAttributes.Any(va => va.ProductAttributeValue.Id == storageId))
+                    .Select(p => p.Id)
+                    .FirstOrDefaultAsync();
         }
         public async Task<IEnumerable<CartItem>> GetAllByUserIdAsync(string userId)
         {

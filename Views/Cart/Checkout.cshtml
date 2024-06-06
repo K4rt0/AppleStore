@@ -2,6 +2,7 @@
     var user = (ApplicationUser?)ViewData["user"];
     var deli = (DeliveryAddress?)ViewData["deliveryAddress"];
     decimal? totalPrice = 0;
+    decimal? totalDiscount = 0;
     if (user != null)
     {
         totalPrice = user.CartItems.Sum(item => item.ProductVariant.Price * item.CartProductQuantity);
@@ -43,9 +44,36 @@
                                             @item.ProductVariant.Product.Name ×
                                             <span>@item.CartProductQuantity</span>
                                         </p>
+                                        @if (item.ProductVariant.VariantsAttributes.Count() > 0)
+                                        {
+                                            <p class="text-muted" style="font-size: 13px;">Màu:
+                                                @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
+                                                         p.ProductAttributeValue.ProductAttribute.Name == "Màu sắc" &&
+                                                         p.ProductVariantId
+                                                         == item.ProductVariantId).ProductAttributeValue.Name</p>
+                                            <p class="text-muted" style="font-size: 13px;">Dung lượng:
+                                                @item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p =>
+                                                         p.ProductAttributeValue.ProductAttribute.Name == "Dung lượng lưu trữ" &&
+                                                         p.ProductVariantId
+                                                         == item.ProductVariantId).ProductAttributeValue.Name</p>
+                                        }
                                     </td>
                                     <td class="text-end">
                                         @($"{(item.ProductVariant.Price * item.CartProductQuantity):#,##0}đ")
+                                        @if (item.ProductVariant?.Product?.Discount != null)
+                                        {
+                                            if (item.ProductVariant?.Product?.Discount?.Price != 0)
+                                            {
+                                                totalDiscount += item.ProductVariant?.Product?.Discount?.Price;
+                                                <p class="text-muted" style="font-size: 13px;">Giảm giá: @($"{item.ProductVariant?.Product?.Discount?.Price:#,##0}đ")</p>
+                                            }
+                                            else if (item.ProductVariant?.Product?.Discount?.Percent != 0)
+                                            {
+                                                double amount = (double)item.ProductVariant?.Product?.Discount?.Percent / 100.0;
+                                                totalDiscount += (item.ProductVariant?.Price * item.CartProductQuantity) * (decimal)amount;
+                                                <p class="text-muted" style="font-size: 13px;">Giảm giá: @($"{(item.ProductVariant?.Price * item.CartProductQuantity) * (decimal)amount:#,##0}đ")</p>
+                                            }
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -69,14 +97,14 @@
                                 <h6>Tổng tiền</h6>
                             </td>
                             <td class="text-end">
-                                <b><span>@($"{totalPrice:#,##0}đ")</span></b>
+                                <b><span>@($"{totalPrice - totalDiscount:#,##0}đ")</span></b>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="button">
                                     <form asp-action="CheckoutSubmit" asp-route-deliId="@deli.Id" id="form-checkout">
-                                        <input type="hidden" name="amount" value="@totalPrice" />
+                                        <input type="hidden" name="amount" value="@(totalPrice - totalDiscount)" />
                                         <input type="hidden" id="payment-type" name="payment" value="" />
                                         <button type="submit" id="btn-checkout" class="btn w-100">Checkout</button>
                                     </form>

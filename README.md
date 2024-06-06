@@ -1,7 +1,9 @@
 # Smart Shopping
 
 ## Danh sách công việc đã hoàn thành:
+
 ### Karto
+
 ```bash
 - Database (Full)
 - Base Source
@@ -26,7 +28,9 @@ Admin Panel:
 
 
 ```
+
 ### Việt:
+
 ```bash
 - Login with google
 - CRU Product (List, Creat new)
@@ -35,7 +39,9 @@ Admin Panel:
 ****************** [Scripting] ******************
 - Add product to Cart (Pending)
 ```
+
 ### Duyên:
+
 ```bash
 - Shop grid view (Pending)
 ```

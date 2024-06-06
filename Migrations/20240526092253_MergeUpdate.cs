@@ -5,15 +5,15 @@
 namespace AppleStore.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNameSuggest : Migration
+    public partial class MergeUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "NameSuggest",
-                table: "ProductAttributes",
-                type: "nvarchar(max)",
+            migrationBuilder.AddColumn<int>(
+                name: "Status",
+                table: "Orders",
+                type: "int",
                 nullable: true);
         }
 
@@ -21,8 +21,8 @@ namespace AppleStore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "NameSuggest",
-                table: "ProductAttributes");
+                name: "Status",
+                table: "Orders");
         }
     }
 }

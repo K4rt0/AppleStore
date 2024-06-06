@@ -5,6 +5,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AppleStore.Controllers
 {
@@ -25,29 +26,16 @@ namespace AppleStore.Controllers
             _productAttributeRepository = productAttributeRepository;
             _context = context;
             _notyf = notyf;
+            _productRepository = productRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["newsOnTops"] = _context.NewsOnTops.ToList();
-            var product = _context.Products
-                                .OrderByDescending(p => p.Id)
-                                .Include(p => p.ProductVariants)
-                                .FirstOrDefault();
-            if (product != null)
+            var products = (await _productRepository.GetAllAsync()).Where(p => p.Display == true && p.HotSeller == true).Take(8);
+            if (products != null)
             {
-                var price = _context.ProductVariants.Where(p => p.ProductId == product.Id);
-                if (price.Any())
-                {
-                    var priceMin = price.Min(p => p.Price);
-                    ViewBag.NewProduct = product;
-                    ViewBag.Price = priceMin;
-                }
-                else
-                {
-                    ViewBag.NewProduct = product;
-                    ViewBag.Price = 0;
-                }
+                return View(products);
             }
             return View();
         }

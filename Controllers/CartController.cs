@@ -14,7 +14,6 @@ using System.Security.Claims;
 
 namespace AppleStore.Controllers
 {
-
     [Authorize]
     public class CartController : Controller
     {
@@ -79,8 +78,11 @@ namespace AppleStore.Controllers
             var productVariant = await _productVariantRepository.GetByIdAsync(productVariantId);
             if (productVariant == null)
             {
-                _notyf.Warning("Sản phẩm không tồn tại!");
-                return Json(new { success = false });
+                if (colorId != 0 && storageId != 0)
+                {
+                    _notyf.Warning("Sản phẩm không tồn tại!");
+                    return Json(new { success = false });
+                }
             }
 
             var existingCartItem = await _cartItemRepository.GetByIdAndUserIdAsync(productVariantId, userId);
@@ -195,7 +197,9 @@ namespace AppleStore.Controllers
                 Name = item.ProductVariant?.Product?.Name,
                 Avatar = item.ProductVariant?.Product?.Avatar,
                 CartProductQuantity = item.CartProductQuantity,
-                Price = item.ProductVariant?.Price
+                Price = item.ProductVariant?.Price,
+                Color = item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p => p.ProductAttributeValue?.ProductAttribute?.Name == "Màu sắc" && p.ProductVariantId == item.ProductVariantId)?.ProductAttributeValue?.Name,
+                Storage = item.ProductVariant?.VariantsAttributes?.FirstOrDefault(p => p.ProductAttributeValue?.ProductAttribute?.Name == "Dung lượng lưu trữ" && p.ProductVariantId == item.ProductVariantId)?.ProductAttributeValue?.Name
             }).ToList();
             return Json(new
             {
@@ -205,6 +209,11 @@ namespace AppleStore.Controllers
         }
         public async Task<IActionResult> Checkout(int addressId)
         {
+            if (addressId == 0)
+            {
+                _notyf.Warning("Vui lòng chọn địa chỉ giao hàng!");
+                return RedirectToAction("Index");
+            }
             var user = await _userManager.GetUserAsync(User);
             ViewData["user"] = _context.ApplicationUsers?
                     .Include(p => p.CartItems)
@@ -216,6 +225,10 @@ namespace AppleStore.Controllers
                     .ThenInclude(p => p.ProductVariant)
                     .ThenInclude(p => p.Product)
                     .ThenInclude(p => p.Category)
+                    .Include(p => p.CartItems)
+                    .ThenInclude(p => p.ProductVariant)
+                    .ThenInclude(p => p.Product)
+                    .ThenInclude(p => p.Discount)
                     .FirstOrDefault(u => u.Id == user.Id);
 
             ViewData["deliveryAddress"] = _context.DeliveryAddresses.FirstOrDefault(d => d.Id == addressId);
@@ -280,7 +293,7 @@ namespace AppleStore.Controllers
                 {
                     var orderDetail = new OrderDetail
                     {
-                        ProductId = item.ProductVariant.ProductId,
+                        ProductVariantId = item.ProductVariant.Id,
                         Quantity = item.CartProductQuantity,
                         Price = item.ProductVariant.Price,
                     };
@@ -305,7 +318,7 @@ namespace AppleStore.Controllers
                     return Redirect(_vnPayRespository.CreatePaymentUrl(HttpContext, vnPayModel));
                 }
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -14,9 +14,9 @@ namespace AppleStore.Models.Entities
         [ForeignKey("Orders")]
         public int OrderId { get; set; }
         public virtual Order? Order { get; set; }
-        [ForeignKey("Products")]
-        public int ProductId { get; set; }
-        public virtual Product? Product { get; set; }
+        [ForeignKey("ProductVariants")]
+        public int ProductVariantId { get; set; }
+        public virtual ProductVariant? ProductVariant { get; set; }
 
     }
 }

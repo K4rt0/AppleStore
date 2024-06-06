@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers().AddNewtonsoftJson();
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -25,6 +27,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddNotyf(config =>
 {
@@ -40,7 +48,8 @@ builder.Services.AddScoped<IProductVariantRepository, EFProductVariantRepository
 builder.Services.AddScoped<IProductAttributeRepository, EFProductAttributeRepository>();
 builder.Services.AddScoped<IProductAttributeValueRepository, EFProductAttributeValueRepository>();
 builder.Services.AddScoped<ICartItemRepository, EFCartItemRepository>();
-builder.Services.AddSingleton<IVnPayRespository, EFVnPayRespository>();
+builder.Services.AddScoped<IVnPayRespository, EFVnPayRespository>();
+builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 
 var app = builder.Build();
 
@@ -75,6 +84,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

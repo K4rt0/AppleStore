@@ -1274,6 +1274,28 @@ ol {
   color: #fff;
   border-color: transparent;
 }
+.pagination-list .page-item.active .page-link,
+.pagination-list .page-item:hover .page-link {
+    background: #fff;
+    color: #081828;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 6px 18px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+.pagination-list .page-item .page-link {
+    background: #fff;
+    color: #081828;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 6px 18px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
 
 .pagination .pagination-list li a i {
   font-size: 14px;
@@ -1893,16 +1915,6 @@ ol {
   background-color: #0167F3;
 }
 
-.header .navbar-cart .cart-items .shopping-item .shopping-list li .cart-img-head {
-  width: 40%;
-}
-
-@media (max-width: 767px) {
-  .header .navbar-cart .cart-items .shopping-item .shopping-list li .cart-img-head {
-    width: 30%;
-    margin-right: 12px;
-  }
-}
 
 .header .navbar-cart .cart-items .shopping-item .shopping-list li .cart-img {
   border: 1px solid #ededed;
@@ -2702,7 +2714,6 @@ ol {
   font-weight: 600;
   transition: all 0.3s ease-out 0s;
   position: relative;
-  text-transform: capitalize;
 }
 
 .navbar-nav .nav-item:hover .dd-menu::before {
@@ -3393,7 +3404,11 @@ ol {
 }
 
 .single-product .product-image img {
-  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 290px;
+  min-height: 290px;
+  object-fit: cover;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }

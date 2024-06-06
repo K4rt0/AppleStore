@@ -138,6 +138,8 @@ namespace AppleStore.Areas.Admin.Controllers
                 existingProduct.CategoryId = product.CategoryId;
                 existingProduct.DiscountId = product.DiscountId;
                 existingProduct.Description = product.Description;
+                existingProduct.HotSeller = product.HotSeller;
+                existingProduct.Display = product.Display;
                 await _productRepository.UpdateAsync(existingProduct);
                 _notyf.Success("Cập nhật sản phẩm thành công !");
                 return RedirectToAction("Index");
@@ -208,7 +210,7 @@ namespace AppleStore.Areas.Admin.Controllers
 
             foreach (var item in VariantsAttributes)
             {
-                if(item != 0)
+                if (item != 0)
                 {
                     variantAttributes.Add(new VariantsAttributes()
                     {

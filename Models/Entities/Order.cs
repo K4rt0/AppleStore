@@ -9,6 +9,7 @@ namespace AppleStore.Models.Entities
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool Confirmed { get; set; }
+        public bool Canceled { get; set; }
         public bool Paid { get; set; }
         public string? PaymentMethod { get; set; }
         public decimal TotalPrice { get; set; }
@@ -23,5 +24,6 @@ namespace AppleStore.Models.Entities
         public string? ApplicationUserId { get; set; }
         public ApplicationUser? ApplicationUser { get; set; }
         public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
+        public OrderStatus? Status { get; set; }
     }
 }
