@@ -20,6 +20,15 @@ namespace AppleStore.Repositories
         {
             return await _context.Orders.Where(o => o.ApplicationUserId == userId).ToListAsync();
         }
+        public async Task<OrderDetail> GetProductVariant(int id)
+        {
+            return await _context.OrderDetails
+                .Include(od => od.ProductVariant)
+                .ThenInclude(pv => pv.VariantsAttributes)
+                .ThenInclude(va => va.ProductAttributeValue)
+                .ThenInclude(pav => pav.ProductAttribute)
+                .FirstOrDefaultAsync(o => o.Id == id);
+        }
         public async Task<Order> GetOrderByIdAsync(int id)
         {
             return await _context.Orders
@@ -41,7 +50,10 @@ namespace AppleStore.Repositories
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.ProductVariant)
                 .ThenInclude(od => od.Product)
+                .ThenInclude(od => od.Category)
+                .ThenInclude(od => od.Discount)
                 .Include(o => o.DeliveryAddress)
+                .Include(o => o.OrderDetails)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
         public async Task<List<Order>> GetOrdersByStatusAsync(OrderStatus status)

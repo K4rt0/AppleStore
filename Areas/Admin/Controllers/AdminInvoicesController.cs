@@ -29,6 +29,21 @@ namespace AppleStore.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var order = await _orderRepository.GetOrderByIdAsync(id);
+            var productVariant = await _orderRepository.GetProductVariant(id);
+
+            if (productVariant != null)
+            {
+                var color = productVariant?.ProductVariant?.VariantsAttributes?
+                    .FirstOrDefault(va => va.ProductAttributeValue?.ProductAttribute?.Name == "Màu sắc")?.ProductAttributeValue?.Name;
+                var storage = productVariant?.ProductVariant?.VariantsAttributes?
+                    .FirstOrDefault(va => va.ProductAttributeValue?.ProductAttribute?.Name == "Dung lượng lưu trữ")?.ProductAttributeValue?.Name;
+
+                ViewBag.Color = color;
+                ViewBag.Storage = storage;
+            }
+
+            ViewBag.ProductVariant = productVariant;
+
             if (order == null)
             {
                 return NotFound();
@@ -64,9 +79,22 @@ namespace AppleStore.Areas.Admin.Controllers
         public async Task<IActionResult> Print(int id)
         {
             var order = await _orderRepository.GetOrderByIdAsync(id);
+            var productVariant = await _orderRepository.GetProductVariant(id);
+            
+            if (productVariant != null)
+            {
+                var color = productVariant?.ProductVariant?.VariantsAttributes?
+                    .FirstOrDefault(va => va.ProductAttributeValue?.ProductAttribute?.Name == "Màu sắc")?.ProductAttributeValue?.Name;
+                var storage = productVariant?.ProductVariant?.VariantsAttributes?
+                    .FirstOrDefault(va => va.ProductAttributeValue?.ProductAttribute?.Name == "Dung lượng lưu trữ")?.ProductAttributeValue?.Name;
+
+                ViewBag.Color = color;
+                ViewBag.Storage = storage;
+            }
             ViewBag.SubTotal = order.TotalPrice;
             ViewBag.Tax = (order.TotalPrice * 5/100);
             ViewBag.Total = (order.TotalPrice - (order.Discount?.Price) - (order.TotalPrice * 5 / 100));
+            ViewBag.ProductVariant = productVariant;
             if (order == null)
             {
                 return NotFound();

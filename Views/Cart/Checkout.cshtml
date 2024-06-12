@@ -103,17 +103,16 @@
                         <tr>
                             <td>
                                 <div class="button">
-                                    <form asp-action="CheckoutSubmit" asp-route-deliId="@deli.Id" id="form-checkout">
-                                        <input type="hidden" name="amount" value="@(totalPrice - totalDiscount)" />
-                                        <input type="hidden" id="payment-type" name="payment" value="" />
-                                        <button type="submit" id="btn-checkout" class="btn w-100">Checkout</button>
-                                    </form>
+                                    <a asp-controller="Products" asp-action="Index" class="btn btn-alt w-100">Tiếp tục mua hàng</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="button">
-                                    <a asp-controller="Products" asp-action="Index" class="btn btn-alt w-100">Continue
-                                        shopping</a>
+                                    <form asp-action="CheckoutSubmit" asp-route-deliId="@deli.Id" id="form-checkout">
+                                        <input type="hidden" name="amount" value="@(totalPrice - totalDiscount)" />
+                                        <input type="hidden" id="payment-type" name="payment" value="" />
+                                        <button type="submit" id="btn-checkout" class="btn w-100">Thanh toán</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

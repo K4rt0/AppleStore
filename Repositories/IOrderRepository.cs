@@ -8,6 +8,7 @@ namespace AppleStore.Repositories
     {
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
+        Task<OrderDetail> GetProductVariant(int id);
         Task<List<Order>> GetOrdersByStatusAsync(OrderStatus status);
         Task<List<Order>> GetAllOrdersByUserIdAsync(string userId);
         Task<OrderStatus?> GetOrderStatusAsync(int orderId);

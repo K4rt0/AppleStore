@@ -66,7 +66,8 @@
                 <thead>
                     <tr>
                         <th>Sản phẩm</th>
-                        <th>Loại</th>
+                        <th>Màu sắc</th>
+                        <th>Dung lượng</th>
                         <th>Đơn giá</th>
                         <th>Số lượng</th>
                         <th>Thành tiền</th>
@@ -79,7 +80,8 @@
                         {
                             <tr>
                                 <td class="text-nowrap">@item.ProductVariant?.Product?.Name</td>
-                                <td class="text-nowrap">@item.ProductVariant?.Product?.Category?.Name</td>
+                                <td class="text-nowrap">@ViewBag.Color</td>
+                                <td class="text-nowrap">@ViewBag.Storage</td>
                                 <td>@($"{item.Price:#,##0}đ")</td>
                                 <td>@item.Quantity</td>
                                 <td>@($"{(item.Quantity * item.Price):#,##0}đ")</td>
@@ -102,7 +104,7 @@
                         </td>
                         <td class="px-4 py-5">
                             <p class="fw-medium mb-2">@($"{(ViewBag.SubTotal):#,##0}đ")</p>
-                            <p class="fw-medium mb-2">@($"{Model?.Discount?.Price:#,##0}đ")</p>
+                            <p class="fw-medium mb-2">@($"{ViewBag.Discount:#,##0}đ")</p>
                             <p class="fw-medium mb-2">@($"{(ViewBag.Tax):#,##0}đ")</p>
                             <p class="fw-medium mb-0">@($"{(ViewBag.Total):#,##0}đ")</p>
                         </td>

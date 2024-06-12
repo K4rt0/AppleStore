@@ -69,11 +69,11 @@
                     <div class="row g-4">
                         <div class="col-md-4">
                             <label for="fname" class="form-label">Họ tên</label>
-                            <input type="text" class="form-control" id="fname" placeholder="họ tên" value="@Model.ApplicationUser?.FullName" name="invoice_user_fullname" disabled="" fdprocessedid="5gdmzt">
+                            <input type="text" class="form-control" id="fname" placeholder="họ tên" value="@Model.DeliveryAddress?.FullName" name="invoice_user_fullname" disabled="" fdprocessedid="5gdmzt">
                         </div>
                         <div class="col-md-4">
                             <label for="lname" class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control" id="lname" placeholder="số điện thoại" value="@Model.ApplicationUser?.PhoneNumber" name="invoice_user_phone_number" disabled="" fdprocessedid="jz0puc">
+                            <input type="text" class="form-control" id="lname" placeholder="số điện thoại" value="@Model.DeliveryAddress?.PhoneNumber" name="invoice_user_phone_number" disabled="" fdprocessedid="jz0puc">
                         </div>
 
                         <div class="col-md-4">
@@ -120,7 +120,9 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a >@item.ProductVariant?.Product?.Name</a>
+                                        <p class="" >@item.ProductVariant?.Product?.Name</p>
+                                        <p class="" >@ViewBag.Color</p>
+                                        <p class="" >@ViewBag.Storage</p>
                                     </td>
                                     <td>
                                         <h2 style="font-size: 20px; color: #6f12dc;" class="product_price">@($"{item.ProductVariant?.Price:#,##0}đ")</h2>

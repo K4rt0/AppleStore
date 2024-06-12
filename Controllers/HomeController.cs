@@ -1,4 +1,4 @@
-using AppleStore.Data;
+﻿using AppleStore.Data;
 using AppleStore.Models;
 using AppleStore.Models.Entities;
 using AppleStore.Repositories;
@@ -68,6 +68,19 @@ namespace AppleStore.Controllers
         public async Task<IActionResult> OrderDetails(int id)
         {
             var orderDetails = await _orderRepository.GetOrderByIdAsync(id);
+            var productVariant = await _orderRepository.GetProductVariant(id);
+
+            if (productVariant != null)
+            {
+                var color = productVariant?.ProductVariant?.VariantsAttributes?
+                    .FirstOrDefault(va => va.ProductAttributeValue?.ProductAttribute?.Name == "Màu sắc")?.ProductAttributeValue?.Name;
+                var storage = productVariant?.ProductVariant?.VariantsAttributes?
+                    .FirstOrDefault(va => va.ProductAttributeValue?.ProductAttribute?.Name == "Dung lượng lưu trữ")?.ProductAttributeValue?.Name;
+
+                ViewBag.Color = color;
+                ViewBag.Storage = storage;
+            }
+            ViewBag.ProductVariant = productVariant;
             if (orderDetails == null)
             {
                 return NotFound();
